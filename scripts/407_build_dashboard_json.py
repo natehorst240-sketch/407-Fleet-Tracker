@@ -11,8 +11,8 @@ import pandas as pd
 #   INPUT_FILE = Path("data/407_daily_due_list.csv")
 #   OUTPUT_JSON = Path("data/dashboard.json")
 
-INPUT_FILE = Path(r"C:\Users\nhorstme\Downloads\407_daily_due_list.csv")
-OUTPUT_JSON = Path(r"C:\Users\nhorstme\Downloads\dashboard.json")
+INPUT_FILE = Path("data/407_daily_due_list.csv")
+OUTPUT_JSON = Path("data/dashboard.json")
 
 TRACKED_INSPECTIONS = [
     {"label": "12 Month",             "match": "12MO-INSPECTION",            "mode": "contains"},
