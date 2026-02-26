@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IHC Health Services — Bell 407 Due Dashboard</title>
 
-  <link href="https://urldefense.com/v3/__https://fonts.googleapis.com/css2?family=Share*Tech*Mono&family=Barlow*Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap__;Kysr!!HnyL5y5g8FOd9kGaVA!GzXyHpIP_E8PWzOVRMzgde1ae0BUKFEnNWu2wvJe1qxiOW6o26RTgVsbQHEUEk_vV_3vrUs-aoOxUNabXI6j1T3IwoJt$" rel="stylesheet">
+  <link href="https://urldefense.com/v3/__https://fonts.googleapis.com/css2?family=Share*Tech*Mono&family=Barlow*Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap__;Kysr!!HnyL5y5g8FOd9kGaVA!BWygBheVL64EJq9wwAPR7UPAj0xh117KFF_n8nr-Joo6nOEUMHsj01lcNc2cEcx9PF2prpaw6MmA2w9SmH_xl8jlSrVH$" rel="stylesheet">
 
   <style>
     :root{
@@ -237,7 +237,6 @@
       color:#000;
     }
 
-    /* Cards */
     .cards{
       display:grid;
       grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
@@ -349,7 +348,6 @@
       text-transform:uppercase;
     }
 
-    /* Tables */
     .table-wrap{
       overflow:auto;
       border:1px solid var(--border);
@@ -458,7 +456,6 @@
     <button class="tab-btn" id="btn-calendar" hidden onclick="switchTab('calendar', this)">Calendar</button>
   </div>
 
-  <!-- SUMMARY -->
   <div class="summary-bar" id="summary-bar">
     <div class="summary-stat">
       <div class="stat-value" id="sum-overdue" style="color:var(--overdue)">—</div>
@@ -484,7 +481,6 @@
 
   <div id="error-box" class="errbar" hidden></div>
 
-  <!-- INSPECTIONS TAB -->
   <div id="tab-inspections" class="tab-content active">
     <div class="toolbar">
       <div class="search">
@@ -508,7 +504,6 @@
     </div>
   </div>
 
-  <!-- ATA TAB -->
   <div id="tab-ata" class="tab-content">
     <div class="toolbar">
       <div class="search">
@@ -544,7 +539,6 @@
     </div>
   </div>
 
-  <!-- CALENDAR TAB -->
   <div id="tab-calendar" class="tab-content">
     <div class="section-label">Projected Maintenance Calendar</div>
     <div class="empty">
@@ -578,39 +572,6 @@
 </footer>
 
 <script>
-/*
-  Expected JSON format (flexible):
-
-  {
-    "meta": {
-      "report_date": "2026-02-26",         // optional
-      "generated_utc": "2026-02-26T21:33:05Z",
-      "fleet_name": "Bell 407",
-      "source": "407_daily_due_list.csv"
-    },
-    "aircraft": [
-      { "tail": "N407XX", "items": [ ... ] },
-      ...
-    ],
-    "items": [
-      // Optional flat list; if present we’ll use it.
-      {
-        "tail":"N407XX",
-        "inspection":"12 Month",
-        "ata":"12MO-INSPECTION",
-        "due_date":"2026-03-14",         // optional
-        "days_remaining": 17,            // optional (date-driven)
-        "hours_remaining": null,         // optional (hour-driven)
-        "status":"COMING DUE"            // optional
-      }
-    ],
-    "projections": [
-      // Optional; if present & non-empty, Calendar tab appears.
-      { "tail":"N407XX","inspection":"300HR/12M Airframe","ata":"300HR-PERIODIC INSPECTION","projected_due_date":"2026-04-10","days":44,"hours":120 }
-    ]
-  }
-*/
-
 const DASHBOARD_URL = "data/dashboard.json";
 
 let DASH = null;
@@ -634,7 +595,6 @@ function setSeverityFilter(val, btn){
 
 function setAtaSort(mode, btn){
   ataSortMode = mode;
-  // toggle chip active within ATA toolbar
   const chips = btn.parentElement.querySelectorAll(".chip");
   chips.forEach(c => c.classList.remove("active"));
   btn.classList.add("active");
@@ -659,9 +619,7 @@ function fmtDate(d){
   return `${y}-${m}-${day}`;
 }
 
-// Severity logic (date-first, hours fallback)
 function classifyItem(item){
-  // Prefer days_remaining if present (date-driven)
   const days = item.days_remaining;
   if (days !== null && days !== undefined && days !== "" && !Number.isNaN(Number(days))){
     const d = Number(days);
@@ -671,7 +629,6 @@ function classifyItem(item){
     return "ok";
   }
 
-  // Else use hours_remaining if present
   const hrs = item.hours_remaining;
   if (hrs !== null && hrs !== undefined && hrs !== "" && !Number.isNaN(Number(hrs))){
     const h = Number(hrs);
@@ -681,17 +638,15 @@ function classifyItem(item){
     return "ok";
   }
 
-  // Else try status text
   const s = safeStr(item.status).toUpperCase();
   if (s.includes("PAST DUE") || s.includes("OVERDUE")) return "overdue";
   if (s.includes("CRITICAL")) return "critical";
   if (s.includes("COMING")) return "coming";
   if (s.includes("WITHIN") || s.includes("OK") || s.includes("TOLERANCE")) return "ok";
-
   return "na";
 }
 
-function badgeFor(sev, item){
+function badgeFor(sev){
   if (sev === "overdue") return `<span class="badge b-overdue">OVERDUE</span>`;
   if (sev === "critical") return `<span class="badge b-red">CRITICAL</span>`;
   if (sev === "coming") return `<span class="badge b-amber">COMING</span>`;
@@ -708,13 +663,11 @@ function barClass(sev){
 }
 
 function scoreItem(item){
-  // Lower = more urgent (sort ascending)
   const sev = classifyItem(item);
   if (sev === "overdue"){
-    // more negative days/hours should float up
     const d = Number(item.days_remaining);
     const h = Number(item.hours_remaining);
-    if (!Number.isNaN(d)) return -100000 + d; // e.g. -100050
+    if (!Number.isNaN(d)) return -100000 + d;
     if (!Number.isNaN(h)) return -90000 + h;
     return -80000;
   }
@@ -743,7 +696,6 @@ function scoreItem(item){
 }
 
 function normalizeItems(dash){
-  // Prefer dash.items if present, else flatten dash.aircraft[].items
   const out = [];
   if (Array.isArray(dash.items) && dash.items.length){
     dash.items.forEach(it => out.push(it));
@@ -834,7 +786,6 @@ function renderInspections(){
   const byTail = groupByTail(items);
   const tails = Array.from(byTail.keys());
 
-  // Sort tails by their most urgent item
   tails.sort((a,b)=>{
     const sa = Math.min(...byTail.get(a).map(scoreItem));
     const sb = Math.min(...byTail.get(b).map(scoreItem));
@@ -853,7 +804,6 @@ function renderInspections(){
     const top = list[0];
     const sevTop = classifyItem(top);
 
-    // Optional hours total if provided
     const tt = (top.total_time || top.airframe_hours || top.hours_tt);
 
     const card = document.createElement("div");
@@ -866,7 +816,7 @@ function renderInspections(){
         <span style="white-space:nowrap">${tail}</span>
         <span class="subline">${tt ? (safeStr(tt) + " TT") : ""}</span>
       </div>
-      ${badgeFor(sevTop, top)}
+      ${badgeFor(sevTop)}
     `;
 
     const body = document.createElement("div");
@@ -897,7 +847,7 @@ function renderInspections(){
             <div class="item-title" title="${inspection}">${inspection}</div>
             <div class="item-meta">${metaBits.join(" ")}</div>
           </div>
-          ${badgeFor(sev, it)}
+          ${badgeFor(sev)}
         </div>
       `;
     }).join("");
@@ -913,7 +863,6 @@ function renderAta(){
   const all = normalizeItems(DASH);
   const q = document.getElementById("q-ata").value.trim().toLowerCase();
 
-  // ATA view ignores severityFilter chips (but still uses the search box)
   const filtered = all.filter(it=>{
     if (!q) return true;
     const hay = [it.ata, it.ata_code, it.inspection, it.inspection_name, it.tail].map(safeStr).join(" ").toLowerCase();
@@ -959,7 +908,7 @@ function renderAta(){
         <td><span class="mono-pill">${ata}</span></td>
         <td>${inspection}</td>
         <td><span class="mono-pill">${tail}</span></td>
-        <td class="td-center">${badgeFor(sev, it)}</td>
+        <td class="td-center">${badgeFor(sev)}</td>
         <td class="td-right">${(days===null) ? "—" : days}</td>
         <td class="td-right">${(hrs===null) ? "—" : hrs.toFixed(1)}</td>
         <td>${due}</td>
@@ -971,14 +920,12 @@ function renderAta(){
 
 function renderCalendar(){
   const btn = document.getElementById("btn-calendar");
-  const tab = document.getElementById("tab-calendar");
   const wrap = document.getElementById("calendar-table-wrap");
   const tbody = document.getElementById("calendar-tbody");
 
   const projections = Array.isArray(DASH?.projections) ? DASH.projections : [];
   if (!projections.length){
     btn.hidden = true;
-    // If currently on calendar, bounce back to inspections
     const activeBtn = document.querySelector(".tab-btn.active");
     if (activeBtn && activeBtn.id === "btn-calendar"){
       switchTab("inspections", document.getElementById("btn-inspections"));
@@ -1032,11 +979,8 @@ async function loadDashboard(){
   errorBox.hidden = true;
   try{
     const res = await fetch(DASHBOARD_URL + "?t=" + Date.now(), { cache: "no-store" });
-    if (!res.ok){
-      throw new Error(`HTTP ${res.status} while fetching ${DASHBOARD_URL}`);
-    }
+    if (!res.ok) throw new Error(`HTTP ${res.status} while fetching ${DASHBOARD_URL}`);
     DASH = await res.json();
-
     updateHeader(DASH.meta || {});
     renderAll();
   }catch(err){
