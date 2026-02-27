@@ -21,9 +21,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --------
-      # Python
-      # --------
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -34,40 +31,35 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas
 
-      # --------
-      # Node / Build site
-      # --------
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          # IMPORTANT: no cache until you commit a lockfile
+      # Create dist and copy your static website into it
+      - name: Prepare dist
+        run: |
+          rm -rf dist
+          mkdir -p dist
 
-      - name: Install Node deps
-        run: npm install
+          # If your site files are in /public (common), copy them
+          if [ -d "public" ]; then
+            cp -R public/* dist/
+          fi
 
-      - name: Build site
-        run: npm run build
+          # If your site files are in repo root (index.html etc), copy them
+          if [ -f "index.html" ]; then
+            cp index.html dist/
+          fi
+          if [ -d "css" ]; then cp -R css dist/; fi
+          if [ -d "js" ]; then cp -R js dist/; fi
+          if [ -d "assets" ]; then cp -R assets dist/; fi
 
-      # Build dashboard JSON AFTER site build
+      # Build the JSON into dist/data/dashboard.json
       - name: Build dashboard JSON
         run: python scripts/407_build_dashboard_json.py
 
-      - name: Verify dist output + JSON aircraft_count
+      - name: Verify dist output
         run: |
           ls -la dist
           ls -la dist/data || true
           test -f dist/index.html
           test -f dist/data/dashboard.json
-
-          python - <<'PY'
-          import json
-          with open("dist/data/dashboard.json","r",encoding="utf-8") as f:
-              data = json.load(f)
-          print("generated_at_utc:", data.get("generated_at_utc"))
-          print("aircraft_count:", data.get("aircraft_count"))
-          print("first tails:", list((data.get("aircraft") or {}).keys())[:10])
-          PY
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
