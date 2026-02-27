@@ -131,13 +131,20 @@ def build():
     for _, row in df.iterrows():
         ata_value = row.get("ATA and Code")
 
-        for rule in TRACKED_INSPECTIONS:
-            if not matches_rule(ata_value, rule):
-                continue
+    tail = str(row.get("Registration Number", "")).strip()
+    if not tail:
+        continue
 
-            tail = str(row.get("Registration Number", "")).strip()
-            if not tail:
-                continue
+    item = {
+        "label": str(row.get("Description")),
+        "ata": str(ata_value),
+        "description": row.get("Description"),
+        "next_due_date": parse_date_maybe(row.get("Next Due Date")),
+        "remaining_days": remaining_days,
+        "remaining_hours": remaining_hours,
+        "next_due_status": row.get("Next Due Status"),
+        "status": classify_date_first(remaining_days, remaining_hours),
+}
 
             # Remaining fields
             rd = row.get("Remaining Days")
