@@ -1,0 +1,18 @@
+{
+  "tracked_inspections": [
+    { "label": "12 Month", "match": "12MO-INSPECTION", "mode": "contains" },
+    { "label": "24 Month", "match": "24MO.INSPECTION", "mode": "contains" },
+    { "label": "300HR/12M Airframe", "match": "300HR-PERIODIC INSPECTION", "mode": "contains" },
+
+    { "label": "300HR/12M Engine", "match": "72/300", "mode": "exact" },
+
+    { "label": "IFR Certs", "match": "91.411", "mode": "contains" },
+    { "label": "IFR Certs", "match": "91.413", "mode": "contains" },
+
+    { "label": "MR Mast Interim", "match": "11-20 INTERIM", "mode": "contains" },
+    { "label": "Freewheel Interim", "match": "13-11 INTERIM", "mode": "contains" },
+    { "label": "Transmission Interim", "match": "21-10 INTERIM", "mode": "contains" },
+    { "label": "TRGB Interim", "match": "10-11 INTERIM", "mode": "contains" },
+    { "label": "Spring Link Interim", "match": "20-12 INTERIM", "mode": "contains" }
+  ]
+}
