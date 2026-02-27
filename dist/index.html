@@ -441,7 +441,7 @@
     // ---- CONFIG ----
     // If your index.html is in dist/ and json is in dist/data/, use "data/dashboard.json".
     // If you serve from another base path, adjust here.
-    const DASHBOARD_JSON_URL = "data/dashboard.json";
+    const DASHBOARD_URL = "data/dashboard.json";
 
     // ---- STATE ----
     let DASH = null;
@@ -685,7 +685,7 @@
 
     async function loadDashboard(){
       // cache-bust so GitHub Pages updates show immediately
-      const url = `${DASHBOARD_JSON_URL}?v=${Date.now()}`;
+      const url = `${DASHBOARD_URL}?v=${Date.now()}`;
       const res = await fetch(url, { cache: "no-store" });
       if(!res.ok) throw new Error(`Failed to load ${url}: HTTP ${res.status}`);
       return await res.json();
