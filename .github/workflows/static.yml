@@ -1,8 +1,13 @@
-name: Deploy Dashboard to GitHub Pages
+name: Build + Deploy 407 Dashboard
 
 on:
   push:
     branches: ["main"]
+    paths:
+      - "data/**"
+      - "scripts/**"
+      - "public/**"
+      - ".github/workflows/**"
   workflow_dispatch:
 
 permissions:
@@ -11,39 +16,41 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Build JSON
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install pandas
+
       - name: Build dashboard JSON
         run: python scripts/407_build_dashboard_json.py
 
-      # Prepare public site
       - name: Prepare public folder
         run: |
           mkdir -p public/data
-          cp dist/index.html public/index.html || true
-          cp data/dashboard.json public/data/dashboard.json || true
-          ls -R public
+          # put your HTML page here (replace with your real path/name)
+          cp public/index.html public/index.html || true
+          # copy json to where the browser will fetch it
+          cp dist/data/dashboard.json public/data/dashboard.json
 
-      # REQUIRED FOR PAGES
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # THIS CREATES github-pages ARTIFACT
-      - name: Upload Pages Artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: public
 
-      # Deploy
-      - name: Deploy
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
