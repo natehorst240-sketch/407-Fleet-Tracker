@@ -212,7 +212,9 @@ def build():
         json.dump(out, f, indent=2)
 
     print(f"Wrote {OUTPUT_JSON} ({len(aircraft)} aircraft)")
-
+    print("dist exists:", Path("dist").exists())
+    print("dist/data exists:", Path("dist/data").exists())
+    print("dashboard exists:", OUTPUT_JSON.exists())
 
 if __name__ == "__main__":
     build()
