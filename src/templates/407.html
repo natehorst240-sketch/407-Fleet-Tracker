@@ -439,7 +439,7 @@
   <div class="header-meta">
     <div class="date" id="hdr-report-date">REPORT DATE: —</div>
     <div id="hdr-generated">GENERATED: —</div>
-    <div id="hdr-source" class="small">SOURCE: dist/data/dashboard.json</div>
+    <div id="hdr-source" class="small">SOURCE: data/dashboard.json</div>
   </div>
 </header>
 
@@ -802,7 +802,7 @@ function updateHeader(meta){
   const gen = meta?.generated_utc ? meta.generated_utc : (meta?.generated || "—");
   document.getElementById("hdr-report-date").textContent = `REPORT DATE: ${report}`;
   document.getElementById("hdr-generated").textContent = `GENERATED: ${gen}`;
-  const src = meta?.source ? meta.source : "dist/data/dashboard.json";
+  const src = meta?.source ? meta.source : "data/dashboard.json";
   document.getElementById("hdr-source").textContent = `SOURCE: ${src}`;
   document.getElementById("ftr-right").textContent = `Last update: ${gen}`;
 }
@@ -1046,7 +1046,7 @@ async function loadDashboard(){
       <div style="font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Dashboard load failed</div>
       <div>Could not load <code>${DASHBOARD_URL}</code>.</div>
       <div style="margin-top:8px" class="small">${safeStr(err.message || err)}</div>
-      <div style="margin-top:10px" class="small">Fix: ensure the file exists at <code>dist/data/dashboard.json</code> and GitHub Pages is serving <code>dist/</code>.</div>
+      <div style="margin-top:10px" class="small">Fix: ensure the file exists at <code>data/dashboard.json</code> and GitHub Pages is serving </code>.</div>
     `;
   }
 }
