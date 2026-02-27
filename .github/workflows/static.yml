@@ -56,6 +56,14 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Debug dist contents
+        run: |
+          pwd
+          ls -la
+          ls -ლა dist || true
+          ls -la dist/data || true
+          test -f dist/data/dashboard.json && echo "✅ JSON exists" || (echo "❌ JSON missing" && exit 1)
+
       # Upload EXACTLY ONE Pages artifact (prevents duplicate github-pages artifacts)
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
