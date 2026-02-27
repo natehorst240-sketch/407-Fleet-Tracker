@@ -180,7 +180,7 @@ def build():
     Path("data").mkdir(parents=True, exist_ok=True)
 
     with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-    json.dump(out, f, indent=2)
+        json.dump(out, f, indent=2)
 
 
 if __name__ == "__main__":
