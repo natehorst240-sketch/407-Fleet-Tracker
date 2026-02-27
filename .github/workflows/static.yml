@@ -3,12 +3,10 @@ name: Build + Deploy 407 Dashboard
 on:
   push:
     branches: ["main"]
-    paths:
-      - "data/**"
-      - "scripts/**"
-      - "public/**"
-      - ".github/workflows/**"
   workflow_dispatch:
+  schedule:
+    # every day at 12:10 UTC (change as needed)
+    - cron: "10 12 * * *"
 
 permissions:
   contents: read
@@ -17,14 +15,14 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -34,25 +32,44 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pandas
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
+      # Build dashboard.json from your CSV in /data
       - name: Build dashboard JSON
         run: |
           python scripts/407_build_dashboard_json.py
 
-      - name: Prepare public folder
+      # Build dist/index.html from your template + JSON
+      - name: Build HTML dashboard
         run: |
-          mkdir -p public/data
-          cp dist/data/dashboard.json public/data/dashboard.json
+          python src/build_b407_dashboard.py
 
-      - name: Setup GitHub Pages
+      # (Optional) sanity check so the job fails clearly if files aren't created
+      - name: Verify dist output
+        run: |
+          ls -la dist
+          ls -la dist/data || true
+          test -f dist/index.html
+          test -f dist/data/dashboard.json
+
+      - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # Upload EXACTLY ONE Pages artifact (prevents duplicate github-pages artifacts)
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: dist
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
