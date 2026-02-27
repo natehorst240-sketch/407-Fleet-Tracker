@@ -31,30 +31,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas
 
-      - name: Check dist after python
-        run: |
-          echo "After python:"
-          ls -la dist || true
-          ls -la dist/data || true
-
-      # Create dist and copy your static website into it
-      - name: Ensure index.html exists
-        run: |
-          if [ -f "dist/index" ] && [ ! -f "dist/index.html" ]; then
-          mv dist/index dist/index.html
-          fi
-     
-      - name: Prepare dist
+      # Prepare dist FIRST (but do not delete it later)
+      - name: Prepare dist (copy site)
         run: |
           rm -rf dist
           mkdir -p dist
 
-          # If your site files are in /public (common), copy them
+          # Copy your static site into dist
           if [ -d "public" ]; then
             cp -R public/* dist/
           fi
 
-          # If your site files are in repo root (index.html etc), copy them
+          # If you also have root index.html or other folders, copy them too (optional)
           if [ -f "index.html" ]; then
             cp index.html dist/
           fi
@@ -62,22 +50,26 @@ jobs:
           if [ -d "js" ]; then cp -R js dist/; fi
           if [ -d "assets" ]; then cp -R assets dist/; fi
 
-      # Build the JSON into dist/data/dashboard.json
+          # Ensure Pages entrypoint is index.html
+          if [ -f "dist/index" ] && [ ! -f "dist/index.html" ]; then
+            mv dist/index dist/index.html
+          fi
+
+      # Build JSON AFTER dist exists (writes dist/data/dashboard.json)
       - name: Build dashboard JSON
         run: python scripts/407_build_dashboard_json.py
 
+      - name: Check dist after python
+        run: |
+          echo "After python:"
+          ls -la dist || true
+          ls -la dist/data || true
+
       - name: Verify dist output
         run: |
-          ls -la dist
-          ls -la dist/data || true
           test -f dist/index.html
           test -f dist/data/dashboard.json
-    
-      - name: Copy public site into dist
-        run: |
-          mkdir -p dist
-          cp public/index.html dist/index.html
-    
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
