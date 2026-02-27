@@ -39,25 +39,35 @@ CRITICAL_HOURS = 25
 COMING_DUE_HOURS = 100
 
 
+
 def _norm(x) -> str:
-    """Uppercase + remove punctuation so matching survives CAMP formatting differences."""
+    """
+    Normalize strings for matching:
+    - uppercase
+    - collapse whitespace
+    - remove spaces around punctuation like '-', '.', '/'
+    """
     if x is None:
         return ""
     if isinstance(x, float) and pd.isna(x):
         return ""
     s = str(x).strip().upper()
-    # remove non-alphanumeric
-    s = re.sub(r"[^A-Z0-9]+", "", s)
+    s = re.sub(r"\s+", " ", s)                 # collapse whitespace
+    s = re.sub(r"\s*([\-./])\s*", r"\1", s)    # remove spaces around - . /
     return s
-
 
 def matches_rule(ata_value, rule) -> bool:
     ata = _norm(ata_value)
     target = _norm(rule["match"])
     if not ata:
         return False
+
     if rule["mode"] == "exact":
-        return ata == target
+        # exact = match whole token OR exact string
+        tokens = ata.split()
+        return ata == target or target in tokens
+
+    # contains
     return target in ata
 
 
