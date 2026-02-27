@@ -180,7 +180,7 @@ def build():
 
     OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-        json.dump(out, f, indent=2)
+      json.dump(out, f, indent=2)
 
     print(f"Wrote {OUTPUT_JSON} ({len(aircraft)} aircraft)")
 
