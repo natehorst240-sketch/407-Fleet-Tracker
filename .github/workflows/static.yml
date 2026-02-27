@@ -1,4 +1,6 @@
-name: Build + Deploy 407 Dashboard
+name: Run script 
+run: python scripts/407_build_dashboard_json.py 
+working-directory: ./ # repo root
 
 on:
   push:
