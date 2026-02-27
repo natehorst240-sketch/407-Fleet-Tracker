@@ -437,7 +437,7 @@
   <div class="header-meta">
     <div class="date" id="hdr-report-date">REPORT DATE: —</div>
     <div id="hdr-generated">GENERATED: —</div>
-    <div id="hdr-source" class="small">SOURCE: dist/data/dashboard.json</div>
+    <div id="hdr-source" class="small">SOURCE: data/dashboard.json</div>
   </div>
 </header>
 
@@ -500,7 +500,7 @@
     <div id="cards" class="cards"></div>
 
     <div id="empty-inspections" class="empty" hidden>
-      No tracked inspection items found in the JSON.
+      No inspection items found in the JSON.
     </div>
   </div>
 
@@ -709,10 +709,7 @@ function normalizeItems(dash){
   for (const [tail, ac] of Object.entries(aircraft)){
     const items = ac?.items || [];
     for (const it of items){
-      out.push({
-        tail,                 // add tail so the UI can show/group it
-        ...it
-      });
+      out.push({ tail, ...it });
     }
   }
 
@@ -728,6 +725,25 @@ function normalizeItems(dash){
   return out;
 }
 
+function mapFields(it){
+  return {
+    ...it,
+
+    // name fields
+    inspection: it.inspection ?? it.inspection_name ?? it.name ?? it.label ?? "Inspection",
+
+    // due date field
+    due_date: it.due_date ?? it.next_due_date ?? null,
+
+    // remaining fields
+    days_remaining: (it.days_remaining ?? it.remaining_days ?? null),
+    hours_remaining: (it.hours_remaining ?? it.remaining_hours ?? null),
+
+    // ata field
+    ata_code: it.ata_code ?? it.ata ?? "—",
+  };
+}  
+  
 function groupByTail(items){
   const m = new Map();
   for (const it of items){
@@ -771,7 +787,7 @@ function updateHeader(meta){
   const gen = meta?.generated_utc ? meta.generated_utc : (meta?.generated || "—");
   document.getElementById("hdr-report-date").textContent = `REPORT DATE: ${report}`;
   document.getElementById("hdr-generated").textContent = `GENERATED: ${gen}`;
-  const src = meta?.source ? meta.source : "dist/data/dashboard.json";
+  const src = meta?.source ? meta.source : "data/dashboard.json";
   document.getElementById("hdr-source").textContent = `SOURCE: ${src}`;
   document.getElementById("ftr-right").textContent = `Last update: ${gen}`;
 }
@@ -792,22 +808,11 @@ function renderSummary(items){
   document.getElementById("sum-tracked").textContent = tracked;
 }
 
-function renderInspections(){
-  const all = normalizeItems(DASH);
+function renderInspections(itemsAll){
   const q = document.getElementById("q-aircraft").value;
-  const items = applyFilters(all, q);
-
-  const cards = document.getElementById("cards");
-  cards.innerHTML = "";
-
-  const byTail = groupByTail(items);
-  const tails = Array.from(byTail.keys());
-
-  tails.sort((a,b)=>{
-    const sa = Math.min(...byTail.get(a).map(scoreItem));
-    const sb = Math.min(...byTail.get(b).map(scoreItem));
-    return sa - sb || a.localeCompare(b);
-  });
+  const items = applyFilters(itemsAll, q);
+  ...
+}
 
   if (!items.length){
     document.getElementById("empty-inspections").hidden = false;
@@ -876,15 +881,13 @@ function renderInspections(){
   }
 }
 
-function renderAta(){
-  const all = normalizeItems(DASH);
+function renderAta(itemsAll){
   const q = document.getElementById("q-ata").value.trim().toLowerCase();
-
-  const filtered = all.filter(it=>{
-    if (!q) return true;
-    const hay = [it.ata, it.ata_code, it.inspection, it.inspection_name, it.tail].map(safeStr).join(" ").toLowerCase();
-    return hay.includes(q);
+  const filtered = itemsAll.filter(it => {
+    ...
   });
+  ...
+}
 
   const tbody = document.getElementById("ata-tbody");
   tbody.innerHTML = "";
@@ -982,29 +985,12 @@ function renderCalendar(){
     tbody.appendChild(tr);
   }
 }
-
-function getAllItems(data){
-  const out = [];
-
-  if(!data?.aircraft) return out;
-
-  Object.entries(data.aircraft).forEach(([tail, ac])=>{
-    (ac.items || []).forEach(item=>{
-      out.push({
-        tail,
-        ...item
-      });
-    });
-  });
-
-  return out;
-}  
   
 function renderAll(){
-  const items = normalizeItems(DASH);
+  const items = normalizeItems(DASH).map(mapFields);
   renderSummary(items);
-  renderInspections();
-  renderAta();
+  renderInspections(items);
+  renderAta(items);
   renderCalendar();
 }
 
@@ -1036,8 +1022,8 @@ async function loadDashboard(){
   }
 }
 
-document.getElementById("q-aircraft").addEventListener("input", () => renderInspections());
-document.getElementById("q-ata").addEventListener("input", () => renderAta());
+document.getElementById("q-aircraft").addEventListener("input", () => renderInspections(normalizeItems(DASH).map(mapFields)));
+document.getElementById("q-ata").addEventListener("input", () => renderAta(normalizeItems(DASH).map(mapFields)));
 
 loadDashboard();
 </script>
