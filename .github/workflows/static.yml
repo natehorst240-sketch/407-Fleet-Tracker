@@ -1,4 +1,4 @@
-name: Static Build
+name: Build + Deploy 407 Dashboard
 
 on:
   push:
@@ -24,24 +24,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      - name: Install dependencies
+        run: |
+          pip install pandas
+
       - name: Build dashboard JSON
-        run: python scripts/407_build_dashboard_json.py
+        run: |
+          python scripts/407_build_dashboard_json.py
 
       - name: Prepare public folder
         run: |
           mkdir -p public/data
-          cp public/index.html public/index.html || true
           cp dist/data/dashboard.json public/data/dashboard.json
 
-      - name: Setup Pages
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
