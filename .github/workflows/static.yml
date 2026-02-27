@@ -31,6 +31,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas
 
+      - name: Check dist after python
+        run: |
+          echo "After python:"
+          ls -la dist || true
+          ls -la dist/data || true
+
       # Create dist and copy your static website into it
       - name: Ensure index.html exists
         run: |
