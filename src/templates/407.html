@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IHC Health Services — Bell 407 Due Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0a0c0f;
+      --surface:#111418;
+      --surface2:#181c22;
+      --border:#1e2530;
+
+      --green:#00e676;
+      --amber:#ffab00;
+      --red:#ff1744;
+      --overdue:#ff6d00;
+      --blue:#29b6f6;
+
+      --text:#cdd6e0;
+      --muted:#4a5568;
+      --heading:#e8edf2;
+
+      --mono:'Share Tech Mono', monospace;
+      --sans:'Barlow Condensed', sans-serif;
+      --body:'Barlow', sans-serif;
+
+      --radius: 6px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:var(--body);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:'';
+      position:fixed; inset:0;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);
+      pointer-events:none;
+      z-index:1000;
+    }
+
+    header{
+      background:var(--surface);
+      border-bottom:1px solid var(--border);
+      padding:18px 28px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:100;
+      gap:16px;
+    }
+    .logo{
+      font-family:var(--sans);
+      font-weight:900;
+      font-size:20px;
+      letter-spacing:3px;
+      color:var(--heading);
+      text-transform:uppercase;
+      line-height:1;
+    }
+    .logo span{ color:var(--blue); }
+    .subtitle{
+      margin-top:6px;
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:2px;
+      text-transform:uppercase;
+      line-height:1.2;
+    }
+    .header-meta{
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--muted);
+      text-align:right;
+      line-height:1.7;
+      white-space:nowrap;
+    }
+    .header-meta .date{ color:var(--blue); }
+
+    main{
+      max-width:1600px;
+      margin:0 auto;
+      padding:22px 28px 40px;
+    }
+
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      align-items:center;
+      padding:10px 28px;
+      background:var(--surface2);
+      border-bottom:1px solid var(--border);
+      font-family:var(--mono);
+      font-size:11px;
+      color:var(--muted);
+    }
+    .legend-item{ display:flex; align-items:center; gap:8px; text-transform:uppercase; letter-spacing:1px; }
+    .dot{ width:8px; height:8px; border-radius:999px; }
+    .dot-green{ background:var(--green); box-shadow:0 0 6px var(--green); }
+    .dot-amber{ background:var(--amber); box-shadow:0 0 6px var(--amber); }
+    .dot-red{ background:var(--red); box-shadow:0 0 6px var(--red); }
+    .dot-overdue{ background:var(--overdue); box-shadow:0 0 6px var(--overdue); }
+
+    .tabs{
+      display:flex;
+      gap:0;
+      border-bottom:2px solid var(--border);
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    .tab-btn{
+      font-family:var(--sans);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      padding:12px 18px;
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      cursor:pointer;
+      transition:all .15s;
+      border-bottom:3px solid transparent;
+    }
+    .tab-btn:hover{ color:var(--text); background:rgba(255,255,255,0.02); }
+    .tab-btn.active{ color:var(--blue); border-bottom-color:var(--blue); }
+    .tab-btn[hidden]{ display:none !important; }
+
+    .tab-content{ display:none; }
+    .tab-content.active{ display:block; }
+
+    .summary-bar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .summary-stat{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:12px 16px;
+      min-width:160px;
+      flex:0 0 auto;
+    }
+    .stat-value{
+      font-family:var(--sans);
+      font-size:30px;
+      font-weight:900;
+      line-height:1;
+      margin-bottom:6px;
+      color:var(--heading);
+    }
+    .stat-label{
+      font-family:var(--mono);
+      font-size:10px;
+      color:var(--muted);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+    .divider-line{
+      width:42px; height:2px; border-radius:1px;
+      margin:6px 0 8px;
+      background:var(--border);
+    }
+
+    .section-label{
+      font-family:var(--sans);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin:22px 0 10px;
+      padding-bottom:6px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      margin:10px 0 14px;
+    }
+    .search{
+      flex:1 1 280px;
+      min-width:240px;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:8px 10px;
+    }
+    .search input{
+      width:100%;
+      background:transparent;
+      border:none;
+      outline:none;
+      color:var(--text);
+      font-family:var(--mono);
+      font-size:12px;
+    }
+    .chip-row{ display:flex; gap:8px; flex-wrap:wrap; }
+    .chip{
+      font-family:var(--sans);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      padding:6px 12px;
+      border:1px solid var(--border);
+      background:transparent;
+      color:var(--muted);
+      border-radius:999px;
+      cursor:pointer;
+      transition:.12s;
+    }
+    .chip:hover{ color:var(--text); border-color:rgba(41,182,246,0.35); }
+    .chip.active{
+      background:var(--blue);
+      border-color:var(--blue);
+      color:#000;
+    }
+
+    /* Cards */
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+      gap:14px;
+    }
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      overflow:hidden;
+    }
+    .card-header{
+      background:var(--surface2);
+      border-bottom:1px solid var(--border);
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card-tail{
+      font-family:var(--sans);
+      font-weight:900;
+      font-size:18px;
+      letter-spacing:1px;
+      color:var(--heading);
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+      min-width:0;
+    }
+    .subline{
+      font-family:var(--mono);
+      font-size:10px;
+      color:var(--muted);
+      letter-spacing:1px;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-family:var(--mono);
+      font-size:10px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      color:var(--muted);
+      white-space:nowrap;
+      flex:0 0 auto;
+    }
+    .b-overdue{ color:var(--overdue); border-color:rgba(255,109,0,0.35); background:rgba(255,109,0,0.08); }
+    .b-red{ color:var(--red); border-color:rgba(255,23,68,0.35); background:rgba(255,23,68,0.08); }
+    .b-amber{ color:var(--amber); border-color:rgba(255,171,0,0.35); background:rgba(255,171,0,0.08); }
+    .b-green{ color:var(--green); border-color:rgba(0,230,118,0.35); background:rgba(0,230,118,0.06); }
+    .b-na{ color:var(--muted); }
+
+    .card-body{ padding:12px 14px; }
+    .item{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:10px 0;
+      border-bottom:1px solid rgba(30,37,48,0.7);
+    }
+    .item:last-child{ border-bottom:none; }
+    .bar{
+      width:3px;
+      height:34px;
+      border-radius:2px;
+      flex:0 0 auto;
+      background:var(--border);
+      margin-top:2px;
+    }
+    .bar.overdue{ background:var(--overdue); box-shadow:0 0 10px rgba(255,109,0,0.25); }
+    .bar.red{ background:var(--red); box-shadow:0 0 10px rgba(255,23,68,0.18); }
+    .bar.amber{ background:var(--amber); box-shadow:0 0 10px rgba(255,171,0,0.14); }
+    .bar.green{ background:var(--green); box-shadow:0 0 10px rgba(0,230,118,0.14); }
+
+    .item-main{ min-width:0; flex:1 1 auto; }
+    .item-title{
+      font-family:var(--body);
+      font-size:12px;
+      font-weight:600;
+      color:var(--text);
+      line-height:1.25;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .item-meta{
+      margin-top:4px;
+      font-family:var(--mono);
+      font-size:10px;
+      color:var(--muted);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .mono-pill{
+      border:1px solid rgba(74,85,104,0.35);
+      padding:2px 6px;
+      border-radius:4px;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+    }
+
+    /* Tables */
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--surface);
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-family:var(--mono);
+      font-size:12px;
+      min-width:920px;
+    }
+    thead th{
+      background:var(--surface2);
+      color:var(--muted);
+      font-family:var(--sans);
+      font-weight:800;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      font-size:11px;
+      padding:10px 12px;
+      text-align:left;
+      border-bottom:1px solid var(--border);
+      white-space:nowrap;
+    }
+    tbody td{
+      padding:10px 12px;
+      border-bottom:1px solid rgba(30,37,48,0.7);
+      vertical-align:top;
+    }
+    tbody tr:hover{ background:rgba(255,255,255,0.02); }
+    .td-right{ text-align:right; }
+    .td-center{ text-align:center; }
+    .small{ font-size:10px; color:var(--muted); }
+
+    .empty{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:14px;
+      font-family:var(--mono);
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    footer{
+      margin-top:38px;
+      padding:16px 28px;
+      border-top:1px solid var(--border);
+      font-family:var(--mono);
+      font-size:10px;
+      color:var(--muted);
+      display:flex;
+      justify-content:space-between;
+      letter-spacing:1px;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .errbar{
+      border:1px solid rgba(255,23,68,0.35);
+      background:rgba(255,23,68,0.08);
+      color:var(--red);
+      padding:10px 12px;
+      border-radius:var(--radius);
+      font-family:var(--mono);
+      font-size:12px;
+      margin:14px 0;
+    }
+    code{ font-family:var(--mono); }
+
+    @media (max-width: 720px){
+      header{ padding:16px 18px; }
+      .legend{ padding:10px 18px; }
+      main{ padding:18px 18px 36px; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div>
+    <div class="logo">IHC <span>HEALTH</span> SERVICES</div>
+    <div class="subtitle">Bell 407 Fleet — Inspections & Due List</div>
+  </div>
+  <div class="header-meta">
+    <div class="date" id="hdr-report-date">REPORT DATE: —</div>
+    <div id="hdr-generated">GENERATED: —</div>
+    <div id="hdr-source" class="small">SOURCE: dist/data/dashboard.json</div>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot dot-green"></div> OK</div>
+  <div class="legend-item"><div class="dot dot-amber"></div> Coming Due</div>
+  <div class="legend-item"><div class="dot dot-red"></div> Critical</div>
+  <div class="legend-item"><div class="dot dot-overdue"></div> Overdue</div>
+  <div style="margin-left:auto">Date-driven items use <b>days remaining</b> first. Hour-driven items use <b>hours remaining</b>.</div>
+</div>
+
+<main>
+  <div class="tabs">
+    <button class="tab-btn active" id="btn-inspections" onclick="switchTab('inspections', this)">Inspections</button>
+    <button class="tab-btn" id="btn-ata" onclick="switchTab('ata', this)">ATA View</button>
+    <button class="tab-btn" id="btn-calendar" hidden onclick="switchTab('calendar', this)">Calendar</button>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-bar" id="summary-bar">
+    <div class="summary-stat">
+      <div class="stat-value" id="sum-overdue" style="color:var(--overdue)">—</div>
+      <div class="divider-line" style="background:var(--overdue)"></div>
+      <div class="stat-label">Overdue</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-value" id="sum-critical" style="color:var(--red)">—</div>
+      <div class="divider-line" style="background:var(--red)"></div>
+      <div class="stat-label">Critical</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-value" id="sum-coming" style="color:var(--amber)">—</div>
+      <div class="divider-line" style="background:var(--amber)"></div>
+      <div class="stat-label">Coming Due</div>
+    </div>
+    <div class="summary-stat">
+      <div class="stat-value" id="sum-tracked" style="color:var(--blue)">—</div>
+      <div class="divider-line" style="background:var(--blue)"></div>
+      <div class="stat-label">Tracked Items</div>
+    </div>
+  </div>
+
+  <div id="error-box" class="errbar" hidden></div>
+
+  <!-- INSPECTIONS TAB -->
+  <div id="tab-inspections" class="tab-content active">
+    <div class="toolbar">
+      <div class="search">
+        <span style="color:var(--muted);font-family:var(--mono);font-size:11px;">FILTER</span>
+        <input id="q-aircraft" placeholder="Search tail, inspection name, or ATA…" autocomplete="off" />
+      </div>
+      <div class="chip-row" id="severity-chips">
+        <button class="chip active" data-sev="all" onclick="setSeverityFilter('all', this)">All</button>
+        <button class="chip" data-sev="overdue" onclick="setSeverityFilter('overdue', this)">Overdue</button>
+        <button class="chip" data-sev="critical" onclick="setSeverityFilter('critical', this)">Critical</button>
+        <button class="chip" data-sev="coming" onclick="setSeverityFilter('coming', this)">Coming</button>
+        <button class="chip" data-sev="ok" onclick="setSeverityFilter('ok', this)">OK</button>
+      </div>
+    </div>
+
+    <div class="section-label">Inspections by Aircraft</div>
+    <div id="cards" class="cards"></div>
+
+    <div id="empty-inspections" class="empty" hidden>
+      No tracked inspection items found in the JSON.
+    </div>
+  </div>
+
+  <!-- ATA TAB -->
+  <div id="tab-ata" class="tab-content">
+    <div class="toolbar">
+      <div class="search">
+        <span style="color:var(--muted);font-family:var(--mono);font-size:11px;">FILTER</span>
+        <input id="q-ata" placeholder="Search ATA, inspection name, or tail…" autocomplete="off" />
+      </div>
+      <div class="chip-row">
+        <button class="chip active" onclick="setAtaSort('severity', this)">Sort: Severity</button>
+        <button class="chip" onclick="setAtaSort('ata', this)">Sort: ATA</button>
+      </div>
+    </div>
+
+    <div class="section-label">Grouped by ATA Code</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ATA Code</th>
+            <th>Inspection</th>
+            <th>Aircraft</th>
+            <th class="td-center">Status</th>
+            <th class="td-right">Days Rem</th>
+            <th class="td-right">Hours Rem</th>
+            <th>Due Date</th>
+          </tr>
+        </thead>
+        <tbody id="ata-tbody"></tbody>
+      </table>
+    </div>
+
+    <div id="empty-ata" class="empty" hidden style="margin-top:12px;">
+      No ATA-grouped items found.
+    </div>
+  </div>
+
+  <!-- CALENDAR TAB -->
+  <div id="tab-calendar" class="tab-content">
+    <div class="section-label">Projected Maintenance Calendar</div>
+    <div class="empty">
+      Calendar will appear when projections exist in <code>dashboard.json</code> (for example after enough flight-hour history accumulates).
+      <div style="margin-top:10px" class="small">
+        You can wire projections into <code>dashboard.projections[]</code> later without changing this page.
+      </div>
+    </div>
+
+    <div id="calendar-table-wrap" class="table-wrap" style="margin-top:14px;" hidden>
+      <table style="min-width:820px;">
+        <thead>
+          <tr>
+            <th>Projected Due Date</th>
+            <th>Aircraft</th>
+            <th>Inspection</th>
+            <th>ATA</th>
+            <th class="td-right">Days</th>
+            <th class="td-right">Hours</th>
+          </tr>
+        </thead>
+        <tbody id="calendar-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span id="ftr-left">IHC Health Services — Bell 407 Dashboard</span>
+  <span id="ftr-right">—</span>
+</footer>
+
+<script>
+/*
+  Expected JSON format (flexible):
+
+  {
+    "meta": {
+      "report_date": "2026-02-26",         // optional
+      "generated_utc": "2026-02-26T21:33:05Z",
+      "fleet_name": "Bell 407",
+      "source": "407_daily_due_list.csv"
+    },
+    "aircraft": [
+      { "tail": "N407XX", "items": [ ... ] },
+      ...
+    ],
+    "items": [
+      // Optional flat list; if present we’ll use it.
+      {
+        "tail":"N407XX",
+        "inspection":"12 Month",
+        "ata":"12MO-INSPECTION",
+        "due_date":"2026-03-14",         // optional
+        "days_remaining": 17,            // optional (date-driven)
+        "hours_remaining": null,         // optional (hour-driven)
+        "status":"COMING DUE"            // optional
+      }
+    ],
+    "projections": [
+      // Optional; if present & non-empty, Calendar tab appears.
+      { "tail":"N407XX","inspection":"300HR/12M Airframe","ata":"300HR-PERIODIC INSPECTION","projected_due_date":"2026-04-10","days":44,"hours":120 }
+    ]
+  }
+*/
+
+const DASHBOARD_URL = "data/dashboard.json";
+
+let DASH = null;
+let severityFilter = "all";
+let ataSortMode = "severity"; // "severity" or "ata"
+
+function switchTab(name, btn){
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  const el = document.getElementById("tab-" + name);
+  if (el) el.classList.add("active");
+}
+
+function setSeverityFilter(val, btn){
+  severityFilter = val;
+  document.querySelectorAll("#severity-chips .chip").forEach(c => c.classList.remove("active"));
+  btn.classList.add("active");
+  renderAll();
+}
+
+function setAtaSort(mode, btn){
+  ataSortMode = mode;
+  // toggle chip active within ATA toolbar
+  const chips = btn.parentElement.querySelectorAll(".chip");
+  chips.forEach(c => c.classList.remove("active"));
+  btn.classList.add("active");
+  renderAta();
+}
+
+function safeStr(x){ return (x===null || x===undefined) ? "" : String(x); }
+
+function parseISODate(d){
+  if (!d) return null;
+  const t = Date.parse(d);
+  if (Number.isNaN(t)) return null;
+  return new Date(t);
+}
+
+function fmtDate(d){
+  const dt = parseISODate(d);
+  if (!dt) return "—";
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth()+1).padStart(2,"0");
+  const day = String(dt.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+
+// Severity logic (date-first, hours fallback)
+function classifyItem(item){
+  // Prefer days_remaining if present (date-driven)
+  const days = item.days_remaining;
+  if (days !== null && days !== undefined && days !== "" && !Number.isNaN(Number(days))){
+    const d = Number(days);
+    if (d < 0) return "overdue";
+    if (d <= 7) return "critical";
+    if (d <= 30) return "coming";
+    return "ok";
+  }
+
+  // Else use hours_remaining if present
+  const hrs = item.hours_remaining;
+  if (hrs !== null && hrs !== undefined && hrs !== "" && !Number.isNaN(Number(hrs))){
+    const h = Number(hrs);
+    if (h < 0) return "overdue";
+    if (h <= 25) return "critical";
+    if (h <= 100) return "coming";
+    return "ok";
+  }
+
+  // Else try status text
+  const s = safeStr(item.status).toUpperCase();
+  if (s.includes("PAST DUE") || s.includes("OVERDUE")) return "overdue";
+  if (s.includes("CRITICAL")) return "critical";
+  if (s.includes("COMING")) return "coming";
+  if (s.includes("WITHIN") || s.includes("OK") || s.includes("TOLERANCE")) return "ok";
+
+  return "na";
+}
+
+function badgeFor(sev, item){
+  if (sev === "overdue") return `<span class="badge b-overdue">OVERDUE</span>`;
+  if (sev === "critical") return `<span class="badge b-red">CRITICAL</span>`;
+  if (sev === "coming") return `<span class="badge b-amber">COMING</span>`;
+  if (sev === "ok") return `<span class="badge b-green">OK</span>`;
+  return `<span class="badge b-na">—</span>`;
+}
+
+function barClass(sev){
+  if (sev === "overdue") return "overdue";
+  if (sev === "critical") return "red";
+  if (sev === "coming") return "amber";
+  if (sev === "ok") return "green";
+  return "";
+}
+
+function scoreItem(item){
+  // Lower = more urgent (sort ascending)
+  const sev = classifyItem(item);
+  if (sev === "overdue"){
+    // more negative days/hours should float up
+    const d = Number(item.days_remaining);
+    const h = Number(item.hours_remaining);
+    if (!Number.isNaN(d)) return -100000 + d; // e.g. -100050
+    if (!Number.isNaN(h)) return -90000 + h;
+    return -80000;
+  }
+  if (sev === "critical"){
+    const d = Number(item.days_remaining);
+    const h = Number(item.hours_remaining);
+    if (!Number.isNaN(d)) return 0 + d;
+    if (!Number.isNaN(h)) return 2000 + h;
+    return 5000;
+  }
+  if (sev === "coming"){
+    const d = Number(item.days_remaining);
+    const h = Number(item.hours_remaining);
+    if (!Number.isNaN(d)) return 10000 + d;
+    if (!Number.isNaN(h)) return 14000 + h;
+    return 18000;
+  }
+  if (sev === "ok"){
+    const d = Number(item.days_remaining);
+    const h = Number(item.hours_remaining);
+    if (!Number.isNaN(d)) return 20000 + d;
+    if (!Number.isNaN(h)) return 24000 + h;
+    return 28000;
+  }
+  return 99999;
+}
+
+function normalizeItems(dash){
+  // Prefer dash.items if present, else flatten dash.aircraft[].items
+  const out = [];
+  if (Array.isArray(dash.items) && dash.items.length){
+    dash.items.forEach(it => out.push(it));
+    return out;
+  }
+  if (Array.isArray(dash.aircraft)){
+    dash.aircraft.forEach(a => {
+      const tail = a.tail || a.registration || a.name;
+      const items = Array.isArray(a.items) ? a.items : [];
+      items.forEach(it => out.push({ tail, ...it }));
+    });
+  }
+  return out;
+}
+
+function groupByTail(items){
+  const m = new Map();
+  for (const it of items){
+    const tail = safeStr(it.tail).trim() || "UNKNOWN";
+    if (!m.has(tail)) m.set(tail, []);
+    m.get(tail).push(it);
+  }
+  return m;
+}
+
+function groupByAta(items){
+  const m = new Map();
+  for (const it of items){
+    const ata = safeStr(it.ata || it.ata_code).trim() || "—";
+    if (!m.has(ata)) m.set(ata, []);
+    m.get(ata).push(it);
+  }
+  return m;
+}
+
+function applyFilters(items, query){
+  const q = safeStr(query).trim().toLowerCase();
+  return items.filter(it => {
+    const sev = classifyItem(it);
+    if (severityFilter !== "all"){
+      if (severityFilter === "overdue" && sev !== "overdue") return false;
+      if (severityFilter === "critical" && sev !== "critical") return false;
+      if (severityFilter === "coming" && sev !== "coming") return false;
+      if (severityFilter === "ok" && sev !== "ok") return false;
+    }
+    if (!q) return true;
+    const hay = [
+      it.tail, it.inspection, it.inspection_name, it.ata, it.ata_code, it.status, it.due_date
+    ].map(safeStr).join(" ").toLowerCase();
+    return hay.includes(q);
+  });
+}
+
+function updateHeader(meta){
+  const report = meta?.report_date ? meta.report_date : "—";
+  const gen = meta?.generated_utc ? meta.generated_utc : (meta?.generated || "—");
+  document.getElementById("hdr-report-date").textContent = `REPORT DATE: ${report}`;
+  document.getElementById("hdr-generated").textContent = `GENERATED: ${gen}`;
+  const src = meta?.source ? meta.source : "dist/data/dashboard.json";
+  document.getElementById("hdr-source").textContent = `SOURCE: ${src}`;
+  document.getElementById("ftr-right").textContent = `Last update: ${gen}`;
+}
+
+function renderSummary(items){
+  let overdue=0, critical=0, coming=0, tracked=0;
+  for (const it of items){
+    const sev = classifyItem(it);
+    if (sev === "na") continue;
+    tracked++;
+    if (sev === "overdue") overdue++;
+    else if (sev === "critical") critical++;
+    else if (sev === "coming") coming++;
+  }
+  document.getElementById("sum-overdue").textContent = overdue;
+  document.getElementById("sum-critical").textContent = critical;
+  document.getElementById("sum-coming").textContent = coming;
+  document.getElementById("sum-tracked").textContent = tracked;
+}
+
+function renderInspections(){
+  const all = normalizeItems(DASH);
+  const q = document.getElementById("q-aircraft").value;
+  const items = applyFilters(all, q);
+
+  const cards = document.getElementById("cards");
+  cards.innerHTML = "";
+
+  const byTail = groupByTail(items);
+  const tails = Array.from(byTail.keys());
+
+  // Sort tails by their most urgent item
+  tails.sort((a,b)=>{
+    const sa = Math.min(...byTail.get(a).map(scoreItem));
+    const sb = Math.min(...byTail.get(b).map(scoreItem));
+    return sa - sb || a.localeCompare(b);
+  });
+
+  if (!items.length){
+    document.getElementById("empty-inspections").hidden = false;
+    return;
+  }
+  document.getElementById("empty-inspections").hidden = true;
+
+  for (const tail of tails){
+    const list = byTail.get(tail).slice().sort((x,y)=>scoreItem(x)-scoreItem(y));
+
+    const top = list[0];
+    const sevTop = classifyItem(top);
+
+    // Optional hours total if provided
+    const tt = (top.total_time || top.airframe_hours || top.hours_tt);
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const header = document.createElement("div");
+    header.className = "card-header";
+    header.innerHTML = `
+      <div class="card-tail">
+        <span style="white-space:nowrap">${tail}</span>
+        <span class="subline">${tt ? (safeStr(tt) + " TT") : ""}</span>
+      </div>
+      ${badgeFor(sevTop, top)}
+    `;
+
+    const body = document.createElement("div");
+    body.className = "card-body";
+
+    const rows = list.slice(0, 12).map(it=>{
+      const sev = classifyItem(it);
+      const inspection = safeStr(it.inspection || it.inspection_name || it.name || "Inspection");
+      const ata = safeStr(it.ata || it.ata_code || "—");
+      const due = fmtDate(it.due_date);
+      const days = (it.days_remaining !== null && it.days_remaining !== undefined && it.days_remaining !== "") ? Number(it.days_remaining) : null;
+      const hrs  = (it.hours_remaining !== null && it.hours_remaining !== undefined && it.hours_remaining !== "") ? Number(it.hours_remaining) : null;
+
+      const metric =
+        (days !== null && !Number.isNaN(days)) ? `${days}d` :
+        (hrs !== null && !Number.isNaN(hrs)) ? `${hrs.toFixed(1)}h` :
+        safeStr(it.status || "—").slice(0,18);
+
+      const metaBits = [];
+      if (ata && ata !== "—") metaBits.push(`<span class="mono-pill">ATA ${ata}</span>`);
+      if (due !== "—") metaBits.push(`<span class="mono-pill">DUE ${due}</span>`);
+      metaBits.push(`<span class="mono-pill">${metric}</span>`);
+
+      return `
+        <div class="item">
+          <div class="bar ${barClass(sev)}"></div>
+          <div class="item-main">
+            <div class="item-title" title="${inspection}">${inspection}</div>
+            <div class="item-meta">${metaBits.join(" ")}</div>
+          </div>
+          ${badgeFor(sev, it)}
+        </div>
+      `;
+    }).join("");
+
+    body.innerHTML = rows;
+    card.appendChild(header);
+    card.appendChild(body);
+    cards.appendChild(card);
+  }
+}
+
+function renderAta(){
+  const all = normalizeItems(DASH);
+  const q = document.getElementById("q-ata").value.trim().toLowerCase();
+
+  // ATA view ignores severityFilter chips (but still uses the search box)
+  const filtered = all.filter(it=>{
+    if (!q) return true;
+    const hay = [it.ata, it.ata_code, it.inspection, it.inspection_name, it.tail].map(safeStr).join(" ").toLowerCase();
+    return hay.includes(q);
+  });
+
+  const tbody = document.getElementById("ata-tbody");
+  tbody.innerHTML = "";
+
+  if (!filtered.length){
+    document.getElementById("empty-ata").hidden = false;
+    return;
+  }
+  document.getElementById("empty-ata").hidden = true;
+
+  const grouped = groupByAta(filtered);
+  const groups = Array.from(grouped.entries());
+
+  function groupScore(items){
+    return Math.min(...items.map(scoreItem));
+  }
+
+  if (ataSortMode === "severity"){
+    groups.sort((a,b)=> groupScore(a[1]) - groupScore(b[1]) || a[0].localeCompare(b[0]));
+  } else {
+    groups.sort((a,b)=> a[0].localeCompare(b[0]));
+  }
+
+  for (const [ata, items] of groups){
+    const sorted = items.slice().sort((x,y)=>scoreItem(x)-scoreItem(y));
+    for (const it of sorted){
+      const sev = classifyItem(it);
+      const inspection = safeStr(it.inspection || it.inspection_name || it.name || "Inspection");
+      const tail = safeStr(it.tail || "—");
+      const due = fmtDate(it.due_date);
+      const days = (it.days_remaining !== null && it.days_remaining !== undefined && it.days_remaining !== "" && !Number.isNaN(Number(it.days_remaining)))
+        ? Number(it.days_remaining) : null;
+      const hrs = (it.hours_remaining !== null && it.hours_remaining !== undefined && it.hours_remaining !== "" && !Number.isNaN(Number(it.hours_remaining)))
+        ? Number(it.hours_remaining) : null;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><span class="mono-pill">${ata}</span></td>
+        <td>${inspection}</td>
+        <td><span class="mono-pill">${tail}</span></td>
+        <td class="td-center">${badgeFor(sev, it)}</td>
+        <td class="td-right">${(days===null) ? "—" : days}</td>
+        <td class="td-right">${(hrs===null) ? "—" : hrs.toFixed(1)}</td>
+        <td>${due}</td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+}
+
+function renderCalendar(){
+  const btn = document.getElementById("btn-calendar");
+  const tab = document.getElementById("tab-calendar");
+  const wrap = document.getElementById("calendar-table-wrap");
+  const tbody = document.getElementById("calendar-tbody");
+
+  const projections = Array.isArray(DASH?.projections) ? DASH.projections : [];
+  if (!projections.length){
+    btn.hidden = true;
+    // If currently on calendar, bounce back to inspections
+    const activeBtn = document.querySelector(".tab-btn.active");
+    if (activeBtn && activeBtn.id === "btn-calendar"){
+      switchTab("inspections", document.getElementById("btn-inspections"));
+    }
+    wrap.hidden = true;
+    tbody.innerHTML = "";
+    return;
+  }
+
+  btn.hidden = false;
+  wrap.hidden = false;
+  tbody.innerHTML = "";
+
+  const rows = projections.slice().sort((a,b)=>{
+    const da = Date.parse(a.projected_due_date || a.due_date || "");
+    const db = Date.parse(b.projected_due_date || b.due_date || "");
+    return (da||0)-(db||0);
+  });
+
+  for (const p of rows){
+    const due = fmtDate(p.projected_due_date || p.due_date);
+    const tail = safeStr(p.tail || "—");
+    const insp = safeStr(p.inspection || p.inspection_name || "—");
+    const ata = safeStr(p.ata || p.ata_code || "—");
+    const days = (p.days !== null && p.days !== undefined && !Number.isNaN(Number(p.days))) ? Number(p.days) : null;
+    const hrs  = (p.hours !== null && p.hours !== undefined && !Number.isNaN(Number(p.hours))) ? Number(p.hours) : null;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${due}</td>
+      <td><span class="mono-pill">${tail}</span></td>
+      <td>${insp}</td>
+      <td><span class="mono-pill">${ata}</span></td>
+      <td class="td-right">${(days===null) ? "—" : days}</td>
+      <td class="td-right">${(hrs===null) ? "—" : hrs.toFixed(1)}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+function renderAll(){
+  const items = normalizeItems(DASH);
+  renderSummary(items);
+  renderInspections();
+  renderAta();
+  renderCalendar();
+}
+
+async function loadDashboard(){
+  const errorBox = document.getElementById("error-box");
+  errorBox.hidden = true;
+  try{
+    const res = await fetch(DASHBOARD_URL + "?t=" + Date.now(), { cache: "no-store" });
+    if (!res.ok){
+      throw new Error(`HTTP ${res.status} while fetching ${DASHBOARD_URL}`);
+    }
+    DASH = await res.json();
+
+    updateHeader(DASH.meta || {});
+    renderAll();
+  }catch(err){
+    console.error(err);
+    errorBox.hidden = false;
+    errorBox.innerHTML = `
+      <div style="font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Dashboard load failed</div>
+      <div>Could not load <code>${DASHBOARD_URL}</code>.</div>
+      <div style="margin-top:8px" class="small">${safeStr(err.message || err)}</div>
+      <div style="margin-top:10px" class="small">Fix: ensure the file exists at <code>dist/data/dashboard.json</code> and GitHub Pages is serving <code>dist/</code>.</div>
+    `;
+  }
+}
+
+document.getElementById("q-aircraft").addEventListener("input", () => renderInspections());
+document.getElementById("q-ata").addEventListener("input", () => renderAta());
+
+loadDashboard();
+</script>
+</body>
+</html>
