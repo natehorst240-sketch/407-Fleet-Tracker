@@ -697,10 +697,27 @@ function scoreItem(item){
 
 function normalizeItems(dash){
   const out = [];
-  if (Array.isArray(dash.items) && dash.items.length){
+
+  // Old schema support (dash.items)
+  if (Array.isArray(dash?.items) && dash.items.length){
     dash.items.forEach(it => out.push(it));
     return out;
   }
+
+  // New schema support (dash.aircraft[tail].items)
+  const aircraft = dash?.aircraft || {};
+  for (const [tail, ac] of Object.entries(aircraft)){
+    const items = ac?.items || [];
+    for (const it of items){
+      out.push({
+        tail,                 // add tail so the UI can show/group it
+        ...it
+      });
+    }
+  }
+
+  return out;
+}
   if (Array.isArray(dash.aircraft)){
     dash.aircraft.forEach(a => {
       const tail = a.tail || a.registration || a.name;
@@ -966,6 +983,23 @@ function renderCalendar(){
   }
 }
 
+function getAllItems(data){
+  const out = [];
+
+  if(!data?.aircraft) return out;
+
+  Object.entries(data.aircraft).forEach(([tail, ac])=>{
+    (ac.items || []).forEach(item=>{
+      out.push({
+        tail,
+        ...item
+      });
+    });
+  });
+
+  return out;
+}  
+  
 function renderAll(){
   const items = normalizeItems(DASH);
   renderSummary(items);
@@ -981,8 +1015,15 @@ async function loadDashboard(){
     const res = await fetch(DASHBOARD_URL + "?t=" + Date.now(), { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP ${res.status} while fetching ${DASHBOARD_URL}`);
     DASH = await res.json();
-    updateHeader(DASH.meta || {});
+
+    updateHeader({
+      generated_at_utc: DASH.generated_at_utc,
+      fleet: DASH.fleet,
+      source: DASHBOARD_JSON_URL
+    });
+
     renderAll();
+    
   }catch(err){
     console.error(err);
     errorBox.hidden = false;
