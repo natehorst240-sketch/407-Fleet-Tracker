@@ -41,7 +41,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          # IMPORTANT: no cache until you commit a lockfile
 
       - name: Install Node deps
         run: npm install
@@ -49,10 +49,7 @@ jobs:
       - name: Build site
         run: npm run build
 
-      # --------
       # Build dashboard JSON AFTER site build
-      # (so dist/ exists and doesn't get overwritten)
-      # --------
       - name: Build dashboard JSON
         run: python scripts/407_build_dashboard_json.py
 
