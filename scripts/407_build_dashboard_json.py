@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from datetime import datetime
+import re
 
 import pandas as pd
 
@@ -11,13 +12,14 @@ INPUT_CSV = Path("data/407_daily_due_list.csv")
 OUTPUT_JSON = Path("dist/data/dashboard.json")
 
 # ----------------------------
-# Inspections to track
+# (Optional) Inspections to "flag" as tracked
+# NOTE: This does NOT filter anything out.
 # ----------------------------
 TRACKED_INSPECTIONS = [
     {"label": "12 Month",             "match": "12MO-INSPECTION",             "mode": "contains"},
-    {"label": "24 Month",             "match": "24MO.INSPECTION",             "mode": "contains"},
+    {"label": "24 Month",             "match": "24MO-INSPECTION",             "mode": "contains"},  # fixed from dot to dash
     {"label": "300HR/12M Airframe",   "match": "300HR-PERIODIC INSPECTION",   "mode": "contains"},
-    {"label": "300HR/12M Engine",     "match": "72/300",                      "mode": "exact"},   # important
+    {"label": "300HR/12M Engine",     "match": "72/300",                      "mode": "exact"},
     {"label": "IFR Certs 91.411",     "match": "91.411",                      "mode": "contains"},
     {"label": "IFR Certs 91.413",     "match": "91.413",                      "mode": "contains"},
     {"label": "MR Mast Interim",      "match": "11-20 INTERIM",               "mode": "contains"},
@@ -38,11 +40,15 @@ COMING_DUE_HOURS = 100
 
 
 def _norm(x) -> str:
+    """Uppercase + remove punctuation so matching survives CAMP formatting differences."""
     if x is None:
         return ""
     if isinstance(x, float) and pd.isna(x):
         return ""
-    return str(x).strip().upper()
+    s = str(x).strip().upper()
+    # remove non-alphanumeric
+    s = re.sub(r"[^A-Z0-9]+", "", s)
+    return s
 
 
 def matches_rule(ata_value, rule) -> bool:
@@ -52,7 +58,15 @@ def matches_rule(ata_value, rule) -> bool:
         return False
     if rule["mode"] == "exact":
         return ata == target
-    return target in ata  # contains
+    return target in ata
+
+
+def tracked_label_for(ata_value):
+    """Return a tracked label if the ATA matches one of the tracked rules, else None."""
+    for rule in TRACKED_INSPECTIONS:
+        if matches_rule(ata_value, rule):
+            return rule["label"]
+    return None
 
 
 def parse_date_maybe(val):
@@ -76,10 +90,7 @@ def parse_date_maybe(val):
 
 
 def classify_date_first(remaining_days, remaining_hours):
-    """
-    Prefer remaining_days for urgency.
-    Fall back to remaining_hours if days are missing.
-    """
+    """Prefer remaining_days for urgency; fall back to remaining_hours."""
     if remaining_days is not None:
         d = float(remaining_days)
         if d < 0:
@@ -120,59 +131,59 @@ def build():
         raise FileNotFoundError(f"Missing input CSV: {INPUT_CSV}")
 
     df = pd.read_csv(INPUT_CSV)
+    df.columns = [c.strip() for c in df.columns]  # normalize headers
 
-    # Defensive column names (match CAMP export)
-    # Required: Item Type, ATA and Code, Registration Number
-    df["Item Type"] = df["Item Type"].astype(str)
-    df = df[df["Item Type"].str.upper() == "INSPECTION"].copy()
+    # Must-have columns for this script
+    required = ["Item Type", "Registration Number", "Description"]
+    missing = [c for c in required if c not in df.columns]
+    if missing:
+        raise KeyError(f"Missing required columns: {missing}. Found: {list(df.columns)}")
+
+    # Keep ALL inspections (more forgiving than == "INSPECTION")
+    df["Item Type"] = df["Item Type"].astype(str).str.strip().str.upper()
+    df = df[df["Item Type"].str.contains("INSPECTION", na=False)].copy()
 
     aircraft = {}
 
     for _, row in df.iterrows():
-        ata_value = row.get("ATA and Code")
+        tail = str(row.get("Registration Number", "")).strip()
+        if not tail:
+            continue
 
-    tail = str(row.get("Registration Number", "")).strip()
-    if not tail:
-        continue
+        ata_value = row.get("ATA and Code") if "ATA and Code" in df.columns else row.get("ATA")  # fallback
 
-    item = {
-        "label": str(row.get("Description")),
-        "ata": str(ata_value),
-        "description": row.get("Description"),
-        "next_due_date": parse_date_maybe(row.get("Next Due Date")),
-        "remaining_days": remaining_days,
-        "remaining_hours": remaining_hours,
-        "next_due_status": row.get("Next Due Status"),
-        "status": classify_date_first(remaining_days, remaining_hours),
-}
+        rd = row.get("Remaining Days")
+        rh = row.get("Remaining Hours")
+        remaining_days = float(rd) if pd.notna(rd) else None
+        remaining_hours = float(rh) if pd.notna(rh) else None
 
-            # Remaining fields
-            rd = row.get("Remaining Days")
-            rh = row.get("Remaining Hours")
+        tracked_label = tracked_label_for(ata_value)
 
-            remaining_days = float(rd) if pd.notna(rd) else None
-            remaining_hours = float(rh) if pd.notna(rh) else None
+        item = {
+            # Keep your original row description as the primary label
+            "label": str(row.get("Description", "")).strip(),
+            "ata": str(ata_value).strip() if pd.notna(ata_value) else "",
+            "description": row.get("Description"),
+            "next_due_date": parse_date_maybe(row.get("Next Due Date")),
+            "remaining_days": remaining_days,
+            "remaining_hours": remaining_hours,
+            "next_due_status": row.get("Next Due Status"),
+            "status": classify_date_first(remaining_days, remaining_hours),
 
-            item = {
-                "label": rule["label"],
-                "ata": str(ata_value) if pd.notna(ata_value) else "",
-                "description": row.get("Description"),
-                "next_due_date": parse_date_maybe(row.get("Next Due Date")),
-                "remaining_days": remaining_days,
-                "remaining_hours": remaining_hours,
-                "next_due_status": row.get("Next Due Status"),
-                "status": classify_date_first(remaining_days, remaining_hours),
+            # Optional flags for UI highlighting
+            "tracked": tracked_label is not None,
+            "tracked_label": tracked_label,
+        }
+
+        if tail not in aircraft:
+            ah = row.get("Airframe Hours")
+            aircraft[tail] = {
+                "airframe_report_date": parse_date_maybe(row.get("Airframe Report Date")),
+                "airframe_hours": float(ah) if pd.notna(ah) else None,
+                "items": [],
             }
 
-            if tail not in aircraft:
-                ah = row.get("Airframe Hours")
-                aircraft[tail] = {
-                    "airframe_report_date": parse_date_maybe(row.get("Airframe Report Date")),
-                    "airframe_hours": float(ah) if pd.notna(ah) else None,
-                    "items": [],
-                }
-
-            aircraft[tail]["items"].append(item)
+        aircraft[tail]["items"].append(item)
 
     # Sort items per aircraft
     for tail in aircraft:
