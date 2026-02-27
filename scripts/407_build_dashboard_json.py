@@ -4,45 +4,42 @@ from datetime import datetime
 
 import pandas as pd
 
-# ----------------------------
-# Repo paths (portable)
-# ----------------------------
-INPUT_CSV = Path("data/407_daily_due_list.csv")
-OUTPUT_JSON = Path("dist/data/dashboard.json")
+# ---------------- CONFIG ----------------
 
-# ----------------------------
-# Inspections to track
-# ----------------------------
+# If running locally, set these to Windows paths (RAW strings).
+# If running in GitHub Actions, just use repo-relative paths like:
+#   INPUT_FILE = Path("data/407_daily_due_list.csv")
+#   OUTPUT_JSON = Path("data/dashboard.json")
+
+INPUT_FILE = Path(r"C:\Users\nhorstme\Downloads\407_daily_due_list.csv")
+OUTPUT_JSON = Path(r"C:\Users\nhorstme\Downloads\dashboard.json")
+
 TRACKED_INSPECTIONS = [
-    {"label": "12 Month",             "match": "12MO-INSPECTION",             "mode": "contains"},
-    {"label": "24 Month",             "match": "24MO.INSPECTION",             "mode": "contains"},
-    {"label": "300HR/12M Airframe",   "match": "300HR-PERIODIC INSPECTION",   "mode": "contains"},
-    {"label": "300HR/12M Engine",     "match": "72/300",                      "mode": "exact"},   # important
-    {"label": "IFR Certs 91.411",     "match": "91.411",                      "mode": "contains"},
-    {"label": "IFR Certs 91.413",     "match": "91.413",                      "mode": "contains"},
-    {"label": "MR Mast Interim",      "match": "11-20 INTERIM",               "mode": "contains"},
-    {"label": "Freewheel Interim",    "match": "13-11 INTERIM",               "mode": "contains"},
-    {"label": "Transmission Interim", "match": "21-10 INTERIM",               "mode": "contains"},
-    {"label": "TRGB Interim",         "match": "10-11 INTERIM",               "mode": "contains"},
-    {"label": "Spring Link Interim",  "match": "20-12 INTERIM",               "mode": "contains"},
+    {"label": "12 Month",             "match": "12MO-INSPECTION",            "mode": "contains"},
+    {"label": "24 Month",             "match": "24MO.INSPECTION",            "mode": "contains"},
+    {"label": "300HR/12M Airframe",   "match": "300HR-PERIODIC INSPECTION",  "mode": "contains"},
+    {"label": "300HR/12M Engine",     "match": "72/300",                     "mode": "exact"},   # important!
+    {"label": "IFR Certs 91.411",     "match": "91.411",                     "mode": "contains"},
+    {"label": "IFR Certs 91.413",     "match": "91.413",                     "mode": "contains"},
+    {"label": "MR Mast Interim",      "match": "11-20 INTERIM",              "mode": "contains"},
+    {"label": "Freewheel Interim",    "match": "13-11 INTERIM",              "mode": "contains"},
+    {"label": "Transmission Interim", "match": "21-10 INTERIM",              "mode": "contains"},
+    {"label": "TRGB Interim",         "match": "10-11 INTERIM",              "mode": "contains"},
+    {"label": "Spring Link Interim",  "match": "20-12 INTERIM",              "mode": "contains"},
 ]
 
-# ----------------------------
-# Thresholds (date-first)
-# ----------------------------
 CRITICAL_DAYS = 7
 COMING_DUE_DAYS = 30
-
 CRITICAL_HOURS = 25
 COMING_DUE_HOURS = 100
 
 
-def _norm(x) -> str:
-    if x is None:
+# ---------------- HELPERS ----------------
+
+def _norm(val) -> str:
+    if val is None or (isinstance(val, float) and pd.isna(val)):
         return ""
-    if isinstance(x, float) and pd.isna(x):
-        return ""
-    return str(x).strip().upper()
+    return str(val).strip().upper()
 
 
 def matches_rule(ata_value, rule) -> bool:
@@ -52,18 +49,18 @@ def matches_rule(ata_value, rule) -> bool:
         return False
     if rule["mode"] == "exact":
         return ata == target
-    return target in ata  # contains
+    return target in ata
 
 
 def parse_date_maybe(val):
-    """Return ISO date (YYYY-MM-DD) or None."""
+    """Parse common dates; returns ISO (YYYY-MM-DD) or None."""
     if val is None or (isinstance(val, float) and pd.isna(val)):
         return None
     s = str(val).strip()
     if not s:
         return None
 
-    for fmt in ("%m/%d/%Y", "%Y-%m-%d", "%m/%d/%y"):
+    for fmt in ("%m/%d/%Y", "%Y-%m-%d"):
         try:
             return datetime.strptime(s, fmt).date().isoformat()
         except ValueError:
@@ -76,10 +73,7 @@ def parse_date_maybe(val):
 
 
 def classify_date_first(remaining_days, remaining_hours):
-    """
-    Prefer remaining_days for urgency.
-    Fall back to remaining_hours if days are missing.
-    """
+    """Prefer days-based urgency; fallback to hours if days missing."""
     if remaining_days is not None:
         d = float(remaining_days)
         if d < 0:
@@ -87,7 +81,7 @@ def classify_date_first(remaining_days, remaining_hours):
         if d <= CRITICAL_DAYS:
             return "CRITICAL"
         if d <= COMING_DUE_DAYS:
-            return "COMING_DUE"
+            return "COMING DUE"
         return "OK"
 
     if remaining_hours is not None:
@@ -97,14 +91,14 @@ def classify_date_first(remaining_days, remaining_hours):
         if h <= CRITICAL_HOURS:
             return "CRITICAL"
         if h <= COMING_DUE_HOURS:
-            return "COMING_DUE"
+            return "COMING DUE"
         return "OK"
 
     return "UNKNOWN"
 
 
 def urgency_sort_key(item):
-    bucket_order = {"OVERDUE": 0, "CRITICAL": 1, "COMING_DUE": 2, "OK": 3, "UNKNOWN": 4}
+    bucket_order = {"OVERDUE": 0, "CRITICAL": 1, "COMING DUE": 2, "OK": 3, "UNKNOWN": 4}
     bucket = bucket_order.get(item.get("status", "UNKNOWN"), 9)
     d = item.get("remaining_days")
     h = item.get("remaining_hours")
@@ -115,16 +109,23 @@ def urgency_sort_key(item):
     return (bucket, 999999)
 
 
+# ---------------- MAIN BUILD ----------------
+
 def build():
-    if not INPUT_CSV.exists():
-        raise FileNotFoundError(f"Missing input CSV: {INPUT_CSV}")
+    if not INPUT_FILE.exists():
+        raise FileNotFoundError(f"Input CSV not found: {INPUT_FILE}")
 
-    df = pd.read_csv(INPUT_CSV)
+    df = pd.read_csv(INPUT_FILE)
 
-    # Defensive column names (match CAMP export)
+    # Normalize expected column names (adjust here if your CSV differs)
     # Required: Item Type, ATA and Code, Registration Number
-    df["Item Type"] = df["Item Type"].astype(str)
-    df = df[df["Item Type"].str.upper() == "INSPECTION"].copy()
+    required_cols = ["Item Type", "ATA and Code", "Registration Number"]
+    missing = [c for c in required_cols if c not in df.columns]
+    if missing:
+        raise KeyError(f"CSV missing required columns: {missing}\nFound columns: {list(df.columns)}")
+
+    # Only inspections
+    df = df[df["Item Type"].astype(str).str.upper().str.strip() == "INSPECTION"].copy()
 
     aircraft = {}
 
@@ -139,7 +140,7 @@ def build():
             if not tail:
                 continue
 
-            # Remaining fields
+            # Remaining Days / Remaining Hours might be blank
             rd = row.get("Remaining Days")
             rh = row.get("Remaining Hours")
 
@@ -167,7 +168,6 @@ def build():
 
             aircraft[tail]["items"].append(item)
 
-    # Sort items per aircraft
     for tail in aircraft:
         aircraft[tail]["items"].sort(key=urgency_sort_key)
 
@@ -179,10 +179,8 @@ def build():
     }
 
     OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-      json.dump(out, f, indent=2)
-
-    print(f"Wrote {OUTPUT_JSON} ({len(aircraft)} aircraft)")
+    OUTPUT_JSON.write_text(json.dumps(out, indent=2), encoding="utf-8")
+    print(f"Wrote {OUTPUT_JSON} for {len(aircraft)} aircraft.")
 
 
 if __name__ == "__main__":
