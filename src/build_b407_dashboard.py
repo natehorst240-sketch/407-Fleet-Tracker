@@ -5,7 +5,7 @@ from datetime import datetime
 
 # ---- Paths (keep data separate from dist output) ----
 INPUT_FILE = "data/407_daily_due_list.csv"
-OUTPUT_JSON = "dist/data/dashboard.json"
+OUTPUT_JSON = "/data/dashboard.json"
 
 # ---- Inspections to track (from your screenshot) ----
 TRACKED_INSPECTIONS = [
