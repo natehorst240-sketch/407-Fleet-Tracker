@@ -32,9 +32,6 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
       - name: Build dashboard JSON
         run: python scripts/407_build_dashboard_json.py
 
