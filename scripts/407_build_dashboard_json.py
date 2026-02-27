@@ -9,7 +9,8 @@ import pandas as pd
 # Repo paths (portable)
 # ----------------------------
 INPUT_CSV = Path("data/407_daily_due_list.csv")
-OUTPUT_JSON = Path("data/dashboard.json")
+OUTPUT_JSON = Path("dist/data/dashboard.json")
+OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
 
 # ----------------------------
 # (Optional) Inspections to "flag" as tracked
