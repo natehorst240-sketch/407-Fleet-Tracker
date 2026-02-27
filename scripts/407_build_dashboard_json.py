@@ -177,10 +177,10 @@ def build():
         "aircraft_count": len(aircraft),
         "aircraft": aircraft,
     }
+    Path("data").mkdir(parents=True, exist_ok=True)
 
-    OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT_JSON.write_text(json.dumps(out, indent=2), encoding="utf-8")
-    print(f"Wrote {OUTPUT_JSON} for {len(aircraft)} aircraft.")
+    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
+    json.dump(out, f, indent=2)
 
 
 if __name__ == "__main__":
