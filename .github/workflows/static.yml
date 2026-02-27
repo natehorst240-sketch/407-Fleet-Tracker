@@ -32,6 +32,12 @@ jobs:
           pip install pandas
 
       # Create dist and copy your static website into it
+      - name: Ensure index.html exists
+        run: |
+          if [ -f "dist/index" ] && [ ! -f "dist/index.html" ]; then
+          mv dist/index dist/index.html
+          fi
+     
       - name: Prepare dist
         run: |
           rm -rf dist
