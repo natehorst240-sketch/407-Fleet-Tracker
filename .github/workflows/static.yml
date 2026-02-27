@@ -1,29 +1,6 @@
 name: Static Build
 
 on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run dashboard generator
-        run: python scripts/407_build_dashboard_json.py
-        working-directory: .
-
-on:
   push:
     branches: ["main"]
     paths:
@@ -45,15 +22,18 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install deps
-        run: pip install pandas
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       - name: Build dashboard JSON
         run: python scripts/407_build_dashboard_json.py
@@ -61,9 +41,7 @@ jobs:
       - name: Prepare public folder
         run: |
           mkdir -p public/data
-          # put your HTML page here (replace with your real path/name)
           cp public/index.html public/index.html || true
-          # copy json to where the browser will fetch it
           cp dist/data/dashboard.json public/data/dashboard.json
 
       - name: Setup Pages
