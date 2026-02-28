@@ -9,7 +9,7 @@ import pandas as pd
 VERYON_EXPORT_CSV = Path(
     os.getenv(
         "VERYON_407_CSV",
-        r"C:/Users/nateh/OneDrive - Intermountain Health/VeryonExports/Veryon Exports/407_daily_due_list.csv",
+        "/data/407_daily_due_list.csv",
     )
 )
 OUTPUT_JSON = Path("data/dashboard.json")
