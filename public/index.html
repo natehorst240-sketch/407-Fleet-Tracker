@@ -738,55 +738,35 @@ loadDashboard();
 <script>
 // ---- Merlin the Creole wizard --------------------------------------------
 
-const ELEVEN_API_KEY  = "sk_de187cf69fd60b980848a35cf254c853672b268cfa9479e6";
-const ELEVEN_VOICE_ID = "oubi7HGxNVjXMnWLgwBT"; // Cletus - Hillbilly
-const ELEVEN_CHAR_CAP = 10000;
-let elevenCharsUsed = parseInt(localStorage.getItem("merlin_chars_used") || "0");
-let elevenCharReset  = parseInt(localStorage.getItem("merlin_chars_reset") || "0");
+function merlinTTS(text) {
+  if (typeof speechSynthesis === "undefined") return;
+  speechSynthesis.cancel();
 
-// Reset counter monthly
-(function(){
-  const now = Date.now();
-  if(now - elevenCharReset > 30 * 24 * 60 * 60 * 1000){
-    elevenCharsUsed = 0;
-    elevenCharReset = now;
-    localStorage.setItem("merlin_chars_used", "0");
-    localStorage.setItem("merlin_chars_reset", String(now));
+  function speak() {
+    const utter = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
+    const preferred =
+      voices.find(v => v.name === "Microsoft David Desktop - English (United States)") ||
+      voices.find(v => v.name.includes("David")) ||
+      voices.find(v => v.name.includes("Mark"))  ||
+      voices.find(v => v.lang === "en-US" && v.name.toLowerCase().includes("male")) ||
+      voices.find(v => v.lang === "en-US") ||
+      voices[0];
+    if (preferred) utter.voice = preferred;
+    utter.rate   = 0.68;
+    utter.pitch  = 0.55;
+    utter.volume = 1.0;
+    currentUtterance = utter;
+    speechSynthesis.speak(utter);
   }
-})();
 
-async function merlinTTS(text) {
-  if (elevenCharsUsed + text.length > ELEVEN_CHAR_CAP) {
-    console.log("Merlin: ElevenLabs cap reached (" + elevenCharsUsed + "/" + ELEVEN_CHAR_CAP + " chars). No TTS.");
-    return;
-  }
-  try {
-    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE_ID}`, {
-      method: "POST",
-      headers: {
-        "xi-api-key": ELEVEN_API_KEY,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text,
-        model_id: "eleven_turbo_v2_5",
-        voice_settings: { stability: 0.45, similarity_boost: 0.75, style: 0.55, use_speaker_boost: true }
-      })
-    });
-    if (!res.ok) { console.warn("Merlin TTS error:", res.status); return; }
-    const blob = await res.blob();
-    const url  = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    currentUtterance = audio;
-    audio.play();
-    audio.onended = () => URL.revokeObjectURL(url);
-
-    elevenCharsUsed += text.length;
-    localStorage.setItem("merlin_chars_used", String(elevenCharsUsed));
-  } catch(e) {
-    console.warn("Merlin TTS failed:", e);
+  if (speechSynthesis.getVoices().length) {
+    speak();
+  } else {
+    speechSynthesis.onvoiceschanged = () => { speechSynthesis.onvoiceschanged = null; speak(); };
   }
 }
+
 
 let merlinSpeaking = false;
 let merlinQueue = [];
@@ -855,7 +835,7 @@ function merlinSpeak(text, opts = {}) {
     }
   }, 28);
 
-  // TTS — ElevenLabs Cletus (Hillbilly voice)
+  // TTS
   merlinTTS(text);
 
   // Auto-dismiss after a while
