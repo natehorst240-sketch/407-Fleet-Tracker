@@ -698,6 +698,7 @@ async function loadDashboard(){
     renderSummary(items);
     render12MonthChart(items);
     renderInspections();
+    if(window._merlinGreetPending){ window._merlinGreetPending=false; setTimeout(merlinGreet,1200); }
   }catch(err){
     console.error(err);
     errorBox.hidden=false;
@@ -713,5 +714,207 @@ document.getElementById("q-comp").addEventListener("input",()=>renderComponents(
 
 loadDashboard();
 </script>
+
+<!-- ========== MERLIN ========== -->
+<div id="merlin-wrap" style="position:fixed;bottom:24px;right:24px;z-index:9999;user-select:none;">
+  <div id="merlin-bubble" style="
+    display:none;position:absolute;bottom:130px;right:0;
+    background:#0d1117;border:1px solid #29b6f6;border-radius:8px 8px 0 8px;
+    padding:12px 14px;max-width:260px;min-width:180px;
+    font-family:'Share Tech Mono',monospace;font-size:12px;line-height:1.55;
+    color:#cdd6e0;box-shadow:0 0 20px rgba(41,182,246,0.15);
+  ">
+    <div id="merlin-text"></div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;" id="merlin-btns"></div>
+  </div>
+  <img id="merlin-img" src="https://cdn.jsdelivr.net/npm/clippyjs/dist/agents/Merlin/map.png"
+    style="width:80px;height:80px;cursor:pointer;image-rendering:pixelated;filter:drop-shadow(0 0 8px rgba(41,182,246,0.4));"
+    title="Merlin — click me, cher!"
+    onerror="this.style.display='none';document.getElementById('merlin-fallback').style.display='block'"
+  />
+  <div id="merlin-fallback" style="display:none;width:80px;height:80px;background:var(--surface);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;" onclick="merlinClick()">🧙</div>
+</div>
+
+<script>
+// ---- Merlin the Creole wizard --------------------------------------------
+
+let merlinSpeaking = false;
+let merlinQueue = [];
+let currentUtterance = null;
+
+const MERLIN_LINES = {
+  greeting: [
+    "Mais cher, welcome to da fleet tracker, yeah! I'm Merlin, your wizard of da skies, me.",
+    "Eh la-bas! You made it. Sit down, sha, let Merlin tell you what's goin on wit da birds.",
+    "Bon soir, cher! Merlin been waitin on you. Got some t'ings to tell you bout dis fleet, yeah.",
+  ],
+  overdue: (tail, insp) =>
+    `Mais, sha, dis ${tail} — dat ${insp} been PAST DUE, yeah! You best call somebody right now, cher, before Merlin hafta conjure up a miracle!`,
+  critical: (tail, insp, days) =>
+    `Laissez les bons temps rouler? Non non non! ${tail} got dat ${insp} comin up in ${days} days, cher. Dat ain't good, no.`,
+  allGood:
+    "Well I'll be! Ain't nothin too bad today, sha. But don't you go gettin lazy on me now, yeah, you hear?",
+  components: (tail, desc, hrs) =>
+    `Mais, listen here — dat ${tail}, she got dat ${desc} wit only ${hrs.toFixed(0)} hours left, cher. Merlin don't like dat one bit, no.`,
+  manyIssues: (n) =>
+    `Whoooeee, sha! ${n} t'ings need attention on dis fleet. Merlin been up all night, yeah, worryin bout dis. You better get to work, cher!`,
+  idle: [
+    "You still dere, cher? Merlin waitin patiently, him.",
+    "Sha, don't forget to check dem components tab, yeah. Some t'ings real close, me.",
+    "Merlin knows t'ings. Ask him anyt'ing bout dis fleet, yeah.",
+    "Laissez les bons temps rouler — but not too much, cher. Dem birds need maintenance, yeah!",
+    "Mon dieu, dat N307KH got more hours on her dan Merlin got years, sha!",
+  ],
+};
+
+function merlinSpeak(text, opts = {}) {
+  const bubble = document.getElementById("merlin-bubble");
+  const textEl = document.getElementById("merlin-text");
+  const btnsEl = document.getElementById("merlin-btns");
+
+  // Cancel current speech
+  if (currentUtterance) { speechSynthesis.cancel(); currentUtterance = null; }
+
+  // Show bubble
+  bubble.style.display = "block";
+  btnsEl.innerHTML = "";
+
+  // Typewriter effect
+  textEl.textContent = "";
+  let i = 0;
+  const interval = setInterval(() => {
+    textEl.textContent += text[i] || "";
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+      // Add dismiss button
+      const btn = document.createElement("button");
+      btn.textContent = "A'ight, cher";
+      btn.style.cssText = "background:transparent;border:1px solid #29b6f6;color:#29b6f6;font-family:'Share Tech Mono',monospace;font-size:10px;padding:4px 8px;border-radius:4px;cursor:pointer;";
+      btn.onclick = merlinDismiss;
+      btnsEl.appendChild(btn);
+
+      // Add "Tell me more" if callback provided
+      if (opts.more) {
+        const btn2 = document.createElement("button");
+        btn2.textContent = "Tell me more, yeah";
+        btn2.style.cssText = "background:transparent;border:1px solid rgba(41,182,246,0.4);color:#4a5568;font-family:'Share Tech Mono',monospace;font-size:10px;padding:4px 8px;border-radius:4px;cursor:pointer;";
+        btn2.onclick = opts.more;
+        btnsEl.appendChild(btn2);
+      }
+    }
+  }, 28);
+
+  // TTS — slow Southern drawl
+  if (typeof speechSynthesis !== "undefined") {
+    const utter = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
+    // Pick a deep male voice if available
+    const preferred = voices.find(v =>
+      v.name.includes("David") || v.name.includes("Mark") ||
+      v.name.includes("Daniel") || v.name.toLowerCase().includes("male")
+    ) || voices[0];
+    if (preferred) utter.voice = preferred;
+    utter.rate  = 0.72;   // slow drawl
+    utter.pitch = 0.65;   // deep
+    utter.volume = 0.85;
+    currentUtterance = utter;
+    speechSynthesis.speak(utter);
+  }
+
+  // Auto-dismiss after a while
+  if (!opts.persist) {
+    setTimeout(() => {
+      if (bubble.style.display !== "none") merlinDismiss();
+    }, Math.max(6000, text.length * 60));
+  }
+}
+
+function merlinDismiss() {
+  document.getElementById("merlin-bubble").style.display = "none";
+  if (currentUtterance) { speechSynthesis.cancel(); currentUtterance = null; }
+}
+
+function merlinClick() {
+  if (document.getElementById("merlin-bubble").style.display !== "none") {
+    merlinDismiss();
+    return;
+  }
+  merlinBriefing();
+}
+document.getElementById("merlin-img").onclick = merlinClick;
+
+function merlinBriefing() {
+  if (!DASH) {
+    merlinSpeak("Mais cher, da data ain't loaded yet, yeah. Give Merlin a moment, him.");
+    return;
+  }
+
+  const items = [];
+  (DASH.aircraft || []).forEach(a => {
+    (a.items || []).forEach(it => items.push({ tail: a.tail, ...it }));
+  });
+
+  const overdue  = items.filter(it => (it.remaining_days !== null && Number(it.remaining_days) < 0) ||
+                                       it.status === "OVERDUE");
+  const critical = items.filter(it => {
+    const d = Number(it.remaining_days);
+    return !isNaN(d) && d >= 0 && d <= 7;
+  });
+  const components200 = (DASH.components || []).filter(c => c.remaining_hours <= 50);
+
+  if (overdue.length) {
+    const o = overdue[0];
+    const moreIdx = [1];
+    merlinSpeak(MERLIN_LINES.overdue(o.tail, o.inspection), {
+      more: overdue.length > 1 ? () => {
+        const o2 = overdue[moreIdx[0]++ % overdue.length];
+        merlinSpeak(MERLIN_LINES.overdue(o2.tail, o2.inspection));
+      } : null
+    });
+  } else if (critical.length >= 3) {
+    merlinSpeak(MERLIN_LINES.manyIssues(critical.length), {
+      more: () => {
+        const c = critical[Math.floor(Math.random() * critical.length)];
+        merlinSpeak(MERLIN_LINES.critical(c.tail, c.inspection, Number(c.remaining_days)));
+      }
+    });
+  } else if (critical.length) {
+    const c = critical[0];
+    merlinSpeak(MERLIN_LINES.critical(c.tail, c.inspection, Number(c.remaining_days)), {
+      more: components200.length ? () => {
+        const comp = components200[0];
+        merlinSpeak(MERLIN_LINES.components(comp.tail, comp.description, comp.remaining_hours));
+      } : null
+    });
+  } else if (components200.length) {
+    const comp = components200[0];
+    merlinSpeak(MERLIN_LINES.components(comp.tail, comp.description, comp.remaining_hours));
+  } else {
+    merlinSpeak(MERLIN_LINES.allGood);
+  }
+}
+
+// Greet on load after data is ready
+function merlinGreet() {
+  const line = MERLIN_LINES.greeting[Math.floor(Math.random() * MERLIN_LINES.greeting.length)];
+  merlinSpeak(line, {
+    more: () => merlinBriefing()
+  });
+}
+
+// Idle chatter every ~3 minutes
+setInterval(() => {
+  if (document.getElementById("merlin-bubble").style.display === "none") {
+    const line = MERLIN_LINES.idle[Math.floor(Math.random() * MERLIN_LINES.idle.length)];
+    merlinSpeak(line);
+  }
+}, 3 * 60 * 1000);
+
+// Patch loadDashboard to trigger greeting after data loads
+const _origLoad = loadDashboard;
+window._merlinGreetPending = true;
+</script>
+
 </body>
 </html>
