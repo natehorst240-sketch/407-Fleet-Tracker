@@ -4,28 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>IHC Health Services — Bell 407 Due Dashboard</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-
   <style>
     :root{
-      --bg:#0a0c0f;
-      --surface:#111418;
-      --surface2:#181c22;
-      --border:#1e2530;
-      --green:#00e676;
-      --amber:#ffab00;
-      --red:#ff1744;
-      --overdue:#ff6d00;
-      --blue:#29b6f6;
-      --text:#cdd6e0;
-      --muted:#4a5568;
-      --heading:#e8edf2;
-      --mono:'Share Tech Mono', monospace;
-      --sans:'Barlow Condensed', sans-serif;
-      --body:'Barlow', sans-serif;
+      --bg:#0a0c0f; --surface:#111418; --surface2:#181c22; --border:#1e2530;
+      --green:#00e676; --amber:#ffab00; --red:#ff1744; --overdue:#ff6d00; --blue:#29b6f6;
+      --text:#cdd6e0; --muted:#4a5568; --heading:#e8edf2;
+      --mono:'Share Tech Mono',monospace; --sans:'Barlow Condensed',sans-serif; --body:'Barlow',sans-serif;
       --radius:6px;
     }
     *{box-sizing:border-box;margin:0;padding:0}
@@ -35,7 +22,7 @@
     header{background:var(--surface);border-bottom:1px solid var(--border);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:16px;}
     .logo{font-family:var(--sans);font-weight:900;font-size:20px;letter-spacing:3px;color:var(--heading);text-transform:uppercase;line-height:1;}
     .logo span{color:var(--blue);}
-    .subtitle{margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;line-height:1.2;}
+    .subtitle{margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
     .header-meta{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;line-height:1.7;white-space:nowrap;}
     .header-meta .date{color:var(--blue);}
 
@@ -53,7 +40,6 @@
     .tab-btn{font-family:var(--sans);font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:12px 18px;background:transparent;border:none;color:var(--muted);cursor:pointer;transition:all .15s;border-bottom:3px solid transparent;}
     .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.02);}
     .tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
-
     .tab-content{display:none;}
     .tab-content.active{display:block;}
 
@@ -64,6 +50,11 @@
     .divider-line{width:42px;height:2px;border-radius:1px;margin:6px 0 8px;background:var(--border);}
 
     .section-label{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:22px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+
+    /* 12-month bar chart panel */
+    .twelve-month-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;}
+    .twelve-month-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+    .twelve-month-chart-wrap{position:relative;height:280px;}
 
     .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;}
     .search{flex:1 1 280px;min-width:240px;display:flex;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;}
@@ -78,12 +69,12 @@
     .card-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
     .card-tail{font-family:var(--sans);font-weight:900;font-size:18px;letter-spacing:1px;color:var(--heading);display:flex;align-items:baseline;gap:10px;min-width:0;}
     .subline{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
-
-    .badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;flex:0 0 auto;}
+    .badge{display:inline-flex;align-items:center;font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 8px;border-radius:999px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;flex:0 0 auto;}
     .b-overdue{color:var(--overdue);border-color:rgba(255,109,0,0.35);background:rgba(255,109,0,0.08);}
     .b-red{color:var(--red);border-color:rgba(255,23,68,0.35);background:rgba(255,23,68,0.08);}
     .b-amber{color:var(--amber);border-color:rgba(255,171,0,0.35);background:rgba(255,171,0,0.08);}
     .b-green{color:var(--green);border-color:rgba(0,230,118,0.35);background:rgba(0,230,118,0.06);}
+    .b-blue{color:var(--blue);border-color:rgba(41,182,246,0.35);background:rgba(41,182,246,0.06);}
     .b-na{color:var(--muted);}
 
     .card-body{padding:12px 14px;}
@@ -91,24 +82,29 @@
     .item:last-child{border-bottom:none;}
     .bar{width:3px;height:34px;border-radius:2px;flex:0 0 auto;background:var(--border);margin-top:2px;}
     .bar.overdue{background:var(--overdue);box-shadow:0 0 10px rgba(255,109,0,0.25);}
-    .bar.red{background:var(--red);box-shadow:0 0 10px rgba(255,23,68,0.18);}
-    .bar.amber{background:var(--amber);box-shadow:0 0 10px rgba(255,171,0,0.14);}
-    .bar.green{background:var(--green);box-shadow:0 0 10px rgba(0,230,118,0.14);}
+    .bar.red{background:var(--red);}
+    .bar.amber{background:var(--amber);}
+    .bar.green{background:var(--green);}
+    .bar.blue{background:var(--blue);}
     .item-main{min-width:0;flex:1 1 auto;}
     .item-title{font-family:var(--body);font-size:12px;font-weight:600;color:var(--text);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .item-meta{margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;}
     .mono-pill{border:1px solid rgba(74,85,104,0.35);padding:2px 6px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;}
 
+    /* Components tab table */
     .table-wrap{overflow:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);}
-    table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px;min-width:920px;}
+    table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px;min-width:760px;}
     thead th{background:var(--surface2);color:var(--muted);font-family:var(--sans);font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:11px;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
-    tbody td{padding:10px 12px;border-bottom:1px solid rgba(30,37,48,0.7);vertical-align:top;}
+    tbody td{padding:10px 12px;border-bottom:1px solid rgba(30,37,48,0.7);vertical-align:middle;}
     tbody tr:hover{background:rgba(255,255,255,0.02);}
     .td-right{text-align:right;}
     .td-center{text-align:center;}
-    .small{font-size:10px;color:var(--muted);}
 
-    .empty{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;font-family:var(--mono);color:var(--muted);font-size:12px;}
+    /* Horizontal hours-remaining bar inside table */
+    .hrs-bar-wrap{display:flex;align-items:center;gap:8px;}
+    .hrs-bar-bg{flex:1;height:6px;background:var(--border);border-radius:3px;min-width:80px;max-width:160px;}
+    .hrs-bar-fill{height:6px;border-radius:3px;transition:width .3s;}
+    .hrs-val{font-family:var(--mono);font-size:11px;white-space:nowrap;min-width:44px;text-align:right;}
 
     /* Utilization tab */
     .util-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:14px;}
@@ -122,19 +118,15 @@
     .util-chart-wrap{padding:10px 14px;position:relative;height:140px;}
     .util-no-data{padding:20px 14px;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;}
 
+    .empty{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;font-family:var(--mono);color:var(--muted);font-size:12px;}
     footer{margin-top:38px;padding:16px 28px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--muted);display:flex;justify-content:space-between;letter-spacing:1px;flex-wrap:wrap;gap:10px;}
     .errbar{border:1px solid rgba(255,23,68,0.35);background:rgba(255,23,68,0.08);color:var(--red);padding:10px 12px;border-radius:var(--radius);font-family:var(--mono);font-size:12px;margin:14px 0;}
     code{font-family:var(--mono);}
-
-    @media(max-width:720px){
-      header{padding:16px 18px;}
-      .legend{padding:10px 18px;}
-      main{padding:18px 18px 36px;}
-    }
+    @media(max-width:720px){header{padding:16px 18px;}main{padding:18px 18px 36px;}}
   </style>
 </head>
-
 <body>
+
 <header>
   <div>
     <div class="logo">IHC <span>HEALTH</span> SERVICES</div>
@@ -158,7 +150,7 @@
 <main>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('inspections',this)">Inspections</button>
-    <button class="tab-btn" onclick="switchTab('ata',this)">ATA View</button>
+    <button class="tab-btn" onclick="switchTab('components',this)">Components</button>
     <button class="tab-btn" onclick="switchTab('utilization',this)">Utilization</button>
   </div>
 
@@ -189,6 +181,15 @@
 
   <!-- INSPECTIONS TAB -->
   <div id="tab-inspections" class="tab-content active">
+
+    <!-- 12-Month inspection bar chart -->
+    <div class="twelve-month-panel" id="twelve-month-panel" hidden>
+      <div class="twelve-month-title">Weeks Remaining — 12 Month Inspection</div>
+      <div class="twelve-month-chart-wrap">
+        <canvas id="twelve-month-chart"></canvas>
+      </div>
+    </div>
+
     <div class="toolbar">
       <div class="search">
         <span style="color:var(--muted);font-family:var(--mono);font-size:11px;">FILTER</span>
@@ -207,39 +208,43 @@
     <div id="empty-inspections" class="empty" hidden>No tracked inspection items found.</div>
   </div>
 
-  <!-- ATA TAB -->
-  <div id="tab-ata" class="tab-content">
+  <!-- COMPONENTS TAB -->
+  <div id="tab-components" class="tab-content">
     <div class="toolbar">
       <div class="search">
         <span style="color:var(--muted);font-family:var(--mono);font-size:11px;">FILTER</span>
-        <input id="q-ata" placeholder="Search ATA, inspection name, or tail…" autocomplete="off" />
+        <input id="q-comp" placeholder="Search tail, component, or ATA…" autocomplete="off" />
       </div>
-      <div class="chip-row">
-        <button class="chip active" onclick="setAtaSort('severity',this)">Sort: Severity</button>
-        <button class="chip" onclick="setAtaSort('ata',this)">Sort: ATA</button>
+      <div class="chip-row" id="comp-window-chips">
+        <button class="chip active" onclick="setCompWindow(200,this)">≤200 hrs</button>
+        <button class="chip" onclick="setCompWindow(100,this)">≤100 hrs</button>
+        <button class="chip" onclick="setCompWindow(50,this)">≤50 hrs</button>
+        <button class="chip" onclick="setCompWindow(9999,this)">All</button>
       </div>
     </div>
-    <div class="section-label">Grouped by ATA Code</div>
+    <div class="section-label">Components Due Retire / Overhaul</div>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>ATA Code</th><th>Inspection</th><th>Aircraft</th>
-            <th class="td-center">Status</th><th class="td-right">Days Rem</th>
-            <th class="td-right">Hours Rem</th><th>Due Date</th>
+            <th>Aircraft</th>
+            <th>ATA</th>
+            <th>Component</th>
+            <th>Type</th>
+            <th class="td-right">Hours Remaining</th>
           </tr>
         </thead>
-        <tbody id="ata-tbody"></tbody>
+        <tbody id="comp-tbody"></tbody>
       </table>
     </div>
-    <div id="empty-ata" class="empty" hidden style="margin-top:12px;">No ATA-grouped items found.</div>
+    <div id="empty-comp" class="empty" hidden style="margin-top:12px;">No components found within selected window.</div>
   </div>
 
   <!-- UTILIZATION TAB -->
   <div id="tab-utilization" class="tab-content">
     <div class="section-label">Fleet Utilization — Daily Flight Hours</div>
     <div id="util-grid" class="util-grid"></div>
-    <div id="empty-util" class="empty" hidden>No utilization data available yet. History accumulates with each daily scraper run.</div>
+    <div id="empty-util" class="empty" hidden>No utilization data available yet.</div>
   </div>
 </main>
 
@@ -253,8 +258,10 @@ Chart.register(ChartDataLabels);
 
 const DASHBOARD_URL = "data/dashboard.json";
 let DASH = null;
+let RAW_COMP = [];        // raw component rows from dashboard.json
 let severityFilter = "all";
-let ataSortMode = "severity";
+let compWindow = 200;
+let twelveMonthChart = null;
 const utilCharts = {};
 
 // ---- Tab switching --------------------------------------------------------
@@ -264,26 +271,11 @@ function switchTab(name, btn){
   document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
   document.getElementById("tab-" + name).classList.add("active");
   if(name === "utilization") renderUtilization();
+  if(name === "components")  renderComponents();
 }
 
-// ---- Severity filter ------------------------------------------------------
-function setSeverityFilter(val, btn){
-  severityFilter = val;
-  document.querySelectorAll("#severity-chips .chip").forEach(c => c.classList.remove("active"));
-  btn.classList.add("active");
-  renderInspections();
-}
-
-function setAtaSort(mode, btn){
-  ataSortMode = mode;
-  btn.parentElement.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-  btn.classList.add("active");
-  renderAta();
-}
-
-// ---- Utility functions ----------------------------------------------------
+// ---- Helpers --------------------------------------------------------------
 function safeStr(x){ return (x===null||x===undefined) ? "" : String(x); }
-
 function fmtDate(d){
   if(!d) return "—";
   const dt = new Date(d + "T00:00:00");
@@ -291,13 +283,12 @@ function fmtDate(d){
   return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`;
 }
 
-// ---- Data normalization ---------------------------------------------------
-// aircraft[] is an array with {tail, airframe_hours, avg_daily, daily_data, items[]}
+// ---- Normalize inspection items from aircraft array ----------------------
 function normalizeItems(dash){
   const out = [];
   if(!Array.isArray(dash.aircraft)) return out;
   dash.aircraft.forEach(a => {
-    const tail = a.tail || a.registration || "";
+    const tail = a.tail || "";
     const tt   = a.airframe_hours;
     (a.items || []).forEach(it => out.push({ tail, total_time: tt, ...it }));
   });
@@ -306,27 +297,27 @@ function normalizeItems(dash){
 
 // ---- Classification -------------------------------------------------------
 function classifyItem(item){
-  const days = item.remaining_days;
-  if(days !== null && days !== undefined && days !== "" && !isNaN(Number(days))){
-    const d = Number(days);
-    if(d < 0)   return "overdue";
-    if(d <= 7)  return "critical";
-    if(d <= 30) return "coming";
+  const d = item.remaining_days;
+  if(d !== null && d !== undefined && d !== "" && !isNaN(Number(d))){
+    const v = Number(d);
+    if(v < 0)   return "overdue";
+    if(v <= 7)  return "critical";
+    if(v <= 30) return "coming";
     return "ok";
   }
-  const hrs = item.remaining_hours;
-  if(hrs !== null && hrs !== undefined && hrs !== "" && !isNaN(Number(hrs))){
-    const h = Number(hrs);
-    if(h < 0)    return "overdue";
-    if(h <= 25)  return "critical";
-    if(h <= 100) return "coming";
+  const h = item.remaining_hours;
+  if(h !== null && h !== undefined && h !== "" && !isNaN(Number(h))){
+    const v = Number(h);
+    if(v < 0)    return "overdue";
+    if(v <= 25)  return "critical";
+    if(v <= 100) return "coming";
     return "ok";
   }
   const s = safeStr(item.status || item.next_due_status).toUpperCase();
   if(s.includes("PAST DUE")||s.includes("OVERDUE")) return "overdue";
   if(s.includes("CRITICAL"))  return "critical";
   if(s.includes("COMING"))    return "coming";
-  if(s.includes("OK")||s.includes("TOLERANCE")) return "ok";
+  if(s.includes("OK"))        return "ok";
   return "na";
 }
 
@@ -335,7 +326,7 @@ function scoreItem(item){
   const d = Number(item.remaining_days);
   const h = Number(item.remaining_hours);
   if(sev==="overdue")  return !isNaN(d) ? -100000+d : !isNaN(h) ? -90000+h : -80000;
-  if(sev==="critical") return !isNaN(d) ?        d  : !isNaN(h) ?  2000+h  :  5000;
+  if(sev==="critical") return !isNaN(d) ? d         : !isNaN(h) ?  2000+h  :  5000;
   if(sev==="coming")   return !isNaN(d) ? 10000+d   : !isNaN(h) ? 14000+h  : 18000;
   if(sev==="ok")       return !isNaN(d) ? 20000+d   : !isNaN(h) ? 24000+h  : 28000;
   return 99999;
@@ -350,7 +341,16 @@ function badgeFor(sev){
 }
 
 function barClass(sev){
-  return {overdue:"overdue",critical:"red",coming:"amber",ok:"green"}[sev] || "";
+  return {overdue:"overdue",critical:"red",coming:"amber",ok:"green"}[sev]||"";
+}
+
+// ---- Component severity (hours only) -------------------------------------
+function classifyHours(h){
+  if(h === null || h === undefined || isNaN(h)) return "na";
+  if(h < 0)    return "overdue";
+  if(h <= 25)  return "critical";
+  if(h <= 100) return "coming";
+  return "ok";
 }
 
 // ---- Summary counts -------------------------------------------------------
@@ -372,67 +372,145 @@ function renderSummary(items){
 
 // ---- Header ---------------------------------------------------------------
 function updateHeader(meta){
-  document.getElementById("hdr-report-date").textContent = `REPORT DATE: ${meta?.report_date || "—"}`;
-  document.getElementById("hdr-generated").textContent   = `GENERATED: ${meta?.generated_utc || "—"}`;
-  document.getElementById("hdr-source").textContent      = `SOURCE: ${meta?.source || "data/dashboard.json"}`;
-  document.getElementById("ftr-right").textContent       = `Last update: ${meta?.generated_utc || "—"}`;
+  document.getElementById("hdr-report-date").textContent = `REPORT DATE: ${meta?.report_date||"—"}`;
+  document.getElementById("hdr-generated").textContent   = `GENERATED: ${meta?.generated_utc||"—"}`;
+  document.getElementById("hdr-source").textContent      = `SOURCE: ${meta?.source||"data/dashboard.json"}`;
+  document.getElementById("ftr-right").textContent       = `Last update: ${meta?.generated_utc||"—"}`;
+}
+
+// ---- 12-Month bar chart ---------------------------------------------------
+function render12MonthChart(items){
+  // Pull 12 Month inspection items only
+  const twelveItems = items
+    .filter(it => safeStr(it.inspection).toUpperCase().includes("12 MONTH"))
+    .filter(it => it.remaining_days !== null && it.remaining_days !== undefined && !isNaN(Number(it.remaining_days)));
+
+  const panel = document.getElementById("twelve-month-panel");
+  if(!twelveItems.length){ panel.hidden = true; return; }
+  panel.hidden = false;
+
+  // Sort by weeks remaining ascending (most urgent first)
+  twelveItems.sort((a,b) => Number(a.remaining_days) - Number(b.remaining_days));
+
+  const labels = twelveItems.map(it => it.tail);
+  const weeks  = twelveItems.map(it => parseFloat((Number(it.remaining_days)/7).toFixed(1)));
+
+  const colors = weeks.map(w => {
+    if(w < 0)   return "rgba(255,109,0,0.85)";   // overdue
+    if(w <= 1)  return "rgba(255,23,68,0.85)";    // critical <1 week
+    if(w <= 4)  return "rgba(255,171,0,0.85)";    // coming ≤4 weeks
+    return "rgba(41,182,246,0.7)";                // ok
+  });
+
+  if(twelveMonthChart){ twelveMonthChart.destroy(); twelveMonthChart = null; }
+
+  const ctx = document.getElementById("twelve-month-chart").getContext("2d");
+  twelveMonthChart = new Chart(ctx, {
+    type: "bar",
+    data:{
+      labels,
+      datasets:[{
+        label:"Weeks Remaining",
+        data: weeks,
+        backgroundColor: colors,
+        borderRadius: 4,
+        borderSkipped: false,
+      }]
+    },
+    options:{
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins:{
+        legend:{ display:false },
+        datalabels:{
+          color:"#cdd6e0",
+          font:{ family:"'Share Tech Mono',monospace", size:10 },
+          anchor:"end", align:"right",
+          formatter: v => v < 0 ? `${Math.abs(v).toFixed(1)}w OVERDUE` : `${v}w`,
+        },
+        tooltip:{
+          callbacks:{
+            label: ctx => {
+              const w = ctx.parsed.x;
+              const d = Math.round(w * 7);
+              return w < 0 ? ` ${Math.abs(d)} days overdue` : ` ${d} days (${w} weeks)`;
+            }
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{ color:"rgba(30,37,48,0.6)" },
+          ticks:{ color:"#4a5568", font:{ family:"'Share Tech Mono',monospace", size:9 },
+            callback: v => `${v}w` },
+          title:{ display:true, text:"Weeks Remaining", color:"#4a5568",
+            font:{ family:"'Barlow Condensed',sans-serif", size:11, weight:"700" } }
+        },
+        y:{
+          grid:{ display:false },
+          ticks:{ color:"#cdd6e0", font:{ family:"'Share Tech Mono',monospace", size:11 } }
+        }
+      },
+      layout:{ padding:{ right:70 } }
+    },
+    plugins:[ChartDataLabels]
+  });
 }
 
 // ---- Inspections tab ------------------------------------------------------
-function applyFilters(items, query){
-  const q = query.trim().toLowerCase();
-  return items.filter(it => {
-    const sev = classifyItem(it);
-    if(severityFilter !== "all"){
-      if(severityFilter !== sev) return false;
-    }
-    if(!q) return true;
-    const hay = [it.tail,it.inspection,it.ata,it.status,it.due_date].map(safeStr).join(" ").toLowerCase();
-    return hay.includes(q);
-  });
+function setSeverityFilter(val, btn){
+  severityFilter = val;
+  document.querySelectorAll("#severity-chips .chip").forEach(c => c.classList.remove("active"));
+  btn.classList.add("active");
+  renderInspections();
 }
 
 function renderInspections(){
-  const all   = normalizeItems(DASH);
-  const items = applyFilters(all, document.getElementById("q-aircraft").value);
+  const all = normalizeItems(DASH);
+  const q   = document.getElementById("q-aircraft").value.trim().toLowerCase();
+
+  const filtered = all.filter(it => {
+    const sev = classifyItem(it);
+    if(severityFilter !== "all" && severityFilter !== sev) return false;
+    if(!q) return true;
+    return [it.tail,it.inspection,it.ata,it.status,it.due_date].map(safeStr).join(" ").toLowerCase().includes(q);
+  });
+
   const cards = document.getElementById("cards");
   cards.innerHTML = "";
 
-  // Group by tail
   const byTail = new Map();
-  items.forEach(it => {
-    const t = safeStr(it.tail) || "UNKNOWN";
-    if(!byTail.has(t)) byTail.set(t, []);
+  filtered.forEach(it => {
+    const t = safeStr(it.tail)||"UNKNOWN";
+    if(!byTail.has(t)) byTail.set(t,[]);
     byTail.get(t).push(it);
   });
 
-  const tails = Array.from(byTail.keys()).sort((a,b) => {
+  const tails = Array.from(byTail.keys()).sort((a,b)=>{
     const sa = Math.min(...byTail.get(a).map(scoreItem));
     const sb = Math.min(...byTail.get(b).map(scoreItem));
-    return sa - sb || a.localeCompare(b);
+    return sa-sb||a.localeCompare(b);
   });
 
   document.getElementById("empty-inspections").hidden = !!tails.length;
 
   tails.forEach(tail => {
-    const list    = byTail.get(tail).slice().sort((x,y) => scoreItem(x)-scoreItem(y));
-    const sevTop  = classifyItem(list[0]);
-    const tt      = list[0].total_time;
-
-    const card = document.createElement("div");
-    card.className = "card";
+    const list   = byTail.get(tail).slice().sort((x,y)=>scoreItem(x)-scoreItem(y));
+    const sevTop = classifyItem(list[0]);
+    const tt     = list[0].total_time;
 
     const rows = list.slice(0,12).map(it => {
       const sev  = classifyItem(it);
-      const insp = safeStr(it.inspection || it.name || "Inspection");
-      const ata  = safeStr(it.ata || "—");
+      const insp = safeStr(it.inspection||"Inspection");
+      const ata  = safeStr(it.ata||"—");
       const due  = fmtDate(it.due_date);
-      const d    = (it.remaining_days !== null && it.remaining_days !== undefined && !isNaN(Number(it.remaining_days))) ? Number(it.remaining_days) : null;
-      const h    = (it.remaining_hours !== null && it.remaining_hours !== undefined && !isNaN(Number(it.remaining_hours))) ? Number(it.remaining_hours) : null;
-      const metric = d !== null ? `${d}d` : h !== null ? `${h.toFixed(1)}h` : safeStr(it.status || "—").slice(0,18);
+      const d = (it.remaining_days!==null&&it.remaining_days!==undefined&&!isNaN(Number(it.remaining_days)))?Number(it.remaining_days):null;
+      const h = (it.remaining_hours!==null&&it.remaining_hours!==undefined&&!isNaN(Number(it.remaining_hours)))?Number(it.remaining_hours):null;
+      const metric = d!==null ? `${d}d` : h!==null ? `${h.toFixed(1)}h` : safeStr(it.status||"—").slice(0,18);
       const meta = [];
-      if(ata && ata !== "—") meta.push(`<span class="mono-pill">ATA ${ata}</span>`);
-      if(due !== "—") meta.push(`<span class="mono-pill">DUE ${due}</span>`);
+      if(ata&&ata!=="—") meta.push(`<span class="mono-pill">ATA ${ata}</span>`);
+      if(due!=="—") meta.push(`<span class="mono-pill">DUE ${due}</span>`);
       meta.push(`<span class="mono-pill">${metric}</span>`);
       return `<div class="item">
         <div class="bar ${barClass(sev)}"></div>
@@ -444,11 +522,13 @@ function renderInspections(){
       </div>`;
     }).join("");
 
+    const card = document.createElement("div");
+    card.className = "card";
     card.innerHTML = `
       <div class="card-header">
         <div class="card-tail">
           <span>${tail}</span>
-          <span class="subline">${tt ? Number(tt).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:1}) + " TT" : ""}</span>
+          <span class="subline">${tt?Number(tt).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:1})+" TT":""}</span>
         </div>
         ${badgeFor(sevTop)}
       </div>
@@ -457,56 +537,65 @@ function renderInspections(){
   });
 }
 
-// ---- ATA tab --------------------------------------------------------------
-function renderAta(){
-  const all = normalizeItems(DASH);
-  const q   = document.getElementById("q-ata").value.trim().toLowerCase();
-  const filtered = all.filter(it => {
+// ---- Components tab -------------------------------------------------------
+function setCompWindow(w, btn){
+  compWindow = w;
+  document.querySelectorAll("#comp-window-chips .chip").forEach(c => c.classList.remove("active"));
+  btn.classList.add("active");
+  renderComponents();
+}
+
+function renderComponents(){
+  const q = document.getElementById("q-comp").value.trim().toLowerCase();
+
+  const filtered = RAW_COMP.filter(c => {
+    const h = Number(c.remaining_hours);
+    if(compWindow < 9999 && (!isFinite(h) || h > compWindow)) return false;
     if(!q) return true;
-    return [it.ata,it.inspection,it.tail].map(safeStr).join(" ").toLowerCase().includes(q);
+    return [c.tail, c.ata, c.description, c.item_type, c.label].map(safeStr).join(" ").toLowerCase().includes(q);
+  }).sort((a,b) => {
+    const ha = isFinite(Number(a.remaining_hours)) ? Number(a.remaining_hours) : 99999;
+    const hb = isFinite(Number(b.remaining_hours)) ? Number(b.remaining_hours) : 99999;
+    return ha - hb || a.tail.localeCompare(b.tail);
   });
 
-  const tbody = document.getElementById("ata-tbody");
+  const tbody = document.getElementById("comp-tbody");
   tbody.innerHTML = "";
-  document.getElementById("empty-ata").hidden = !!filtered.length;
+  document.getElementById("empty-comp").hidden = !!filtered.length;
   if(!filtered.length) return;
 
-  // Group by ATA
-  const byAta = new Map();
-  filtered.forEach(it => {
-    const ata = safeStr(it.ata || "—");
-    if(!byAta.has(ata)) byAta.set(ata, []);
-    byAta.get(ata).push(it);
-  });
+  // Max hours for scaling the inline bar (use 200 as reference)
+  const maxH = Math.max(200, ...filtered.map(c => Number(c.remaining_hours)||0));
 
-  const groups = Array.from(byAta.entries());
-  const groupScore = items => Math.min(...items.map(scoreItem));
+  filtered.forEach(c => {
+    const h    = isFinite(Number(c.remaining_hours)) ? Number(c.remaining_hours) : null;
+    const sev  = classifyHours(h);
+    const pct  = h !== null ? Math.min(100, Math.max(0, (h / maxH) * 100)) : 0;
+    const color = {overdue:"var(--overdue)",critical:"var(--red)",coming:"var(--amber)",ok:"var(--green)"}[sev]||"var(--muted)";
+    const hStr = h !== null ? h.toFixed(1) : "—";
 
-  if(ataSortMode === "severity"){
-    groups.sort((a,b) => groupScore(a[1]) - groupScore(b[1]) || a[0].localeCompare(b[0]));
-  } else {
-    groups.sort((a,b) => a[0].localeCompare(b[0]));
-  }
+    // Determine label: RETIRE or OVERHAUL from description
+    const desc = safeStr(c.description).toUpperCase();
+    const label = desc.includes("RETIRE") ? "RETIRE" :
+                  desc.includes("OVERHAUL") ? "OVERHAUL" :
+                  desc.includes("LIMIT") ? "LIMIT" :
+                  safeStr(c.item_type);
 
-  groups.forEach(([ata, items]) => {
-    items.slice().sort((x,y) => scoreItem(x)-scoreItem(y)).forEach(it => {
-      const sev  = classifyItem(it);
-      const insp = safeStr(it.inspection || "Inspection");
-      const tail = safeStr(it.tail || "—");
-      const due  = fmtDate(it.due_date);
-      const d    = (it.remaining_days !== null && it.remaining_days !== undefined && !isNaN(Number(it.remaining_days))) ? Number(it.remaining_days) : null;
-      const h    = (it.remaining_hours !== null && it.remaining_hours !== undefined && !isNaN(Number(it.remaining_hours))) ? Number(it.remaining_hours) : null;
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><span class="mono-pill">${ata}</span></td>
-        <td>${insp}</td>
-        <td><span class="mono-pill">${tail}</span></td>
-        <td class="td-center">${badgeFor(sev)}</td>
-        <td class="td-right">${d === null ? "—" : d}</td>
-        <td class="td-right">${h === null ? "—" : h.toFixed(1)}</td>
-        <td>${due}</td>`;
-      tbody.appendChild(tr);
-    });
+    const badgeCls = {RETIRE:"b-overdue",OVERHAUL:"b-amber",LIMIT:"b-red"}[label]||"b-blue";
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="mono-pill">${c.tail}</span></td>
+      <td><span class="mono-pill">${safeStr(c.ata)||"—"}</span></td>
+      <td style="max-width:340px;white-space:normal;line-height:1.3;">${safeStr(c.description)}</td>
+      <td class="td-center"><span class="badge ${badgeCls}">${label}</span></td>
+      <td class="td-right">
+        <div class="hrs-bar-wrap">
+          <div class="hrs-bar-bg"><div class="hrs-bar-fill" style="width:${pct}%;background:${color};"></div></div>
+          <span class="hrs-val" style="color:${color}">${hStr} hrs</span>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
   });
 }
 
@@ -514,170 +603,113 @@ function renderAta(){
 function renderUtilization(){
   const grid = document.getElementById("util-grid");
   grid.innerHTML = "";
-
-  // Destroy old charts
   Object.values(utilCharts).forEach(c => c.destroy());
   Object.keys(utilCharts).forEach(k => delete utilCharts[k]);
 
   const aircraft = DASH?.aircraft || [];
-  const withData = aircraft.filter(a => Array.isArray(a.daily_data) && a.daily_data.length >= 2);
+  const withData = aircraft.filter(a => Array.isArray(a.daily_data) && a.daily_data.length >= 2)
+                           .sort((a,b)=>a.tail.localeCompare(b.tail));
   const noData   = aircraft.filter(a => !Array.isArray(a.daily_data) || a.daily_data.length < 2);
 
-  document.getElementById("empty-util").hidden = !!(withData.length || noData.length);
+  document.getElementById("empty-util").hidden = !!(withData.length||noData.length);
 
-  // Sort by tail
-  const sorted = [...withData].sort((a,b) => a.tail.localeCompare(b.tail));
-
-  sorted.forEach(ac => {
+  withData.forEach(ac => {
     const avg  = ac.avg_daily;
     const tt   = ac.airframe_hours;
     const data = ac.daily_data;
-
-    // Compute daily deltas for bar chart
-    const labels = [];
-    const bars   = [];
-    for(let i = 1; i < data.length; i++){
-      const prev = data[i-1];
-      const curr = data[i];
-      const delta = Math.max(0, curr.hours - prev.hours);
-      labels.push(curr.date.slice(5)); // MM-DD
-      bars.push(parseFloat(delta.toFixed(2)));
+    const labels=[], bars=[];
+    for(let i=1;i<data.length;i++){
+      labels.push(data[i].date.slice(5));
+      bars.push(parseFloat(Math.max(0,data[i].hours-data[i-1].hours).toFixed(2)));
     }
-
-    const avgStr = avg !== null && avg !== undefined ? `${avg.toFixed(2)} hrs/day` : "—";
-    const ttStr  = tt !== null && tt !== undefined ? Number(tt).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:1}) : "—";
-    const wkStr  = ac.projection_weekly !== null && ac.projection_weekly !== undefined ? ac.projection_weekly.toFixed(1) : "—";
+    const avgStr = avg!=null ? `${avg.toFixed(2)} hrs/day` : "—";
+    const ttStr  = tt!=null  ? Number(tt).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:1}) : "—";
+    const wkStr  = ac.projection_weekly!=null ? ac.projection_weekly.toFixed(1) : "—";
+    const canvasId = `chart-${ac.tail.replace(/\W/g,"_")}`;
 
     const card = document.createElement("div");
     card.className = "util-card";
-    const canvasId = `chart-${ac.tail.replace(/\W/g,"_")}`;
     card.innerHTML = `
       <div class="util-card-header">
         <span class="util-tail">${ac.tail}</span>
         <span class="subline">${ttStr} TT</span>
       </div>
       <div class="util-stats">
-        <div class="util-stat">
-          <div class="util-stat-val">${avgStr}</div>
-          <div class="util-stat-lbl">Avg Daily</div>
-        </div>
-        <div class="util-stat">
-          <div class="util-stat-val">${wkStr} hrs</div>
-          <div class="util-stat-lbl">Proj Weekly</div>
-        </div>
-        <div class="util-stat">
-          <div class="util-stat-val">${data.length}</div>
-          <div class="util-stat-lbl">Data Points</div>
-        </div>
+        <div class="util-stat"><div class="util-stat-val">${avgStr}</div><div class="util-stat-lbl">Avg Daily</div></div>
+        <div class="util-stat"><div class="util-stat-val">${wkStr} hrs</div><div class="util-stat-lbl">Proj Weekly</div></div>
+        <div class="util-stat"><div class="util-stat-val">${data.length}</div><div class="util-stat-lbl">Data Points</div></div>
       </div>
       ${bars.length ? `<div class="util-chart-wrap"><canvas id="${canvasId}"></canvas></div>` : `<div class="util-no-data">Insufficient data for chart</div>`}`;
     grid.appendChild(card);
 
     if(bars.length){
       const ctx = document.getElementById(canvasId).getContext("2d");
-      utilCharts[canvasId] = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels,
-          datasets:[{
-            label: "Daily Hours",
-            data: bars,
-            backgroundColor: bars.map(v =>
-              v <= 0 ? "rgba(74,85,104,0.3)" :
-              v >= 5 ? "rgba(0,230,118,0.7)" :
-              v >= 2 ? "rgba(41,182,246,0.7)" :
-              "rgba(41,182,246,0.4)"
-            ),
-            borderRadius: 3,
-            borderSkipped: false,
-          }]
-        },
-        options:{
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins:{
-            legend:{ display: false },
-            datalabels:{
-              color: "#cdd6e0",
-              font:{ family:"'Share Tech Mono',monospace", size:9 },
-              anchor:"end", align:"top",
-              formatter: v => v > 0 ? v.toFixed(1) : "",
-            },
-            tooltip:{
-              callbacks:{
-                label: ctx => ` ${ctx.parsed.y.toFixed(2)} hrs flown`
-              }
-            }
-          },
+      utilCharts[canvasId] = new Chart(ctx,{
+        type:"bar",
+        data:{labels,datasets:[{label:"Daily Hours",data:bars,
+          backgroundColor:bars.map(v=>v<=0?"rgba(74,85,104,0.3)":v>=5?"rgba(0,230,118,0.7)":v>=2?"rgba(41,182,246,0.7)":"rgba(41,182,246,0.4)"),
+          borderRadius:3,borderSkipped:false}]},
+        options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false},
+            datalabels:{color:"#cdd6e0",font:{family:"'Share Tech Mono',monospace",size:9},anchor:"end",align:"top",formatter:v=>v>0?v.toFixed(1):""},
+            tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y.toFixed(2)} hrs`}}},
           scales:{
-            x:{
-              grid:{ color:"rgba(30,37,48,0.6)" },
-              ticks:{ color:"#4a5568", font:{ family:"'Share Tech Mono',monospace", size:9 } }
-            },
-            y:{
-              grid:{ color:"rgba(30,37,48,0.6)" },
-              ticks:{ color:"#4a5568", font:{ family:"'Share Tech Mono',monospace", size:9 } },
-              beginAtZero: true,
-            }
-          }
-        },
+            x:{grid:{color:"rgba(30,37,48,0.6)"},ticks:{color:"#4a5568",font:{family:"'Share Tech Mono',monospace",size:9}}},
+            y:{grid:{color:"rgba(30,37,48,0.6)"},ticks:{color:"#4a5568",font:{family:"'Share Tech Mono',monospace",size:9}},beginAtZero:true}
+          }},
         plugins:[ChartDataLabels]
       });
     }
   });
 
-  // Aircraft with no data — show as a simple note
   if(noData.length){
     const section = document.createElement("div");
-    section.className = "section-label";
-    section.style.marginTop = "24px";
-    section.textContent = "Insufficient History (≤1 data point)";
+    section.className="section-label";
+    section.style.marginTop="24px";
+    section.textContent="Insufficient History (≤1 data point)";
     grid.appendChild(section);
-
     const row = document.createElement("div");
-    row.style.cssText = "display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;";
-    noData.forEach(ac => {
-      const pill = document.createElement("span");
-      pill.className = "mono-pill";
-      pill.style.cssText = "font-family:var(--mono);font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:4px;color:var(--muted);";
-      pill.textContent = ac.tail;
+    row.style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;";
+    noData.forEach(ac=>{
+      const pill=document.createElement("span");
+      pill.className="mono-pill";
+      pill.style="font-family:var(--mono);font-size:11px;padding:4px 10px;border:1px solid var(--border);border-radius:4px;color:var(--muted);";
+      pill.textContent=ac.tail;
       row.appendChild(pill);
     });
     grid.appendChild(row);
   }
 }
 
-// ---- Master render --------------------------------------------------------
-function renderAll(){
-  const items = normalizeItems(DASH);
-  renderSummary(items);
-  renderInspections();
-  renderAta();
-  // Utilization renders on tab switch to avoid chart sizing issues
-}
-
-// ---- Load -----------------------------------------------------------------
+// ---- Load data ------------------------------------------------------------
 async function loadDashboard(){
   const errorBox = document.getElementById("error-box");
   errorBox.hidden = true;
   try{
-    const res = await fetch(DASHBOARD_URL + "?t=" + Date.now(), { cache: "no-store" });
+    const res = await fetch(DASHBOARD_URL+"?t="+Date.now(),{cache:"no-store"});
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     DASH = await res.json();
-    updateHeader(DASH.meta || {});
-    renderAll();
+
+    // Pre-build component list from dashboard.json components array
+    RAW_COMP = Array.isArray(DASH.components) ? DASH.components : [];
+
+    updateHeader(DASH.meta||{});
+    const items = normalizeItems(DASH);
+    renderSummary(items);
+    render12MonthChart(items);
+    renderInspections();
   }catch(err){
     console.error(err);
-    errorBox.hidden = false;
-    errorBox.innerHTML = `
+    errorBox.hidden=false;
+    errorBox.innerHTML=`
       <div style="font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Dashboard load failed</div>
       <div>Could not load <code>${DASHBOARD_URL}</code></div>
-      <div style="margin-top:8px" class="small">${safeStr(err.message)}</div>`;
+      <div style="margin-top:8px;font-size:10px;">${safeStr(err.message)}</div>`;
   }
 }
 
-document.getElementById("q-aircraft").addEventListener("input", () => renderInspections());
-document.getElementById("q-ata").addEventListener("input", () => renderAta());
+document.getElementById("q-aircraft").addEventListener("input",()=>renderInspections());
+document.getElementById("q-comp").addEventListener("input",()=>renderComponents());
 
 loadDashboard();
 </script>

@@ -315,6 +315,45 @@ def build():
             "items":              data["items"],
         })
 
+    # ---- Build components list (PART items + OVERHAUL inspections) ----------
+    COMPONENT_WINDOW = 200
+    components = []
+
+    # PART items — use the full daily CSV (not inspection-filtered)
+    parts = daily_df[daily_df["Item Type"].astype(str).str.upper() == "PART"].copy()
+    parts["Remaining Hours"] = pd.to_numeric(parts["Remaining Hours"], errors="coerce")
+    for _, row in parts.iterrows():
+        rh = row["Remaining Hours"]
+        if pd.isna(rh) or rh > COMPONENT_WINDOW:
+            continue
+        components.append({
+            "tail":            _norm(row.get("Registration Number","")),
+            "ata":             _norm(row.get("ATA and Code","")),
+            "description":     _norm(row.get("Description","")),
+            "item_type":       "PART",
+            "remaining_hours": float(rh),
+        })
+
+    # INSPECTION items with Requirement Type = OVERHAUL
+    insp_oh = daily_df[
+        (daily_df["Item Type"].astype(str).str.upper() == "INSPECTION") &
+        (daily_df["Requirement Type"].astype(str).str.upper() == "OVERHAUL")
+    ].copy()
+    insp_oh["Remaining Hours"] = pd.to_numeric(insp_oh["Remaining Hours"], errors="coerce")
+    for _, row in insp_oh.iterrows():
+        rh = row["Remaining Hours"]
+        if pd.isna(rh) or rh > COMPONENT_WINDOW:
+            continue
+        components.append({
+            "tail":            _norm(row.get("Registration Number","")),
+            "ata":             _norm(row.get("ATA and Code","")),
+            "description":     _norm(row.get("Description","")),
+            "item_type":       "OVERHAUL",
+            "remaining_hours": float(rh),
+        })
+
+    components.sort(key=lambda c: c["remaining_hours"])
+
     out = {
         "meta": {
             "report_date":    report_date,
@@ -324,6 +363,7 @@ def build():
             "aircraft_count": len(aircraft_list),
         },
         "aircraft": aircraft_list,
+        "components": components,
     }
 
     OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
