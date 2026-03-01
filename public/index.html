@@ -738,6 +738,56 @@ loadDashboard();
 <script>
 // ---- Merlin the Creole wizard --------------------------------------------
 
+const ELEVEN_API_KEY  = "sk_f3b408b70d083c97b1c982846180d57f1d2ec5ca856d8100";
+const ELEVEN_VOICE_ID = "oubi7HGxNVjXMnWLgwBT"; // Cletus - Hillbilly
+const ELEVEN_CHAR_CAP = 10000;
+let elevenCharsUsed = parseInt(localStorage.getItem("merlin_chars_used") || "0");
+let elevenCharReset  = parseInt(localStorage.getItem("merlin_chars_reset") || "0");
+
+// Reset counter monthly
+(function(){
+  const now = Date.now();
+  if(now - elevenCharReset > 30 * 24 * 60 * 60 * 1000){
+    elevenCharsUsed = 0;
+    elevenCharReset = now;
+    localStorage.setItem("merlin_chars_used", "0");
+    localStorage.setItem("merlin_chars_reset", String(now));
+  }
+})();
+
+async function merlinTTS(text) {
+  if (elevenCharsUsed + text.length > ELEVEN_CHAR_CAP) {
+    console.log("Merlin: ElevenLabs cap reached (" + elevenCharsUsed + "/" + ELEVEN_CHAR_CAP + " chars). No TTS.");
+    return;
+  }
+  try {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE_ID}`, {
+      method: "POST",
+      headers: {
+        "xi-api-key": ELEVEN_API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text,
+        model_id: "eleven_turbo_v2",
+        voice_settings: { stability: 0.45, similarity_boost: 0.75, style: 0.55, use_speaker_boost: true }
+      })
+    });
+    if (!res.ok) { console.warn("Merlin TTS error:", res.status); return; }
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    currentUtterance = audio;
+    audio.play();
+    audio.onended = () => URL.revokeObjectURL(url);
+
+    elevenCharsUsed += text.length;
+    localStorage.setItem("merlin_chars_used", String(elevenCharsUsed));
+  } catch(e) {
+    console.warn("Merlin TTS failed:", e);
+  }
+}
+
 let merlinSpeaking = false;
 let merlinQueue = [];
 let currentUtterance = null;
@@ -773,7 +823,7 @@ function merlinSpeak(text, opts = {}) {
   const btnsEl = document.getElementById("merlin-btns");
 
   // Cancel current speech
-  if (currentUtterance) { speechSynthesis.cancel(); currentUtterance = null; }
+  if (currentUtterance) { currentUtterance.pause && currentUtterance.pause(); currentUtterance = null; }
 
   // Show bubble
   bubble.style.display = "block";
@@ -805,22 +855,8 @@ function merlinSpeak(text, opts = {}) {
     }
   }, 28);
 
-  // TTS — slow Southern drawl
-  if (typeof speechSynthesis !== "undefined") {
-    const utter = new SpeechSynthesisUtterance(text);
-    const voices = speechSynthesis.getVoices();
-    // Pick a deep male voice if available
-    const preferred = voices.find(v =>
-      v.name.includes("David") || v.name.includes("Mark") ||
-      v.name.includes("Daniel") || v.name.toLowerCase().includes("male")
-    ) || voices[0];
-    if (preferred) utter.voice = preferred;
-    utter.rate  = 0.72;   // slow drawl
-    utter.pitch = 0.65;   // deep
-    utter.volume = 0.85;
-    currentUtterance = utter;
-    speechSynthesis.speak(utter);
-  }
+  // TTS — ElevenLabs Cletus (Hillbilly voice)
+  merlinTTS(text);
 
   // Auto-dismiss after a while
   if (!opts.persist) {
@@ -832,7 +868,7 @@ function merlinSpeak(text, opts = {}) {
 
 function merlinDismiss() {
   document.getElementById("merlin-bubble").style.display = "none";
-  if (currentUtterance) { speechSynthesis.cancel(); currentUtterance = null; }
+  if (currentUtterance) { currentUtterance.pause && currentUtterance.pause(); currentUtterance = null; }
 }
 
 function merlinClick() {
