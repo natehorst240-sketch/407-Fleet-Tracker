@@ -698,7 +698,6 @@ async function loadDashboard(){
     renderSummary(items);
     render12MonthChart(items);
     renderInspections();
-    if(window._merlinGreetPending){ window._merlinGreetPending=false; setTimeout(merlinGreet,1200); }
   }catch(err){
     console.error(err);
     errorBox.hidden=false;
@@ -774,26 +773,26 @@ let currentUtterance = null;
 
 const MERLIN_LINES = {
   greeting: [
-    "Mais cher, welcome to da fleet tracker, yeah! I'm Merlin, your wizard of da skies, me.",
-    "Eh la-bas! You made it. Sit down, sha, let Merlin tell you what's goin on wit da birds.",
-    "Bon soir, cher! Merlin been waitin on you. Got some t'ings to tell you bout dis fleet, yeah.",
+    "Oh. You opened the dashboard. Congratulations. Let me tell you what you've already missed.",
+    "Welcome back. I've been sitting here watching these numbers get worse. Hope you had a nice break.",
+    "Merlin here. I've memorized every overdue item on this fleet. Would you like to feel bad about that? Click me.",
   ],
   overdue: (tail, insp) =>
-    `Mais, sha, dis ${tail} — dat ${insp} been PAST DUE, yeah! You best call somebody right now, cher, before Merlin hafta conjure up a miracle!`,
+    `${tail} is overdue on the ${insp}. It was overdue yesterday too. And the day before. Just thought you should know.`,
   critical: (tail, insp, days) =>
-    `Laissez les bons temps rouler? Non non non! ${tail} got dat ${insp} comin up in ${days} days, cher. Dat ain't good, no.`,
+    `${tail} has ${days} days until the ${insp}. ${days} days. That's not a lot of days. I'm not panicking. You should be panicking.`,
   allGood:
-    "Well I'll be! Ain't nothin too bad today, sha. But don't you go gettin lazy on me now, yeah, you hear?",
+    "Nothing is critically overdue right now. Don't worry, I'm sure that won't last. Check back in a few days.",
   components: (tail, desc, hrs) =>
-    `Mais, listen here — dat ${tail}, she got dat ${desc} wit only ${hrs.toFixed(0)} hours left, cher. Merlin don't like dat one bit, no.`,
+    `${tail} has ${hrs.toFixed(0)} hours left on the ${desc}. ${hrs.toFixed(0)}. I'll just leave that there.`,
   manyIssues: (n) =>
-    `Whoooeee, sha! ${n} t'ings need attention on dis fleet. Merlin been up all night, yeah, worryin bout dis. You better get to work, cher!`,
+    `There are ${n} items requiring attention on this fleet. ${n}. I've counted them several times hoping the number would change. It hasn't.`,
   idle: [
-    "You still dere, cher? Merlin waitin patiently, him.",
-    "Sha, don't forget to check dem components tab, yeah. Some t'ings real close, me.",
-    "Merlin knows t'ings. Ask him anyt'ing bout dis fleet, yeah.",
-    "Laissez les bons temps rouler — but not too much, cher. Dem birds need maintenance, yeah!",
-    "Mon dieu, dat N307KH got more hours on her dan Merlin got years, sha!",
+    "Still here. Still watching. The Components tab has some things in it you probably don't want to see.",
+    "I'm not saying anyone is behind on maintenance. I'm just saying I've seen the numbers and I have concerns.",
+    "Fun fact: N307KH has more airframe hours than most wizards have birthdays. Something to think about.",
+    "Have you checked the Components tab lately? No? Interesting choice.",
+    "I computed the fleet utilization again. For fun. I need you to look at it.",
   ],
 };
 
@@ -929,7 +928,6 @@ setInterval(() => {
 
 // Patch loadDashboard to trigger greeting after data loads
 const _origLoad = loadDashboard;
-window._merlinGreetPending = true;
 </script>
 
 </body>
