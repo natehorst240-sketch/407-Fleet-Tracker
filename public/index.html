@@ -859,55 +859,60 @@ function merlinClick() {
 }
 document.getElementById("merlin-img").onclick = merlinClick;
 
-function merlinBriefing() {
-  if (!DASH) {
-    merlinSpeak("Mais cher, da data ain't loaded yet, yeah. Give Merlin a moment, him.");
-    return;
-  }
+// Build a flat queue of all the things Merlin wants to complain about
+function buildMerlinQueue() {
+  if (!DASH) return ["The data isn't loaded yet. I've been waiting."];
 
   const items = [];
   (DASH.aircraft || []).forEach(a => {
     (a.items || []).forEach(it => items.push({ tail: a.tail, ...it }));
   });
 
-  const overdue  = items.filter(it => (it.remaining_days !== null && Number(it.remaining_days) < 0) ||
-                                       it.status === "OVERDUE");
-  const critical = items.filter(it => {
-    const d = Number(it.remaining_days);
-    return !isNaN(d) && d >= 0 && d <= 7;
-  });
-  const components200 = (DASH.components || []).filter(c => c.remaining_hours <= 50);
+  const overdue  = items.filter(it => (it.remaining_days !== null && Number(it.remaining_days) < 0) || it.status === "OVERDUE");
+  const critical = items.filter(it => { const d = Number(it.remaining_days); return !isNaN(d) && d >= 0 && d <= 7; });
+  const components50 = (DASH.components || []).filter(c => c.remaining_hours <= 50);
 
-  if (overdue.length) {
-    const o = overdue[0];
-    const moreIdx = [1];
-    merlinSpeak(MERLIN_LINES.overdue(o.tail, o.inspection), {
-      more: overdue.length > 1 ? () => {
-        const o2 = overdue[moreIdx[0]++ % overdue.length];
-        merlinSpeak(MERLIN_LINES.overdue(o2.tail, o2.inspection));
-      } : null
-    });
-  } else if (critical.length >= 3) {
-    merlinSpeak(MERLIN_LINES.manyIssues(critical.length), {
-      more: () => {
-        const c = critical[Math.floor(Math.random() * critical.length)];
-        merlinSpeak(MERLIN_LINES.critical(c.tail, c.inspection, Number(c.remaining_days)));
-      }
-    });
-  } else if (critical.length) {
-    const c = critical[0];
-    merlinSpeak(MERLIN_LINES.critical(c.tail, c.inspection, Number(c.remaining_days)), {
-      more: components200.length ? () => {
-        const comp = components200[0];
-        merlinSpeak(MERLIN_LINES.components(comp.tail, comp.description, comp.remaining_hours));
-      } : null
-    });
-  } else if (components200.length) {
-    const comp = components200[0];
-    merlinSpeak(MERLIN_LINES.components(comp.tail, comp.description, comp.remaining_hours));
-  } else {
-    merlinSpeak(MERLIN_LINES.allGood);
+  const queue = [];
+
+  // Start with summary if many issues
+  const totalBad = overdue.length + critical.length;
+  if (totalBad >= 3) {
+    queue.push(MERLIN_LINES.manyIssues(totalBad));
   }
+
+  // All overdue items
+  overdue.forEach(o => queue.push(MERLIN_LINES.overdue(o.tail, o.inspection)));
+
+  // All critical items
+  critical.forEach(c => queue.push(MERLIN_LINES.critical(c.tail, c.inspection, Number(c.remaining_days))));
+
+  // Components within 50 hrs
+  components50.forEach(comp => queue.push(MERLIN_LINES.components(comp.tail, comp.description, comp.remaining_hours)));
+
+  if (!queue.length) queue.push(MERLIN_LINES.allGood);
+
+  return queue;
+}
+
+let merlinQueueItems = [];
+let merlinQueueIndex = 0;
+
+function merlinBriefing() {
+  // If we're mid-queue, continue it
+  if (merlinQueueIndex > 0 && merlinQueueIndex < merlinQueueItems.length) {
+    const text = merlinQueueItems[merlinQueueIndex++];
+    const hasMore = merlinQueueIndex < merlinQueueItems.length;
+    merlinSpeak(text, { more: hasMore ? merlinBriefing : null });
+    return;
+  }
+
+  // Start fresh
+  merlinQueueItems = buildMerlinQueue();
+  merlinQueueIndex = 0;
+
+  const text = merlinQueueItems[merlinQueueIndex++];
+  const hasMore = merlinQueueIndex < merlinQueueItems.length;
+  merlinSpeak(text, { more: hasMore ? merlinBriefing : null });
 }
 
 // Greet on load after data is ready
