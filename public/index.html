@@ -738,7 +738,7 @@ loadDashboard();
 <script>
 // ---- Merlin the Creole wizard --------------------------------------------
 
-const ELEVEN_API_KEY  = "sk_15b62f0faf4cc28897b79736eaf05e3d5079d43cbf39ef68";
+const ELEVEN_API_KEY  = "sk_de187cf69fd60b980848a35cf254c853672b268cfa9479e6";
 const ELEVEN_VOICE_ID = "oubi7HGxNVjXMnWLgwBT"; // Cletus - Hillbilly
 const ELEVEN_CHAR_CAP = 10000;
 let elevenCharsUsed = parseInt(localStorage.getItem("merlin_chars_used") || "0");
@@ -761,15 +761,16 @@ async function merlinTTS(text) {
     return;
   }
   try {
-    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE_ID}`, {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE_ID}/stream`, {
       method: "POST",
       headers: {
         "xi-api-key": ELEVEN_API_KEY,
         "Content-Type": "application/json",
+        "Accept": "audio/mpeg",
       },
       body: JSON.stringify({
         text,
-        model_id: "eleven_turbo_v2",
+        model_id: "eleven_flash_v2_5",
         voice_settings: { stability: 0.45, similarity_boost: 0.75, style: 0.55, use_speaker_boost: true }
       })
     });
