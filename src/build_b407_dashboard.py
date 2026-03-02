@@ -27,10 +27,16 @@ OUTPUT_JSON  = Path("dist/data/dashboard.json")
 TRACKED_INSPECTIONS = [
     {"label": "12 Month",           "match": "05 12MO- INSPECTION",          "mode": "exact"},
     {"label": "24 Month",           "match": "05 24MO. INSPECTION",          "mode": "exact"},
+    {"label": "24 Month",           "match": "05 24.MO. INSPECTION",         "mode": "exact"},
     {"label": "300HR/12M Airframe", "match": "05 300HR- PERIODIC INSPECTION","mode": "exact"},
     {"label": "300HR/12M Engine",   "match": "72 72/300",                    "mode": "exact"},
     {"label": "600HR/12M Engine",   "match": "72 INSP 600HR/12MO",           "mode": "exact"},
+    {"label": "MR Mast Interim",    "match": "63 11-20 INTERIM",             "mode": "exact"},
+    {"label": "Freewheel Interim",  "match": "63 13-11 INTERIM",             "mode": "exact"},
+    {"label": "Transmission Interim","match": "63 21-10 INTERIM",            "mode": "exact"},
     {"label": "TRGB Interim",       "match": "65 10-11 INTERIM",             "mode": "exact"},
+    {"label": "TRGB Interim",       "match": "65-10-11 INTERIM",             "mode": "exact"},
+    {"label": "Spring Link Interim", "match": "67 20-12 INTERIM",            "mode": "exact"},
 ]
 
 # ---- Thresholds -----------------------------------------------------------
@@ -48,6 +54,12 @@ def _norm(s) -> str:
     return str(s).strip()
 
 
+def _norm_ata(s) -> str:
+    """Canonical ATA text for tolerant matching (spaces/dashes/dots insensitive)."""
+    raw = _norm(s).upper()
+    return "".join(ch for ch in raw if ch.isalnum())
+
+
 def _read_csv(path: Path) -> pd.DataFrame:
     """Read a Veryon CSV, trying utf-8-sig first then cp1252."""
     for enc in ("utf-8-sig", "cp1252"):
@@ -59,13 +71,13 @@ def _read_csv(path: Path) -> pd.DataFrame:
             continue
     raise ValueError(f"Cannot decode {path}")
 def matches_rule(ata_value, rule) -> bool:
-    ata    = _norm(ata_value)
+    ata = _norm(ata_value)
     target = _norm(rule["match"])
     if not ata:
         return False
     if rule["mode"] == "exact":
-        return ata == target
-    return target.upper() in ata.upper()
+        return _norm_ata(ata) == _norm_ata(target)
+    return _norm_ata(target) in _norm_ata(ata)
 
 
 def parse_date_iso(val):

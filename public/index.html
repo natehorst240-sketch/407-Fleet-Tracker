@@ -109,6 +109,13 @@
     .td-right{text-align:right;}
     .td-center{text-align:center;}
 
+    .due-cell{display:inline-flex;min-width:54px;justify-content:flex-end;padding:2px 8px;border-radius:999px;border:1px solid transparent;font-weight:700;}
+    .due-overdue{color:var(--overdue);border-color:rgba(255,109,0,0.35);background:rgba(255,109,0,0.08);}
+    .due-critical{color:var(--red);border-color:rgba(255,23,68,0.35);background:rgba(255,23,68,0.08);}
+    .due-coming{color:var(--amber);border-color:rgba(255,171,0,0.35);background:rgba(255,171,0,0.08);}
+    .due-ok{color:var(--green);border-color:rgba(0,230,118,0.35);background:rgba(0,230,118,0.08);}
+    .due-na{color:var(--muted);}
+
     /* Horizontal hours-remaining bar inside table */
     .hrs-bar-wrap{display:flex;align-items:center;gap:8px;}
     .hrs-bar-bg{flex:1;height:6px;background:var(--border);border-radius:3px;min-width:80px;max-width:160px;}
@@ -411,22 +418,28 @@ const MAIN_INSPECTIONS = [
 ];
 
 const INTERIM_INSPECTIONS = [
-  { label: "MR Mast Interim", ata: "63 13-11 INTERIM" },
-  { label: "Freewheel Interim", ata: "63 13-11A INTERIM" },
-  { label: "Transmission Interim", ata: "67 20-12 INTERIM" },
-  { label: "TRGB Interim", ata: "65 10-11 INTERIM" },
-  { label: "Spring Link Interim", ata: "67 20-13 INTERIM" },
+  { label: "MR Mast Interim", ata: "63 11-20 INTERIM" },
+  { label: "Freewheel Interim", ata: "63 13-11 INTERIM" },
+  { label: "Transmission Interim", ata: "63 21-10 INTERIM" },
+  { label: "TRGB Interim", ata: "65-10-11 INTERIM" },
+  { label: "Spring Link Interim", ata: "67 20-12 INTERIM" },
 ];
 
+function canonicalAta(value){
+  return safeStr(value).toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
 function findInspectionByAta(items, ataCode){
-  const target = safeStr(ataCode).toUpperCase().trim();
-  return items.find(it => safeStr(it.ata).toUpperCase().trim() === target);
+  const target = canonicalAta(ataCode);
+  return items.find(it => canonicalAta(it.ata) === target);
 }
 
 function formatMonths(item){
   const d = Number(item?.remaining_days);
-  if(!Number.isFinite(d)) return "—";
-  return `${(d / 30.44).toFixed(1)}m`;
+  if(!Number.isFinite(d)) return '<span class="due-cell due-na">—</span>';
+  const sev = classifyItem(item);
+  const cls = { overdue:"due-overdue", critical:"due-critical", coming:"due-coming", ok:"due-ok" }[sev] || "due-na";
+  return `<span class="due-cell ${cls}">${(d / 30.44).toFixed(1)}m</span>`;
 }
 
 
