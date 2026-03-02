@@ -190,30 +190,39 @@
 
   <!-- INSPECTIONS TAB -->
   <div id="tab-inspections" class="tab-content active">
-
-    <!-- 12-Month inspection bar chart -->
-    <div class="twelve-month-panel" id="twelve-month-panel" hidden>
-      <div class="twelve-month-title">Months Remaining — 12 Month Inspection</div>
-      <div class="twelve-month-chart-wrap">
-        <canvas id="twelve-month-chart"></canvas>
-      </div>
+    <div class="section-label">Months Remaining by Inspection</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Aircraft</th>
+            <th class="td-right">12 Month</th>
+            <th class="td-right">24 Month</th>
+            <th class="td-right">300HR/12M Airframe</th>
+            <th class="td-right">300HR/12M Engine</th>
+          </tr>
+        </thead>
+        <tbody id="months-table-body"></tbody>
+      </table>
     </div>
 
-    <div class="toolbar">
-      <div class="search">
-        <span style="color:var(--muted);font-family:var(--mono);font-size:11px;">FILTER</span>
-        <input id="q-aircraft" placeholder="Search tail, inspection name, or ATA…" autocomplete="off" />
-      </div>
-      <div class="chip-row" id="severity-chips">
-        <button class="chip active" onclick="setSeverityFilter('all',this)">All</button>
-        <button class="chip" onclick="setSeverityFilter('overdue',this)">Overdue</button>
-        <button class="chip" onclick="setSeverityFilter('critical',this)">Critical</button>
-        <button class="chip" onclick="setSeverityFilter('coming',this)">Coming</button>
-        <button class="chip" onclick="setSeverityFilter('ok',this)">OK</button>
-      </div>
+    <div class="section-label">Interim Inspections</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Aircraft</th>
+            <th class="td-right">MR Mast Interim (Months)</th>
+            <th class="td-right">Freewheel Interim (Months)</th>
+            <th class="td-right">Transmission Interim (Months)</th>
+            <th class="td-right">TRGB Interim (Months)</th>
+            <th class="td-right">Spring Link Interim (Months)</th>
+          </tr>
+        </thead>
+        <tbody id="interim-table-body"></tbody>
+      </table>
     </div>
-    <div class="section-label">Inspections by Aircraft</div>
-    <div id="cards" class="cards"></div>
+
     <div id="empty-inspections" class="empty" hidden>No tracked inspection items found.</div>
   </div>
 
@@ -255,9 +264,7 @@ Chart.register(ChartDataLabels);
 const DASHBOARD_URL = "data/dashboard.json";
 let DASH = null;
 let RAW_COMP = [];        // raw component rows from dashboard.json
-let severityFilter = "all";
 let compWindow = 200;
-let twelveMonthChart = null;
 const utilCharts = {};
 
 // ---- Tab switching --------------------------------------------------------
@@ -282,12 +289,33 @@ function fmtDate(d){
 // ---- Normalize inspection items from aircraft array ----------------------
 function normalizeItems(dash){
   const out = [];
-  if(!Array.isArray(dash.aircraft)) return out;
-  dash.aircraft.forEach(a => {
-    const tail = a.tail || "";
-    const tt   = a.airframe_hours;
-    (a.items || []).forEach(it => out.push({ tail, total_time: tt, ...it }));
-  });
+  if(Array.isArray(dash.aircraft)){
+    dash.aircraft.forEach(a => {
+      const tail = a.tail || a.registration || "";
+      const tt   = a.airframe_hours;
+      (a.items || []).forEach(it => out.push({ tail, total_time: tt, ...it }));
+    });
+    return out;
+  }
+
+  if(dash.aircraft && typeof dash.aircraft === "object"){
+    Object.entries(dash.aircraft).forEach(([tail, ac]) => {
+      const tt = ac?.airframe_hours;
+      (ac?.items || []).forEach(it => {
+        out.push({
+          tail,
+          total_time: tt,
+          inspection: it.inspection || it.label,
+          ata: it.ata,
+          due_date: it.due_date || it.next_due_date,
+          remaining_days: it.remaining_days,
+          remaining_hours: it.remaining_hours,
+          status: it.status || it.next_due_status,
+          ...it,
+        });
+      });
+    });
+  }
   return out;
 }
 
@@ -374,162 +402,60 @@ function updateHeader(meta){
   document.getElementById("ftr-right").textContent       = `Last update: ${meta?.generated_utc||"—"}`;
 }
 
-// ---- 12-Month bar chart ---------------------------------------------------
-function render12MonthChart(items){
-  // Pull 12 Month inspection items only
-  const twelveItems = items
-    .filter(it => safeStr(it.inspection).toUpperCase().includes("12 MONTH"))
-    .filter(it => it.remaining_days !== null && it.remaining_days !== undefined && !isNaN(Number(it.remaining_days)));
-
-  const panel = document.getElementById("twelve-month-panel");
-  if(!twelveItems.length){ panel.hidden = true; return; }
-  panel.hidden = false;
-
-  // Sort by months remaining ascending (most urgent first)
-  twelveItems.sort((a,b) => Number(a.remaining_days) - Number(b.remaining_days));
-
-  const labels = twelveItems.map(it => it.tail);
-  const months = twelveItems.map(it => parseFloat((Number(it.remaining_days)/30.44).toFixed(1)));
-
-  const colors = months.map(m => {
-    if(m < 0)   return "rgba(255,109,0,0.85)";   // overdue
-    if(m <= 0.25) return "rgba(255,23,68,0.85)"; // critical <= 1 week
-    if(m <= 1)  return "rgba(255,171,0,0.85)";   // coming <= 1 month
-    return "rgba(41,182,246,0.7)";                // ok
-  });
-
-  if(twelveMonthChart){ twelveMonthChart.destroy(); twelveMonthChart = null; }
-
-  const ctx = document.getElementById("twelve-month-chart").getContext("2d");
-  twelveMonthChart = new Chart(ctx, {
-    type: "bar",
-    data:{
-      labels,
-      datasets:[{
-        label:"Months Remaining",
-        data: months,
-        backgroundColor: colors,
-        borderRadius: 4,
-        borderSkipped: false,
-      }]
-    },
-    options:{
-      indexAxis: "y",
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins:{
-        legend:{ display:false },
-        datalabels:{
-          color:"#cdd6e0",
-          font:{ family:"'Share Tech Mono',monospace", size:10 },
-          anchor:"end", align:"right",
-          formatter: v => v < 0 ? `${Math.abs(v).toFixed(1)}m OVERDUE` : `${v.toFixed(1)}m`,
-        },
-        tooltip:{
-          callbacks:{
-            label: ctx => {
-              const m = ctx.parsed.x;
-              const d = Math.round(m * 30.44);
-              return m < 0 ? ` ${Math.abs(d)} days overdue` : ` ${d} days (${m.toFixed(1)} months)`;
-            }
-          }
-        }
-      },
-      scales:{
-        x:{
-          grid:{ color:"rgba(30,37,48,0.6)" },
-          ticks:{ color:"#4a5568", font:{ family:"'Share Tech Mono',monospace", size:9 },
-            callback: v => `${v}m` },
-          title:{ display:true, text:"Months Remaining", color:"#4a5568",
-            font:{ family:"'Barlow Condensed',sans-serif", size:11, weight:"700" } }
-        },
-        y:{
-          grid:{ display:false },
-          ticks:{ color:"#cdd6e0", font:{ family:"'Share Tech Mono',monospace", size:11 } }
-        }
-      },
-      layout:{ padding:{ right:70 } }
-    },
-    plugins:[ChartDataLabels]
-  });
-}
-
 // ---- Inspections tab ------------------------------------------------------
-function setSeverityFilter(val, btn){
-  severityFilter = val;
-  document.querySelectorAll("#severity-chips .chip").forEach(c => c.classList.remove("active"));
-  btn.classList.add("active");
-  renderInspections();
+const MAIN_INSPECTIONS = [
+  { label: "12 Month", ata: "05 12MO- INSPECTION" },
+  { label: "24 Month", ata: "05 24MO. INSPECTION" },
+  { label: "300HR/12M Airframe", ata: "05 300HR- PERIODIC INSPECTION" },
+  { label: "300HR/12M Engine", ata: "72 72/300" },
+];
+
+const INTERIM_INSPECTIONS = [
+  { label: "MR Mast Interim", ata: "63 13-11 INTERIM" },
+  { label: "Freewheel Interim", ata: "63 13-11A INTERIM" },
+  { label: "Transmission Interim", ata: "67 20-12 INTERIM" },
+  { label: "TRGB Interim", ata: "65 10-11 INTERIM" },
+  { label: "Spring Link Interim", ata: "67 20-13 INTERIM" },
+];
+
+function findInspectionByAta(items, ataCode){
+  const target = safeStr(ataCode).toUpperCase().trim();
+  return items.find(it => safeStr(it.ata).toUpperCase().trim() === target);
 }
+
+function formatMonths(item){
+  const d = Number(item?.remaining_days);
+  if(!Number.isFinite(d)) return "—";
+  return `${(d / 30.44).toFixed(1)}m`;
+}
+
 
 function renderInspections(){
   const all = normalizeItems(DASH);
-  const q   = document.getElementById("q-aircraft").value.trim().toLowerCase();
-
-  const filtered = all.filter(it => {
-    const sev = classifyItem(it);
-    if(severityFilter !== "all" && severityFilter !== sev) return false;
-    if(!q) return true;
-    return [it.tail,it.inspection,it.ata,it.status,it.due_date].map(safeStr).join(" ").toLowerCase().includes(q);
-  });
-
-  const cards = document.getElementById("cards");
-  cards.innerHTML = "";
-
   const byTail = new Map();
-  filtered.forEach(it => {
-    const t = safeStr(it.tail)||"UNKNOWN";
-    if(!byTail.has(t)) byTail.set(t,[]);
-    byTail.get(t).push(it);
+  all.forEach(it => {
+    const tail = safeStr(it.tail).trim() || "UNKNOWN";
+    if(!byTail.has(tail)) byTail.set(tail, []);
+    byTail.get(tail).push(it);
   });
 
-  const tails = Array.from(byTail.keys()).sort((a,b)=>{
-    const sa = Math.min(...byTail.get(a).map(scoreItem));
-    const sb = Math.min(...byTail.get(b).map(scoreItem));
-    return sa-sb||a.localeCompare(b);
-  });
+  const tails = Array.from(byTail.keys()).sort((a,b) => a.localeCompare(b));
+  const monthsBody = document.getElementById("months-table-body");
+  const interimBody = document.getElementById("interim-table-body");
+  monthsBody.innerHTML = "";
+  interimBody.innerHTML = "";
 
   document.getElementById("empty-inspections").hidden = !!tails.length;
+  if(!tails.length) return;
 
   tails.forEach(tail => {
-    const list   = byTail.get(tail).slice().sort((x,y)=>scoreItem(x)-scoreItem(y));
-    const sevTop = classifyItem(list[0]);
-    const tt     = list[0].total_time;
+    const items = byTail.get(tail);
 
-    const rows = list.slice(0,12).map(it => {
-      const sev  = classifyItem(it);
-      const insp = safeStr(it.inspection||"Inspection");
-      const ata  = safeStr(it.ata||"—");
-      const due  = fmtDate(it.due_date);
-      const d = (it.remaining_days!==null&&it.remaining_days!==undefined&&!isNaN(Number(it.remaining_days)))?Number(it.remaining_days):null;
-      const h = (it.remaining_hours!==null&&it.remaining_hours!==undefined&&!isNaN(Number(it.remaining_hours)))?Number(it.remaining_hours):null;
-      const metric = d!==null ? `${d}d` : h!==null ? `${h.toFixed(1)}h` : safeStr(it.status||"—").slice(0,18);
-      const meta = [];
-      if(ata&&ata!=="—") meta.push(`<span class="mono-pill">ATA ${ata}</span>`);
-      if(due!=="—") meta.push(`<span class="mono-pill">DUE ${due}</span>`);
-      meta.push(`<span class="mono-pill">${metric}</span>`);
-      return `<div class="item">
-        <div class="bar ${barClass(sev)}"></div>
-        <div class="item-main">
-          <div class="item-title" title="${insp}">${insp}</div>
-          <div class="item-meta">${meta.join(" ")}</div>
-        </div>
-        ${badgeFor(sev)}
-      </div>`;
-    }).join("");
+    const monthCells = MAIN_INSPECTIONS.map(def => `<td class="td-right">${formatMonths(findInspectionByAta(items, def.ata))}</td>`).join("");
+    const interimCells = INTERIM_INSPECTIONS.map(def => `<td class="td-right">${formatMonths(findInspectionByAta(items, def.ata))}</td>`).join("");
 
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="card-tail">
-          <span>${tail}</span>
-          <span class="subline">${tt?Number(tt).toLocaleString(undefined,{minimumFractionDigits:1,maximumFractionDigits:1})+" TT":""}</span>
-        </div>
-        ${badgeFor(sevTop)}
-      </div>
-      <div class="card-body">${rows}</div>`;
-    cards.appendChild(card);
+    monthsBody.insertAdjacentHTML("beforeend", `<tr><td><span class="mono-pill">${tail}</span></td>${monthCells}</tr>`);
+    interimBody.insertAdjacentHTML("beforeend", `<tr><td><span class="mono-pill">${tail}</span></td>${interimCells}</tr>`);
   });
 }
 
@@ -706,7 +632,6 @@ async function loadDashboard(){
     updateHeader(DASH.meta||{});
     const items = normalizeItems(DASH);
     renderSummary(items);
-    render12MonthChart(items);
     renderInspections();
   }catch(err){
     console.error(err);
@@ -718,7 +643,6 @@ async function loadDashboard(){
   }
 }
 
-document.getElementById("q-aircraft").addEventListener("input",()=>renderInspections());
 document.getElementById("q-comp").addEventListener("input",()=>renderComponents());
 
 loadDashboard();
