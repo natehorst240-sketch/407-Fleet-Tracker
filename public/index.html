@@ -89,6 +89,15 @@
     .item-main{min-width:0;flex:1 1 auto;}
     .item-title{font-family:var(--body);font-size:12px;font-weight:600;color:var(--text);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .item-meta{margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;}
+
+    /* Components card layout */
+    .comp-card .card-body{padding:0;}
+    .comp-row{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid rgba(30,37,48,0.7);}
+    .comp-row:last-child{border-bottom:none;}
+    .comp-main{min-width:0;flex:1;}
+    .comp-title{font-family:var(--body);font-size:12px;font-weight:600;line-height:1.3;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .comp-meta{margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;color:var(--muted);}
+    .comp-hrs{font-family:var(--mono);font-size:11px;letter-spacing:0.5px;text-transform:uppercase;white-space:nowrap;margin-top:2px;}
     .mono-pill{border:1px solid rgba(74,85,104,0.35);padding:2px 6px;border-radius:4px;letter-spacing:.5px;text-transform:uppercase;}
 
     /* Components tab table */
@@ -184,7 +193,7 @@
 
     <!-- 12-Month inspection bar chart -->
     <div class="twelve-month-panel" id="twelve-month-panel" hidden>
-      <div class="twelve-month-title">Weeks Remaining — 12 Month Inspection</div>
+      <div class="twelve-month-title">Months Remaining — 12 Month Inspection</div>
       <div class="twelve-month-chart-wrap">
         <canvas id="twelve-month-chart"></canvas>
       </div>
@@ -222,21 +231,8 @@
         <button class="chip" onclick="setCompWindow(9999,this)">All</button>
       </div>
     </div>
-    <div class="section-label">Components Due Retire / Overhaul</div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Aircraft</th>
-            <th>ATA</th>
-            <th>Component</th>
-            <th>Type</th>
-            <th class="td-right">Hours Remaining</th>
-          </tr>
-        </thead>
-        <tbody id="comp-tbody"></tbody>
-      </table>
-    </div>
+    <div class="section-label">Component Retirement / Overhaul — Within Selected Window</div>
+    <div id="comp-cards" class="cards"></div>
     <div id="empty-comp" class="empty" hidden style="margin-top:12px;">No components found within selected window.</div>
   </div>
 
@@ -389,16 +385,16 @@ function render12MonthChart(items){
   if(!twelveItems.length){ panel.hidden = true; return; }
   panel.hidden = false;
 
-  // Sort by weeks remaining ascending (most urgent first)
+  // Sort by months remaining ascending (most urgent first)
   twelveItems.sort((a,b) => Number(a.remaining_days) - Number(b.remaining_days));
 
   const labels = twelveItems.map(it => it.tail);
-  const weeks  = twelveItems.map(it => parseFloat((Number(it.remaining_days)/7).toFixed(1)));
+  const months = twelveItems.map(it => parseFloat((Number(it.remaining_days)/30.44).toFixed(1)));
 
-  const colors = weeks.map(w => {
-    if(w < 0)   return "rgba(255,109,0,0.85)";   // overdue
-    if(w <= 1)  return "rgba(255,23,68,0.85)";    // critical <1 week
-    if(w <= 4)  return "rgba(255,171,0,0.85)";    // coming ≤4 weeks
+  const colors = months.map(m => {
+    if(m < 0)   return "rgba(255,109,0,0.85)";   // overdue
+    if(m <= 0.25) return "rgba(255,23,68,0.85)"; // critical <= 1 week
+    if(m <= 1)  return "rgba(255,171,0,0.85)";   // coming <= 1 month
     return "rgba(41,182,246,0.7)";                // ok
   });
 
@@ -410,8 +406,8 @@ function render12MonthChart(items){
     data:{
       labels,
       datasets:[{
-        label:"Weeks Remaining",
-        data: weeks,
+        label:"Months Remaining",
+        data: months,
         backgroundColor: colors,
         borderRadius: 4,
         borderSkipped: false,
@@ -427,14 +423,14 @@ function render12MonthChart(items){
           color:"#cdd6e0",
           font:{ family:"'Share Tech Mono',monospace", size:10 },
           anchor:"end", align:"right",
-          formatter: v => v < 0 ? `${Math.abs(v).toFixed(1)}w OVERDUE` : `${v}w`,
+          formatter: v => v < 0 ? `${Math.abs(v).toFixed(1)}m OVERDUE` : `${v.toFixed(1)}m`,
         },
         tooltip:{
           callbacks:{
             label: ctx => {
-              const w = ctx.parsed.x;
-              const d = Math.round(w * 7);
-              return w < 0 ? ` ${Math.abs(d)} days overdue` : ` ${d} days (${w} weeks)`;
+              const m = ctx.parsed.x;
+              const d = Math.round(m * 30.44);
+              return m < 0 ? ` ${Math.abs(d)} days overdue` : ` ${d} days (${m.toFixed(1)} months)`;
             }
           }
         }
@@ -443,8 +439,8 @@ function render12MonthChart(items){
         x:{
           grid:{ color:"rgba(30,37,48,0.6)" },
           ticks:{ color:"#4a5568", font:{ family:"'Share Tech Mono',monospace", size:9 },
-            callback: v => `${v}w` },
-          title:{ display:true, text:"Weeks Remaining", color:"#4a5568",
+            callback: v => `${v}m` },
+          title:{ display:true, text:"Months Remaining", color:"#4a5568",
             font:{ family:"'Barlow Condensed',sans-serif", size:11, weight:"700" } }
         },
         y:{
@@ -559,43 +555,57 @@ function renderComponents(){
     return ha - hb || a.tail.localeCompare(b.tail);
   });
 
-  const tbody = document.getElementById("comp-tbody");
-  tbody.innerHTML = "";
+  const cards = document.getElementById("comp-cards");
+  cards.innerHTML = "";
   document.getElementById("empty-comp").hidden = !!filtered.length;
   if(!filtered.length) return;
 
-  // Max hours for scaling the inline bar (use 200 as reference)
-  const maxH = Math.max(200, ...filtered.map(c => Number(c.remaining_hours)||0));
-
+  const byTail = new Map();
   filtered.forEach(c => {
-    const h    = isFinite(Number(c.remaining_hours)) ? Number(c.remaining_hours) : null;
-    const sev  = classifyHours(h);
-    const pct  = h !== null ? Math.min(100, Math.max(0, (h / maxH) * 100)) : 0;
-    const color = {overdue:"var(--overdue)",critical:"var(--red)",coming:"var(--amber)",ok:"var(--green)"}[sev]||"var(--muted)";
-    const hStr = h !== null ? h.toFixed(1) : "—";
+    const tail = safeStr(c.tail) || "UNKNOWN";
+    if(!byTail.has(tail)) byTail.set(tail, []);
+    byTail.get(tail).push(c);
+  });
 
-    // Determine label: RETIRE or OVERHAUL from description
-    const desc = safeStr(c.description).toUpperCase();
-    const label = desc.includes("RETIRE") ? "RETIRE" :
-                  desc.includes("OVERHAUL") ? "OVERHAUL" :
-                  desc.includes("LIMIT") ? "LIMIT" :
-                  safeStr(c.item_type);
+  Array.from(byTail.keys()).sort((a,b)=>a.localeCompare(b)).forEach(tail => {
+    const compList = byTail.get(tail);
+    const topHours = isFinite(Number(compList[0].remaining_hours)) ? Number(compList[0].remaining_hours) : null;
+    const topHrsTxt = topHours !== null ? `${topHours.toFixed(1)} hrs` : "—";
 
-    const badgeCls = {RETIRE:"b-overdue",OVERHAUL:"b-amber",LIMIT:"b-red"}[label]||"b-blue";
+    const rows = compList.map(c => {
+      const h    = isFinite(Number(c.remaining_hours)) ? Number(c.remaining_hours) : null;
+      const sev  = classifyHours(h);
+      const color = {overdue:"var(--overdue)",critical:"var(--red)",coming:"var(--amber)",ok:"var(--green)"}[sev]||"var(--muted)";
+      const hStr = h !== null ? `${h.toFixed(1)} hrs remaining` : "hours unavailable";
+      const desc = safeStr(c.description).toUpperCase();
+      const label = desc.includes("RETIRE") ? "RETIRE" : desc.includes("OVERHAUL") ? "OVERHAUL" : desc.includes("LIMIT") ? "LIMIT" : "ITEM";
+      const badgeCls = {RETIRE:"b-overdue",OVERHAUL:"b-amber",LIMIT:"b-red",ITEM:"b-blue"}[label] || "b-blue";
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td><span class="mono-pill">${c.tail}</span></td>
-      <td><span class="mono-pill">${safeStr(c.ata)||"—"}</span></td>
-      <td style="max-width:340px;white-space:normal;line-height:1.3;">${safeStr(c.description)}</td>
-      <td class="td-center"><span class="badge ${badgeCls}">${label}</span></td>
-      <td class="td-right">
-        <div class="hrs-bar-wrap">
-          <div class="hrs-bar-bg"><div class="hrs-bar-fill" style="width:${pct}%;background:${color};"></div></div>
-          <span class="hrs-val" style="color:${color}">${hStr} hrs</span>
+      return `
+        <div class="comp-row">
+          <span class="bar ${barClass(sev)}"></span>
+          <div class="comp-main">
+            <div class="comp-title" title="${safeStr(c.description)}">${safeStr(c.description)}</div>
+            <div class="comp-meta">
+              <span class="mono-pill">${safeStr(c.ata)||"NO ATA"}</span>
+              <span class="badge ${badgeCls}">${label}</span>
+            </div>
+            <div class="comp-hrs" style="color:${color}">${hStr}</div>
+          </div>
+        </div>`;
+    }).join("");
+
+    const card = document.createElement("div");
+    card.className = "card comp-card";
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-tail">
+          <span>${tail}</span>
+          <span class="subline">${topHrsTxt}</span>
         </div>
-      </td>`;
-    tbody.appendChild(tr);
+      </div>
+      <div class="card-body">${rows}</div>`;
+    cards.appendChild(card);
   });
 }
 
