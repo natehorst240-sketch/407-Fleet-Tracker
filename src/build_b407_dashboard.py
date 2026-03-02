@@ -272,10 +272,17 @@ def build():
             if not tail:
                 continue
 
-            rd = row.get("Remaining Days")
             rh = row.get("Remaining Hours")
-            remaining_days  = float(rd) if pd.notna(rd) else None
             remaining_hours = float(rh) if pd.notna(rh) else None
+
+            # Calculate remaining_days from due date rather than trusting CSV value
+            due_iso = parse_date_iso(row.get("Next Due Date"))
+            if due_iso:
+                from datetime import date
+                remaining_days = (date.fromisoformat(due_iso) - date.today()).days
+            else:
+                rd = row.get("Remaining Days")
+                remaining_days = float(rd) if pd.notna(rd) else None
 
             item = {
                 "inspection":      rule["label"],
