@@ -71,6 +71,39 @@
 <script>
 let dashboard;
 let chart;
+const TOP_INSPECTIONS = ['12 Month', '24 Month'];
+
+function showTab(name, btn){
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.tabs button').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function round(val){
+  return (val === null || val === undefined || Number.isNaN(Number(val))) ? '—' : Number(val).toFixed(1);
+}
+
+function monthsFromDays(days){
+  if (days === null || days === undefined || Number.isNaN(Number(days))) return null;
+  return Number(days) / 30.44;
+}
+
+function hoursStatus(hours){
+  const n = Number(hours);
+  if (Number.isNaN(n)) return { label: '—', badgeClass: '', cellClass: '' };
+  if (n < 10) return { label: 'IMMEDIATE', badgeClass: 'immediate', cellClass: 'immediate-cell' };
+  if (n < 25) return { label: 'COMING SOON', badgeClass: 'coming-soon', cellClass: 'coming-soon-cell' };
+  if (n < 50) return { label: 'UPCOMING', badgeClass: 'upcoming', cellClass: 'upcoming-cell' };
+  return { label: 'SCHEDULED', badgeClass: 'scheduled', cellClass: 'scheduled-cell' };
+}
+
+function populateInspectionSelector(){
+  const select = document.getElementById('inspectionSelect');
+  select.innerHTML = '';
+
+  const available = TOP_INSPECTIONS.filter(name => dashboard.inspection_names.includes(name));
+  available.forEach(name => {
 
 function showTab(name, btn){
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
@@ -99,6 +132,19 @@ function populateInspectionSelector(){
     option.textContent = name;
     select.appendChild(option);
   });
+
+  select.addEventListener('change', () => renderTopGraph(select.value));
+
+  if (available.length) {
+    renderTopGraph(available[0]);
+  }
+}
+
+function renderTopGraph(name){
+  const rows = [];
+  dashboard.aircraft.forEach(ac => {
+    const match = ac.inspections.find(i => i.inspection === name);
+    if (match) rows.push({ tail: ac.tail, months_remaining: monthsFromDays(match.remaining_days) });
   select.addEventListener('change', () => renderInspection(select.value));
   if (selectableInspections.length) renderInspection(selectableInspections[0]);
   renderInspectionSummaryTable();
@@ -112,6 +158,22 @@ function renderInspection(name){
   });
   rows.sort((a,b) => (a.remaining_hours ?? 99999) - (b.remaining_hours ?? 99999));
 
+  rows.sort((a,b) => (a.months_remaining ?? 99999) - (b.months_remaining ?? 99999));
+
+  const labels = rows.map(r => r.tail);
+  const values = rows.map(r => r.months_remaining ?? null);
+
+  if (chart) chart.destroy();
+  chart = new Chart(document.getElementById('monthsChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ label: `Months Remaining (${name})`, data: values, backgroundColor: '#38bdf8' }]
+    },
+    options: {
+      plugins: { legend: { display: true } },
+      scales: { y: { title: { display: true, text: 'Months' } } }
+    }
   const labels = rows.map(r => r.tail);
   const months = rows.map(r => r.remaining_days === null ? null : r.remaining_days / 30.44);
 
@@ -130,6 +192,35 @@ function renderInspectionSummaryTable(){
   const head = document.getElementById('inspectionTableHead');
   head.innerHTML = `<tr><th>Aircraft</th>${inspectionColumns.map(name => `<th>${name}</th>`).join('')}</tr>`;
 
+function renderRemainingInspectionsTable(){
+  const inspectionTypes = dashboard.inspection_names
+    .filter(name => !TOP_INSPECTIONS.includes(name))
+    .sort((a, b) => a.localeCompare(b));
+
+  const head = document.getElementById('remainingInspectionsHead');
+  const body = document.getElementById('remainingInspectionsBody');
+
+  head.innerHTML = `<th>Aircraft</th>${inspectionTypes.map(name => `<th>${name}</th>`).join('')}`;
+  body.innerHTML = '';
+
+  dashboard.aircraft
+    .slice()
+    .sort((a, b) => a.tail.localeCompare(b.tail))
+    .forEach(ac => {
+      const byInspection = Object.fromEntries(ac.inspections.map(item => [item.inspection, item]));
+      const cols = inspectionTypes.map(type => {
+        const item = byInspection[type];
+        if (!item || item.remaining_hours === null || item.remaining_hours === undefined || Number.isNaN(Number(item.remaining_hours))) {
+          return '<td class="empty-text">—</td>';
+        }
+        const status = hoursStatus(item.remaining_hours);
+        return `<td class="${status.cellClass}">${round(item.remaining_hours)} <span class="badge ${status.badgeClass}">${status.label}</span></td>`;
+      }).join('');
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${ac.tail}</td>${cols}`;
+      body.appendChild(tr);
+    });
   const body = document.getElementById('inspectionTable');
   body.innerHTML = '';
 
@@ -179,6 +270,11 @@ function renderUtilization(){
 }
 
 (async () => {
+  const res = await fetch('data/dashboard.json?t=' + Date.now(), { cache: 'no-store' });
+  dashboard = await res.json();
+  document.getElementById('meta').textContent = `Generated ${dashboard.meta.generated_utc} | Aircraft: ${dashboard.meta.aircraft_count}`;
+  populateInspectionSelector();
+  renderRemainingInspectionsTable();
   const res = await fetch('data/dashboard.json?t=' + Date.now(), {cache: 'no-store'});
   dashboard = await res.json();
   document.getElementById('meta').textContent = `Generated ${dashboard.meta.generated_utc} | Aircraft: ${dashboard.meta.aircraft_count}`;
