@@ -112,6 +112,162 @@
     .tab { display: none; padding: 20px 0 28px; }
     .tab.active { display: block; }
 
+    .calendar-shell {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(9, 17, 30, 0.95), rgba(4, 9, 18, 0.98));
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .calendar-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(15, 27, 44, 0.85);
+    }
+
+    .calendar-nav { display: flex; align-items: center; gap: 8px; }
+
+    .calendar-btn {
+      border: 1px solid var(--line);
+      color: #eaf5ff;
+      background: rgba(7, 14, 25, 0.85);
+      border-radius: 999px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+    }
+
+    .calendar-title {
+      font-size: 0.9rem;
+      letter-spacing: 0.14em;
+      color: #f7fbff;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+
+    .calendar-legend {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 0.66rem;
+      color: #bbd2ec;
+    }
+
+    .calendar-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .legend-overdue { background: #ff6f91; }
+    .legend-soon { background: #ffcf70; }
+    .legend-upcoming { background: #66d0ff; }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .calendar-dow {
+      padding: 10px;
+      font-size: 0.66rem;
+      color: #90accb;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid rgba(23, 48, 78, 0.5);
+      text-align: center;
+    }
+
+    .calendar-dow:last-child { border-right: none; }
+
+    .calendar-day {
+      min-height: 122px;
+      border-right: 1px solid rgba(23, 48, 78, 0.5);
+      border-bottom: 1px solid rgba(23, 48, 78, 0.5);
+      padding: 8px;
+    }
+
+    .calendar-day:nth-child(7n) { border-right: none; }
+    .calendar-day.muted { color: #5f7898; background: rgba(5, 11, 20, 0.7); }
+    .calendar-day.today {
+      background: radial-gradient(circle at top, rgba(37, 200, 255, 0.15), rgba(7, 14, 24, 0.7));
+    }
+
+    .day-number {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #e8f3ff;
+      margin-bottom: 7px;
+    }
+
+    .calendar-event {
+      border-radius: 6px;
+      padding: 4px 6px;
+      margin-bottom: 4px;
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      border: 1px solid transparent;
+      line-height: 1.35;
+      text-transform: none;
+      position: relative;
+      cursor: default;
+    }
+
+    .calendar-event strong { font-size: 0.56rem; }
+    .event-overdue { background: rgba(255, 60, 109, 0.2); border-color: rgba(255, 96, 140, 0.5); color: #ffd2df; }
+    .event-soon { background: rgba(255, 177, 64, 0.2); border-color: rgba(255, 208, 112, 0.5); color: #ffecc5; }
+    .event-upcoming { background: rgba(102, 208, 255, 0.18); border-color: rgba(102, 208, 255, 0.5); color: #d8f3ff; }
+    .calendar-more { color: #9fc4e7; font-size: 0.56rem; }
+
+    .event-tooltip {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 6px);
+      min-width: 260px;
+      max-width: 320px;
+      z-index: 30;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(6px);
+      transition: opacity 0.14s ease, transform 0.14s ease;
+      background: linear-gradient(180deg, rgba(14, 28, 46, 0.98), rgba(7, 13, 24, 0.98));
+      border: 1px solid rgba(93, 139, 184, 0.7);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      border-radius: 8px;
+      padding: 10px;
+      color: #eaf4ff;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+
+    .calendar-event:hover .event-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .event-tooltip .tooltip-title {
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #8fd8ff;
+      margin-bottom: 6px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(93, 139, 184, 0.45);
+    }
+
+    .event-tooltip .tooltip-row {
+      font-size: 0.58rem;
+      margin-bottom: 3px;
+      color: #d7e9ff;
+    }
+
+    .event-tooltip .tooltip-label {
+      color: #9db8d8;
+      margin-right: 6px;
+    }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(5, minmax(150px, 1fr));
@@ -308,6 +464,7 @@
 
       <div class="tabs">
         <button class="active" onclick="showTab('inspections', this)">Maintenance Due List</button>
+        <button onclick="showTab('calendar', this)">Calendar View</button>
         <button onclick="showTab('utilization', this)">Flight Hours Tracking</button>
         <button onclick="showTab('components', this)">Component Tracking</button>
       </div>
@@ -349,6 +506,27 @@
         <div id="componentGroups"></div>
       </section>
 
+      <section id="calendar" class="tab">
+        <h3>Maintenance Month View</h3>
+        <div class="calendar-shell">
+          <div class="calendar-toolbar">
+            <div class="calendar-nav">
+              <button class="calendar-btn" type="button" onclick="changeCalendarMonth(-1)">Prev</button>
+              <button class="calendar-btn" type="button" onclick="setCalendarToday()">Today</button>
+              <button class="calendar-btn" type="button" onclick="changeCalendarMonth(1)">Next</button>
+              <span id="calendarTitle" class="calendar-title"></span>
+            </div>
+            <div class="calendar-legend">
+              <span><i class="legend-dot legend-overdue"></i>Past due</span>
+              <span><i class="legend-dot legend-soon"></i>Due within 30 days</span>
+              <span><i class="legend-dot legend-upcoming"></i>Upcoming</span>
+            </div>
+          </div>
+          <div id="calendarDow" class="calendar-grid"></div>
+          <div id="calendarGrid" class="calendar-grid"></div>
+        </div>
+      </section>
+
       <section id="utilization" class="tab">
         <h3>Average Daily / Weekly Flight Hours</h3>
         <div class="panel">
@@ -370,6 +548,8 @@
 let dashboard;
 let chart;
 const TOP_INSPECTIONS = ['12 Month', '24 Month'];
+const CALENDAR_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+let currentCalendarDate = new Date();
 
 function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
@@ -595,6 +775,122 @@ function renderUtilization() {
   });
 }
 
+function getEventTone(daysRemaining) {
+  if (daysRemaining < 0) return 'event-overdue';
+  if (daysRemaining <= 30) return 'event-soon';
+  return 'event-upcoming';
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function getCalendarEvents() {
+  return dashboard.aircraft.flatMap(ac =>
+    ac.inspections
+      .filter(item => item.due_date)
+      .map(item => {
+        const dueDate = new Date(`${item.due_date}T00:00:00`);
+        const daysRemaining = item.remaining_days ?? Number.MAX_SAFE_INTEGER;
+        return {
+          tail: ac.tail,
+          inspection: item.inspection,
+          ata: item.ata,
+          description: item.description,
+          dueDate,
+          dueDateKey: dueDate.toISOString().slice(0, 10),
+          dueDateText: item.due_date,
+          remainingDays: item.remaining_days,
+          remainingHours: item.remaining_hours,
+          daysRemaining: Number(daysRemaining)
+        };
+      })
+  );
+}
+
+function renderCalendar() {
+  const dowRoot = document.getElementById('calendarDow');
+  if (!dowRoot.dataset.initialized) {
+    dowRoot.innerHTML = CALENDAR_DAYS.map(day => `<div class="calendar-dow">${day}</div>`).join('');
+    dowRoot.dataset.initialized = '1';
+  }
+
+  const monthStart = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth(), 1);
+  const monthEnd = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1, 0);
+  const firstWeekday = monthStart.getDay();
+  const daysInMonth = monthEnd.getDate();
+  const prevMonthDays = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth(), 0).getDate();
+  const totalCells = 42;
+  const events = getCalendarEvents();
+
+  document.getElementById('calendarTitle').textContent = monthStart.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+
+  const cells = [];
+  for (let i = 0; i < totalCells; i += 1) {
+    let day;
+    let cellDate;
+    let isMuted = false;
+
+    if (i < firstWeekday) {
+      day = prevMonthDays - firstWeekday + i + 1;
+      cellDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() - 1, day);
+      isMuted = true;
+    } else if (i >= firstWeekday + daysInMonth) {
+      day = i - (firstWeekday + daysInMonth) + 1;
+      cellDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1, day);
+      isMuted = true;
+    } else {
+      day = i - firstWeekday + 1;
+      cellDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth(), day);
+    }
+
+    const today = new Date();
+    const isToday = today.toDateString() === cellDate.toDateString();
+    const dateKey = cellDate.toISOString().slice(0, 10);
+    const dayEvents = events
+      .filter(event => event.dueDateKey === dateKey)
+      .sort((a, b) => a.daysRemaining - b.daysRemaining);
+
+    const eventMarkup = dayEvents.slice(0, 3).map(event => {
+      const remainingDays = event.remainingDays === null || event.remainingDays === undefined ? '—' : round(event.remainingDays);
+      const remainingHours = event.remainingHours === null || event.remainingHours === undefined ? '—' : round(event.remainingHours);
+      return `<div class="calendar-event ${getEventTone(event.daysRemaining)}">` +
+        `<strong>${escapeHtml(event.tail)}</strong> ${escapeHtml(event.inspection)}` +
+        `<div class="event-tooltip">` +
+        `<div class="tooltip-title">${escapeHtml(event.tail)} — ${escapeHtml(event.inspection)}</div>` +
+        `<div class="tooltip-row"><span class="tooltip-label">Due date:</span>${escapeHtml(event.dueDateText)}</div>` +
+        `<div class="tooltip-row"><span class="tooltip-label">Remaining days:</span>${escapeHtml(remainingDays)}</div>` +
+        `<div class="tooltip-row"><span class="tooltip-label">Remaining hours:</span>${escapeHtml(remainingHours)}</div>` +
+        `<div class="tooltip-row"><span class="tooltip-label">ATA:</span>${escapeHtml(event.ata || 'N/A')}</div>` +
+        `<div class="tooltip-row"><span class="tooltip-label">Description:</span>${escapeHtml(event.description || 'N/A')}</div>` +
+        `</div></div>`;
+    }).join('');
+    const moreMarkup = dayEvents.length > 3 ? `<div class="calendar-more">+${dayEvents.length - 3} more</div>` : '';
+
+    cells.push(
+      `<div class="calendar-day ${isMuted ? 'muted' : ''} ${isToday ? 'today' : ''}">` +
+      `<div class="day-number">${day}</div>${eventMarkup}${moreMarkup}</div>`
+    );
+  }
+
+  document.getElementById('calendarGrid').innerHTML = cells.join('');
+}
+
+function changeCalendarMonth(delta) {
+  currentCalendarDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + delta, 1);
+  renderCalendar();
+}
+
+function setCalendarToday() {
+  currentCalendarDate = new Date();
+  renderCalendar();
+}
+
 (async () => {
   const res = await fetch(`data/dashboard.json?t=${Date.now()}`, { cache: 'no-store' });
   dashboard = await res.json();
@@ -611,6 +907,7 @@ function renderUtilization() {
   renderRemainingInspectionsTable();
   renderComponents();
   renderUtilization();
+  renderCalendar();
 })();
 </script>
 </body>
