@@ -67,6 +67,20 @@
         <tbody id="remainingInspectionsBody"></tbody>
       </table>
     </div>
+      <label for="inspectionSelect">Inspection:</label>
+      <select id="inspectionSelect"></select>
+    </div>
+    <div class="card">
+      <h3>Hours Remaining by Aircraft</h3>
+      <canvas id="hoursChart" height="120"></canvas>
+    </div>
+    <div class="card">
+      <h3>Time Remaining (Months / Weeks / Days)</h3>
+      <table>
+        <thead><tr><th>Aircraft</th><th>Due Date</th><th>Months</th><th>Weeks</th><th>Days</th><th>Hours</th></tr></thead>
+        <tbody id="inspectionTable"></tbody>
+      </table>
+    </div>
   </section>
 
   <section id="components" class="tab">
@@ -119,6 +133,19 @@ function populateInspectionSelector(){
 
   const available = TOP_INSPECTIONS.filter(name => dashboard.inspection_names.includes(name));
   available.forEach(name => {
+
+function showTab(name, btn){
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  document.querySelectorAll('.tabs button').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function round(val){ return (val === null || val === undefined || Number.isNaN(Number(val))) ? '—' : Number(val).toFixed(1); }
+
+function populateInspectionSelector(){
+  const select = document.getElementById('inspectionSelect');
+  dashboard.inspection_names.forEach(name => {
     const option = document.createElement('option');
     option.value = name;
     option.textContent = name;
@@ -137,7 +164,17 @@ function renderTopGraph(name){
   dashboard.aircraft.forEach(ac => {
     const match = ac.inspections.find(i => i.inspection === name);
     if (match) rows.push({ tail: ac.tail, months_remaining: monthsFromDays(match.remaining_days) });
+  select.addEventListener('change', () => renderInspection(select.value));
+  if (dashboard.inspection_names.length) renderInspection(dashboard.inspection_names[0]);
+}
+
+function renderInspection(name){
+  const rows = [];
+  dashboard.aircraft.forEach(ac => {
+    const match = ac.inspections.find(i => i.inspection === name);
+    if (match) rows.push({tail: ac.tail, ...match});
   });
+  rows.sort((a,b) => (a.remaining_hours ?? 99999) - (b.remaining_hours ?? 99999));
 
   rows.sort((a,b) => (a.months_remaining ?? 99999) - (b.months_remaining ?? 99999));
 
@@ -155,8 +192,15 @@ function renderTopGraph(name){
       plugins: { legend: { display: true } },
       scales: { y: { title: { display: true, text: 'Months' } } }
     }
+  const labels = rows.map(r => r.tail);
+  const hours = rows.map(r => r.remaining_hours ?? null);
+
+  if (chart) chart.destroy();
+  chart = new Chart(document.getElementById('hoursChart'), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'Remaining Hours', data: hours, backgroundColor: '#38bdf8' }] },
+    options: { plugins: { legend: { display: false } } }
   });
-}
 
 function renderRemainingInspectionsTable(){
   const inspectionTypes = dashboard.inspection_names
@@ -187,6 +231,16 @@ function renderRemainingInspectionsTable(){
       tr.innerHTML = `<td>${ac.tail}</td>${cols}`;
       body.appendChild(tr);
     });
+  const body = document.getElementById('inspectionTable');
+  body.innerHTML = '';
+  rows.forEach(r => {
+    const days = r.remaining_days;
+    const weeks = days === null ? null : days / 7;
+    const months = days === null ? null : days / 30.44;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.tail}</td><td>${r.due_date ?? '—'}</td><td>${round(months)}</td><td>${round(weeks)}</td><td>${round(days)}</td><td>${round(r.remaining_hours)}</td>`;
+    body.appendChild(tr);
+  });
 }
 
 function renderComponents(){
@@ -218,6 +272,10 @@ function renderUtilization(){
   document.getElementById('meta').textContent = `Generated ${dashboard.meta.generated_utc} | Aircraft: ${dashboard.meta.aircraft_count}`;
   populateInspectionSelector();
   renderRemainingInspectionsTable();
+  const res = await fetch('data/dashboard.json?t=' + Date.now(), {cache: 'no-store'});
+  dashboard = await res.json();
+  document.getElementById('meta').textContent = `Generated ${dashboard.meta.generated_utc} | Aircraft: ${dashboard.meta.aircraft_count}`;
+  populateInspectionSelector();
   renderComponents();
   renderUtilization();
 })();
