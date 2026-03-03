@@ -6,67 +6,286 @@
   <title>Bell 407 Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #0f172a; color: #e2e8f0; }
-    header { padding: 16px 24px; background: #111827; border-bottom: 1px solid #334155; }
-    main { padding: 16px 24px; }
-    .tabs button { margin-right: 8px; padding: 8px 12px; background:#1e293b; color:#e2e8f0; border:1px solid #475569; cursor:pointer; }
-    .tabs button.active { background:#0284c7; color:#0b1120; }
-    .tab { display:none; margin-top: 16px; }
-    .tab.active { display:block; }
-    .card { background:#111827; border:1px solid #334155; border-radius:8px; padding:12px; margin-bottom:12px; }
-    table { width:100%; border-collapse: collapse; }
-    th, td { border-bottom:1px solid #334155; padding:8px; text-align:left; }
-    select { padding:6px; background:#1e293b; color:#e2e8f0; border:1px solid #475569; }
-    .group { margin-bottom: 16px; }
-    .status-immediate { background: rgba(239, 68, 68, 0.22); color: #fecaca; font-weight: 700; }
-    .status-coming-soon { background: rgba(249, 115, 22, 0.22); color: #fed7aa; font-weight: 700; }
-    .status-upcoming { background: rgba(250, 204, 21, 0.22); color: #fef08a; font-weight: 700; }
-    .status-scheduled { background: rgba(34, 197, 94, 0.22); color: #bbf7d0; font-weight: 700; }
+    :root {
+      --bg: #020812;
+      --panel: #070f1c;
+      --panel-2: #0b1422;
+      --line: #17304e;
+      --line-soft: rgba(23, 48, 78, 0.55);
+      --text: #eef6ff;
+      --muted: #87a4c8;
+      --cyan: #25c8ff;
+      --blue: #2fa9ff;
+      --red: #ff2b67;
+      --amber: #f7c14a;
+      --orange: #ff8a1f;
+      --green: #29efb0;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #071120 0%, var(--bg) 22%, #010611 100%);
+      color: var(--text);
+      font-family: "Consolas", "Lucida Console", monospace;
+      letter-spacing: 0.12em;
+      min-height: 100vh;
+      text-transform: uppercase;
+    }
+
+    .frame {
+      width: 100%;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(2, 8, 18, 0.9);
+    }
+
+    .container {
+      width: min(1540px, 96vw);
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 24px 0 16px;
+      border-bottom: 1px solid var(--line);
+      background-image: linear-gradient(90deg, rgba(24,56,90,0.12) 1px, transparent 1px);
+      background-size: 14px 14px;
+    }
+
+    .brand {
+      color: var(--cyan);
+      font-size: 2.1rem;
+      margin: 0;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .subtitle { margin-top: 7px; font-size: 0.84rem; color: #f4f8ff; font-weight: 700; }
+
+    #meta {
+      text-align: right;
+      font-size: 0.74rem;
+      color: var(--cyan);
+      line-height: 1.8;
+      padding-top: 2px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+    }
+
+    .status-strip {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      font-size: 0.73rem;
+      color: #e8f3ff;
+    }
+    .status-left, .status-right { display: flex; gap: 20px; align-items: center; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+    .g { background: var(--green); } .a { background: var(--amber); } .r { background: var(--red); } .o { background: var(--orange); }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid var(--line);
+      margin-top: 14px;
+    }
+    .tabs button {
+      border: 0;
+      background: transparent;
+      color: #f2f7ff;
+      padding: 14px 18px;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tabs button.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+
+    .tab { display: none; padding: 20px 0 28px; }
+    .tab.active { display: block; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(150px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(12, 24, 40, 0.92), rgba(7, 14, 24, 0.96));
+      padding: 14px 18px;
+      min-height: 86px;
+      border-radius: 4px;
+    }
+    .metric .value { font-size: 2.6rem; font-weight: 900; line-height: 1; margin-bottom: 8px; }
+    .metric .value::after { content: ""; display: block; width: 42px; height: 2px; margin-top: 7px; }
+    .metric .label { font-size: 0.7rem; color: #f5f8ff; }
+    .blue .value { color: var(--blue); } .blue .value::after { background: var(--blue); }
+    .red .value { color: var(--red); } .red .value::after { background: var(--red); }
+    .amber .value { color: var(--amber); } .amber .value::after { background: var(--amber); }
+    .orange .value { color: var(--orange); } .orange .value::after { background: var(--orange); }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(13, 26, 44, 0.78), rgba(6, 12, 22, 0.86));
+      padding: 13px 16px;
+      margin-bottom: 16px;
+      border-radius: 4px;
+    }
+
+    h3 {
+      margin: 0 0 12px;
+      color: #f8fbff;
+      font-size: 0.84rem;
+      letter-spacing: 0.24em;
+    }
+
+    .controls { display: flex; gap: 10px; align-items: center; }
+    label, select, button { font: inherit; text-transform: uppercase; }
+    label { color: var(--muted); font-size: 0.72rem; }
+    select {
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--line);
+      padding: 6px 10px;
+      font-size: 0.74rem;
+      border-radius: 3px;
+    }
+
+    .pill-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .pill {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: #eff6ff;
+      padding: 7px 12px;
+      font-size: 0.72rem;
+    }
+    .pill.active { background: var(--cyan); color: #021427; border-color: var(--cyan); }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      border-bottom: 1px solid var(--line-soft);
+      padding: 10px 10px;
+      text-align: left;
+      font-size: 0.72rem;
+      vertical-align: top;
+    }
+    thead th {
+      background: linear-gradient(90deg, rgba(25, 45, 69, 0.9), rgba(18, 34, 53, 0.85));
+      color: #f5f9ff;
+    }
+
+    .status-immediate { background: rgba(255, 43, 103, 0.22); color: #ffd4e3; font-weight: 700; }
+    .status-coming-soon { background: rgba(255, 138, 31, 0.2); color: #ffe0c4; font-weight: 700; }
+    .status-upcoming { background: rgba(247, 193, 74, 0.18); color: #fff0cb; font-weight: 700; }
+    .status-scheduled { background: rgba(41, 239, 176, 0.15); color: #d7fff1; font-weight: 700; }
+
+    .foot {
+      border-top: 1px solid var(--line);
+      margin-top: 24px;
+      padding: 14px 0;
+      color: #f3f8ff;
+      font-size: 0.68rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    @media (max-width: 1050px) {
+      .cards { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+      .status-left, .status-right { flex-wrap: wrap; }
+    }
   </style>
 </head>
 <body>
-<header>
-  <h2>Bell 407 Fleet Dashboard</h2>
-  <div id="meta"></div>
-</header>
-<main>
-  <div class="tabs">
-    <button class="active" onclick="showTab('inspections', this)">Inspections</button>
-    <button onclick="showTab('components', this)">Components</button>
-    <button onclick="showTab('utilization', this)">Utilization</button>
+  <div class="frame">
+    <div class="container">
+      <header>
+        <div>
+          <h1 class="brand">IHC HEALTH SERVICES</h1>
+          <div class="subtitle">AW109SP FLEET — MAINTENANCE DUE LIST</div>
+        </div>
+        <div id="meta"></div>
+      </header>
+
+      <div class="status-strip">
+        <div class="status-left">
+          <span><span class="dot g"></span>OK (&gt;100 HRS)</span>
+          <span><span class="dot a"></span>COMING DUE (26-100 HRS)</span>
+          <span><span class="dot r"></span>CRITICAL (0-25 HRS)</span>
+          <span><span class="dot o"></span>PAST DUE / OVERDUE</span>
+        </div>
+        <div class="status-right"><span>-- Not due this cycle</span></div>
+      </div>
+
+      <div class="tabs">
+        <button class="active" onclick="showTab('inspections', this)">Maintenance Due List</button>
+        <button onclick="showTab('utilization', this)">Flight Hours Tracking</button>
+        <button onclick="showTab('components', this)">Component Tracking</button>
+      </div>
+
+      <section id="inspections" class="tab active">
+        <div id="summaryCards" class="cards"></div>
+
+        <div id="componentNotice" class="panel"></div>
+
+        <h3>Scheduled Phase Inspections — Hours Remaining</h3>
+
+        <div class="controls" style="margin-bottom:10px;">
+          <label for="inspectionSelect">Display inspection</label>
+          <select id="inspectionSelect"></select>
+        </div>
+
+        <div class="pill-row">
+          <button class="pill active" type="button">All</button>
+          <button class="pill" type="button">Past Due</button>
+          <button class="pill" type="button">Critical</button>
+          <button class="pill" type="button">Coming Due</button>
+          <button class="pill" type="button">OK</button>
+        </div>
+
+        <div class="panel">
+          <canvas id="hoursChart" height="85"></canvas>
+        </div>
+
+        <div class="panel">
+          <table>
+            <thead id="inspectionTableHead"></thead>
+            <tbody id="inspectionTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="components" class="tab">
+        <h3>Component Retirement / Overhaul — Within 200 Hours</h3>
+        <div id="componentGroups"></div>
+      </section>
+
+      <section id="utilization" class="tab">
+        <h3>Average Daily / Weekly Flight Hours</h3>
+        <div class="panel">
+          <table>
+            <thead><tr><th>Aircraft</th><th>Avg Daily</th><th>Avg Weekly</th><th>History Points</th></tr></thead>
+            <tbody id="utilTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="foot">
+        <span id="sourceLine">Source: Veryon Maintenance Tracking</span>
+        <span>IHC HEALTH SERVICES — AVIATION MAINTENANCE</span>
+      </div>
+    </div>
   </div>
-
-  <section id="inspections" class="tab active">
-    <div class="card">
-      <label for="inspectionSelect">Months Remaining View:</label>
-      <select id="inspectionSelect"></select>
-    </div>
-    <div class="card">
-      <h3>Months Remaining by Aircraft</h3>
-      <canvas id="hoursChart" height="120"></canvas>
-    </div>
-    <div class="card">
-      <h3>Other Inspections Remaining by Aircraft</h3>
-      <table>
-        <thead id="inspectionTableHead"></thead>
-        <tbody id="inspectionTable"></tbody>
-      </table>
-    </div>
-  </section>
-
-  <section id="components" class="tab">
-    <h3>RETIRE / OVERHAUL items due in ≤ 200 hours (grouped by aircraft)</h3>
-    <div id="componentGroups"></div>
-  </section>
-
-  <section id="utilization" class="tab">
-    <h3>Average Daily / Weekly Flight Hours</h3>
-    <table>
-      <thead><tr><th>Aircraft</th><th>Avg Daily</th><th>Avg Weekly</th><th>History Points</th></tr></thead>
-      <tbody id="utilTable"></tbody>
-    </table>
-  </section>
-</main>
 
 <script>
 let dashboard;
@@ -92,7 +311,6 @@ function monthsFromDays(days) {
 
 function getStatus(value, unit) {
   if (value === null || value === undefined || Number.isNaN(Number(value))) return null;
-
   const numericValue = Number(value);
 
   if (unit === 'days') {
@@ -102,10 +320,51 @@ function getStatus(value, unit) {
     return { label: 'SCHEDULED', className: 'status-scheduled' };
   }
 
+  if (numericValue < 0) return { label: 'OVERDUE', className: 'status-coming-soon' };
   if (numericValue < 10) return { label: 'IMMEDIATE', className: 'status-immediate' };
   if (numericValue < 25) return { label: 'COMING SOON', className: 'status-coming-soon' };
   if (numericValue < 50) return { label: 'UPCOMING', className: 'status-upcoming' };
   return { label: 'SCHEDULED', className: 'status-scheduled' };
+}
+
+function renderSummaryCards() {
+  const cards = document.getElementById('summaryCards');
+  const aircraftCount = dashboard.aircraft.length;
+
+  let critical = 0;
+  let comingDue = 0;
+  dashboard.aircraft.forEach(ac => {
+    ac.inspections.forEach(inspection => {
+      const value = inspection.remaining_hours;
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return;
+      if (Number(value) <= 25) critical += 1;
+      else if (Number(value) <= 100) comingDue += 1;
+    });
+  });
+
+  const componentValues = Object.values(dashboard.components_by_aircraft || {}).flat();
+  const componentOverdue = componentValues
+    .filter(i => i.remaining_hours !== null && i.remaining_hours !== undefined && Number(i.remaining_hours) <= 0)
+    .length;
+
+  const display = [
+    { label: 'Aircraft', value: aircraftCount, tone: 'blue' },
+    { label: 'Airborne', value: aircraftCount, tone: 'blue' },
+    { label: 'Insp. Critical / Due', value: critical, tone: 'red' },
+    { label: 'Insp. Coming Due', value: comingDue, tone: 'amber' },
+    { label: 'Components Overdue', value: componentOverdue, tone: 'orange' }
+  ];
+
+  cards.innerHTML = display
+    .map(item => `<div class="metric ${item.tone}"><div class="value">${item.value}</div><div class="label">${item.label}</div></div>`)
+    .join('');
+
+  const dueWithin200 = componentValues
+    .filter(i => i.remaining_hours !== null && i.remaining_hours !== undefined && Number(i.remaining_hours) <= 200)
+    .length;
+  document.getElementById('componentNotice').textContent = dueWithin200
+    ? `${dueWithin200} component(s) within 200 flight hours found.`
+    : 'No numeric 200-hr remaining hours found.';
 }
 
 function populateInspectionSelector() {
@@ -113,7 +372,6 @@ function populateInspectionSelector() {
   select.innerHTML = '';
 
   const selectableInspections = TOP_INSPECTIONS.filter(name => dashboard.inspection_names.includes(name));
-
   selectableInspections.forEach(name => {
     const option = document.createElement('option');
     option.value = name;
@@ -122,42 +380,41 @@ function populateInspectionSelector() {
   });
 
   select.addEventListener('change', () => renderTopGraph(select.value));
-
-  if (selectableInspections.length > 0) {
-    renderTopGraph(selectableInspections[0]);
-  }
+  if (selectableInspections.length > 0) renderTopGraph(selectableInspections[0]);
 }
 
 function renderTopGraph(inspectionName) {
   const rows = dashboard.aircraft
     .map(ac => {
       const inspection = ac.inspections.find(i => i.inspection === inspectionName);
-      return {
-        tail: ac.tail,
-        monthsRemaining: inspection ? monthsFromDays(inspection.remaining_days) : null
-      };
+      return { tail: ac.tail, monthsRemaining: inspection ? monthsFromDays(inspection.remaining_days) : null };
     })
     .sort((a, b) => (a.monthsRemaining ?? 99999) - (b.monthsRemaining ?? 99999));
-
-  const labels = rows.map(r => r.tail);
-  const values = rows.map(r => r.monthsRemaining);
 
   if (chart) chart.destroy();
   chart = new Chart(document.getElementById('hoursChart'), {
     type: 'bar',
     data: {
-      labels,
+      labels: rows.map(r => r.tail),
       datasets: [{
         label: `Months Remaining (${inspectionName})`,
-        data: values,
-        backgroundColor: '#38bdf8'
+        data: rows.map(r => r.monthsRemaining),
+        backgroundColor: '#25c8ff',
+        borderColor: '#8ce6ff',
+        borderWidth: 1
       }]
     },
     options: {
-      plugins: { legend: { display: true } },
+      plugins: { legend: { labels: { color: '#d9ebff' } } },
       scales: {
         y: {
-          title: { display: true, text: 'Months' }
+          title: { display: true, text: 'Months', color: '#aac8ea' },
+          ticks: { color: '#aac8ea' },
+          grid: { color: 'rgba(32, 63, 97, 0.5)' }
+        },
+        x: {
+          ticks: { color: '#aac8ea' },
+          grid: { color: 'rgba(32, 63, 97, 0.18)' }
         }
       }
     }
@@ -166,59 +423,42 @@ function renderTopGraph(inspectionName) {
 
 function renderRemainingInspectionsTable() {
   const remainingInspectionTypes = dashboard.inspection_names.filter(name => !TOP_INSPECTIONS.includes(name));
-
-  const head = document.getElementById('inspectionTableHead');
-  head.innerHTML = `<tr><th>Aircraft</th>${remainingInspectionTypes.map(name => `<th>${name}</th>`).join('')}</tr>`;
+  document.getElementById('inspectionTableHead').innerHTML =
+    `<tr><th>Aircraft</th>${remainingInspectionTypes.map(name => `<th>${name}</th>`).join('')}</tr>`;
 
   const body = document.getElementById('inspectionTable');
   body.innerHTML = '';
 
-  dashboard.aircraft
-    .slice()
-    .sort((a, b) => a.tail.localeCompare(b.tail))
-    .forEach(ac => {
-      const tr = document.createElement('tr');
-      const cells = [`<td>${ac.tail}</td>`];
+  dashboard.aircraft.slice().sort((a, b) => a.tail.localeCompare(b.tail)).forEach(ac => {
+    const tr = document.createElement('tr');
+    const cells = [`<td>${ac.tail}</td>`];
 
-      remainingInspectionTypes.forEach(inspectionName => {
-        const match = ac.inspections.find(i => i.inspection === inspectionName);
-        const isHourBlockInspection = HOUR_BLOCK_INSPECTIONS.includes(inspectionName);
-        const hasHours = match?.remaining_hours !== null && match?.remaining_hours !== undefined && !Number.isNaN(Number(match?.remaining_hours));
-        const hasDays = match?.remaining_days !== null && match?.remaining_days !== undefined && !Number.isNaN(Number(match?.remaining_days));
+    remainingInspectionTypes.forEach(inspectionName => {
+      const match = ac.inspections.find(i => i.inspection === inspectionName);
+      const isHourBlockInspection = HOUR_BLOCK_INSPECTIONS.includes(inspectionName);
+      const hasHours = match?.remaining_hours !== null && match?.remaining_hours !== undefined && !Number.isNaN(Number(match?.remaining_hours));
+      const hasDays = match?.remaining_days !== null && match?.remaining_days !== undefined && !Number.isNaN(Number(match?.remaining_days));
 
-        if (isHourBlockInspection) {
-          if (!match || !hasHours) {
-            cells.push('<td>—</td>');
-            return;
-          }
+      if (isHourBlockInspection) {
+        if (!match || !hasHours) return cells.push('<td>—</td>');
+        const hourStatus = getStatus(match.remaining_hours, 'hours');
+        if (!hourStatus) return cells.push('<td>—</td>');
+        const dueDateLabel = match.due_date ? match.due_date : 'No due date';
+        return cells.push(`<td class="${hourStatus.className}">${dueDateLabel}<br>${round(match.remaining_hours)} hrs (${hourStatus.label})</td>`);
+      }
 
-          const hourStatus = getStatus(match.remaining_hours, 'hours');
-          if (!hourStatus) {
-            cells.push('<td>—</td>');
-            return;
-          }
+      const unit = hasHours ? 'hours' : (hasDays ? 'days' : null);
+      const value = hasHours ? match.remaining_hours : (hasDays ? match.remaining_days : null);
+      const status = unit ? getStatus(value, unit) : null;
+      if (!match || !status) return cells.push('<td>—</td>');
 
-          const dueDateLabel = match.due_date ? match.due_date : 'No due date';
-          cells.push(`<td class="${hourStatus.className}">${dueDateLabel}<br>${round(match.remaining_hours)} hrs (${hourStatus.label})</td>`);
-          return;
-        }
-
-        const unit = hasHours ? 'hours' : (hasDays ? 'days' : null);
-        const value = hasHours ? match.remaining_hours : (hasDays ? match.remaining_days : null);
-        const status = unit ? getStatus(value, unit) : null;
-
-        if (!match || !status) {
-          cells.push('<td>—</td>');
-          return;
-        }
-
-        const unitLabel = unit === 'days' ? 'days' : 'hrs';
-        cells.push(`<td class="${status.className}">${round(value)} ${unitLabel} (${status.label})</td>`);
-      });
-
-      tr.innerHTML = cells.join('');
-      body.appendChild(tr);
+      const unitLabel = unit === 'days' ? 'days' : 'hrs';
+      cells.push(`<td class="${status.className}">${round(value)} ${unitLabel} (${status.label})</td>`);
     });
+
+    tr.innerHTML = cells.join('');
+    body.appendChild(tr);
+  });
 }
 
 function renderComponents() {
@@ -229,11 +469,11 @@ function renderComponents() {
     .sort(([a], [b]) => a.localeCompare(b))
     .forEach(([tail, items]) => {
       const wrapper = document.createElement('div');
-      wrapper.className = 'card group';
+      wrapper.className = 'panel';
       const rows = items
         .map(i => `<tr><td>${i.requirement_type}</td><td>${i.ata}</td><td>${i.description}</td><td>${round(i.remaining_hours)}</td></tr>`)
         .join('');
-      wrapper.innerHTML = `<h4>${tail}</h4><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
+      wrapper.innerHTML = `<h3 style="margin-bottom:8px;">${tail}</h3><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
       root.appendChild(wrapper);
     });
 }
@@ -252,7 +492,14 @@ function renderUtilization() {
 (async () => {
   const res = await fetch(`data/dashboard.json?t=${Date.now()}`, { cache: 'no-store' });
   dashboard = await res.json();
-  document.getElementById('meta').textContent = `Generated ${dashboard.meta.generated_utc} | Aircraft: ${dashboard.meta.aircraft_count}`;
+  document.getElementById('meta').innerHTML =
+    `REPORT DATE: ${dashboard.meta.generated_utc?.slice(0, 10) || 'N/A'}<br>` +
+    `FLEET: ${dashboard.meta.aircraft_count} AIRCRAFT | 0 AIRBORNE | 0 AT BASE | GENERATED: ${dashboard.meta.generated_utc || 'N/A'}`;
+
+  const sourceName = dashboard.meta.source_file || 'dashboard.json';
+  document.getElementById('sourceLine').textContent = `Source: Veryon Maintenance Tracking | ${sourceName}`;
+
+  renderSummaryCards();
   populateInspectionSelector();
   renderRemainingInspectionsTable();
   renderComponents();
