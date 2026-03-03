@@ -72,6 +72,7 @@
 let dashboard;
 let chart;
 const TOP_INSPECTIONS = ['12 Month', '24 Month'];
+const HOUR_BLOCK_INSPECTIONS = ['300HR/12M Airframe', '300HR/12M Engine', '600HR/12M Engine'];
 
 function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
@@ -181,8 +182,26 @@ function renderRemainingInspectionsTable() {
 
       remainingInspectionTypes.forEach(inspectionName => {
         const match = ac.inspections.find(i => i.inspection === inspectionName);
+        const isHourBlockInspection = HOUR_BLOCK_INSPECTIONS.includes(inspectionName);
         const hasHours = match?.remaining_hours !== null && match?.remaining_hours !== undefined && !Number.isNaN(Number(match?.remaining_hours));
         const hasDays = match?.remaining_days !== null && match?.remaining_days !== undefined && !Number.isNaN(Number(match?.remaining_days));
+
+        if (isHourBlockInspection) {
+          if (!match || !hasHours) {
+            cells.push('<td>—</td>');
+            return;
+          }
+
+          const hourStatus = getStatus(match.remaining_hours, 'hours');
+          if (!hourStatus) {
+            cells.push('<td>—</td>');
+            return;
+          }
+
+          const dueDateLabel = match.due_date ? match.due_date : 'No due date';
+          cells.push(`<td class="${hourStatus.className}">${dueDateLabel}<br>${round(match.remaining_hours)} hrs (${hourStatus.label})</td>`);
+          return;
+        }
 
         const unit = hasHours ? 'hours' : (hasDays ? 'days' : null);
         const value = hasHours ? match.remaining_hours : (hasDays ? match.remaining_days : null);
