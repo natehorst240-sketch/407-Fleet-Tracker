@@ -186,15 +186,64 @@
       border-radius: 3px;
     }
 
-    .pill-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .pill-row { display: flex; gap: 8px; margin-bottom: 14px; }
     .pill {
       border: 1px solid var(--line);
       background: transparent;
       color: #eff6ff;
       padding: 7px 12px;
       font-size: 0.72rem;
+      cursor: pointer;
     }
     .pill.active { background: var(--cyan); color: #021427; border-color: var(--cyan); }
+
+    .due-table-panel {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      padding: 0;
+      background: linear-gradient(180deg, rgba(4, 12, 22, 0.96), rgba(2, 8, 16, 0.98));
+    }
+
+    #inspectionMatrix th,
+    #inspectionMatrix td {
+      border-bottom: 1px solid rgba(23, 48, 78, 0.62);
+      text-align: center;
+      font-size: 0.78rem;
+      padding: 14px 10px;
+    }
+
+    #inspectionMatrix thead th {
+      background: linear-gradient(90deg, rgba(27, 44, 66, 0.95), rgba(19, 31, 48, 0.92));
+      font-size: 0.74rem;
+      color: #ffffff;
+    }
+
+    #inspectionMatrix th:first-child,
+    #inspectionMatrix td:first-child {
+      text-align: left;
+      min-width: 170px;
+      padding-left: 14px;
+    }
+
+    .tail-main { color: #ffffff; font-weight: 800; font-size: 1.02rem; letter-spacing: 0.04em; }
+    .tail-sub { color: #8ec4ff; font-size: 0.62rem; letter-spacing: 0.12em; margin-top: 4px; }
+
+    .value-chip {
+      display: inline-block;
+      min-width: 58px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+    }
+
+    .tone-ok { color: #39f7b8; border-color: rgba(57, 247, 184, 0.4); background: rgba(16, 85, 67, 0.22); }
+    .tone-coming-due { color: #ffc658; border-color: rgba(247, 193, 74, 0.4); background: rgba(91, 65, 16, 0.24); }
+    .tone-critical { color: #ff537f; border-color: rgba(255, 43, 103, 0.45); background: rgba(104, 18, 45, 0.26); }
+    .tone-past-due { color: #ff9a46; border-color: rgba(255, 138, 31, 0.45); background: rgba(105, 47, 10, 0.25); }
+    .tone-na { color: #95aac5; border-color: rgba(120, 141, 172, 0.24); background: rgba(30, 42, 60, 0.3); }
 
     table { width: 100%; border-collapse: collapse; }
     th, td {
@@ -287,8 +336,8 @@
           <canvas id="hoursChart" height="85"></canvas>
         </div>
 
-        <div class="panel">
-          <table>
+        <div class="due-table-panel">
+          <table id="inspectionMatrix">
             <thead id="inspectionTableHead"></thead>
             <tbody id="inspectionTable"></tbody>
           </table>
@@ -321,7 +370,6 @@
 let dashboard;
 let chart;
 const TOP_INSPECTIONS = ['12 Month', '24 Month'];
-const HOUR_BLOCK_INSPECTIONS = ['300HR/12M Airframe', '300HR/12M Engine', '600HR/12M Engine'];
 
 function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
@@ -337,24 +385,6 @@ function round(val) {
 function monthsFromDays(days) {
   if (days === null || days === undefined || Number.isNaN(Number(days))) return null;
   return Number(days) / 30.44;
-}
-
-function getStatus(value, unit) {
-  if (value === null || value === undefined || Number.isNaN(Number(value))) return null;
-  const numericValue = Number(value);
-
-  if (unit === 'days') {
-    if (numericValue < 30) return { label: 'IMMEDIATE', className: 'status-immediate' };
-    if (numericValue < 90) return { label: 'COMING SOON', className: 'status-coming-soon' };
-    if (numericValue < 180) return { label: 'UPCOMING', className: 'status-upcoming' };
-    return { label: 'SCHEDULED', className: 'status-scheduled' };
-  }
-
-  if (numericValue < 0) return { label: 'OVERDUE', className: 'status-coming-soon' };
-  if (numericValue < 10) return { label: 'IMMEDIATE', className: 'status-immediate' };
-  if (numericValue < 25) return { label: 'COMING SOON', className: 'status-coming-soon' };
-  if (numericValue < 50) return { label: 'UPCOMING', className: 'status-upcoming' };
-  return { label: 'SCHEDULED', className: 'status-scheduled' };
 }
 
 function renderSummaryCards() {
@@ -461,33 +491,78 @@ function renderRemainingInspectionsTable() {
 
   dashboard.aircraft.slice().sort((a, b) => a.tail.localeCompare(b.tail)).forEach(ac => {
     const tr = document.createElement('tr');
-    const cells = [`<td>${ac.tail}</td>`];
+    const rowStatuses = [];
+    const cells = [`<td><div class="tail-main">${ac.tail}</div><div class="tail-sub">fleet aircraft</div></td>`];
 
     remainingInspectionTypes.forEach(inspectionName => {
       const match = ac.inspections.find(i => i.inspection === inspectionName);
-      const isHourBlockInspection = HOUR_BLOCK_INSPECTIONS.includes(inspectionName);
       const hasHours = match?.remaining_hours !== null && match?.remaining_hours !== undefined && !Number.isNaN(Number(match?.remaining_hours));
       const hasDays = match?.remaining_days !== null && match?.remaining_days !== undefined && !Number.isNaN(Number(match?.remaining_days));
-
-      if (isHourBlockInspection) {
-        if (!match || !hasHours) return cells.push('<td>—</td>');
-        const hourStatus = getStatus(match.remaining_hours, 'hours');
-        if (!hourStatus) return cells.push('<td>—</td>');
-        const dueDateLabel = match.due_date ? match.due_date : 'No due date';
-        return cells.push(`<td class="${hourStatus.className}">${dueDateLabel}<br>${round(match.remaining_hours)} hrs (${hourStatus.label})</td>`);
-      }
-
       const unit = hasHours ? 'hours' : (hasDays ? 'days' : null);
       const value = hasHours ? match.remaining_hours : (hasDays ? match.remaining_days : null);
-      const status = unit ? getStatus(value, unit) : null;
-      if (!match || !status) return cells.push('<td>—</td>');
+      if (!match || !unit) {
+        cells.push('<td><span class="value-chip tone-na">—</span></td>');
+        return;
+      }
 
-      const unitLabel = unit === 'days' ? 'days' : 'hrs';
-      cells.push(`<td class="${status.className}">${round(value)} ${unitLabel} (${status.label})</td>`);
+      const status = getMatrixStatus(value, unit);
+      rowStatuses.push(status.filter);
+      const suffix = unit === 'days' ? 'd' : '';
+      cells.push(`<td><span class="value-chip ${status.className}">${round(value)}${suffix}</span></td>`);
     });
 
+    tr.dataset.filter = getRowFilter(rowStatuses);
     tr.innerHTML = cells.join('');
     body.appendChild(tr);
+  });
+
+  applyInspectionFilter(document.querySelector('.pill.active')?.dataset.filter || 'all');
+}
+
+function getMatrixStatus(value, unit) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) {
+    return { className: 'tone-na', filter: 'na' };
+  }
+
+  if (unit === 'days') {
+    const days = Number(value);
+    if (days < 0) return { className: 'tone-past-due', filter: 'past-due' };
+    if (days <= 30) return { className: 'tone-critical', filter: 'critical' };
+    if (days <= 90) return { className: 'tone-coming-due', filter: 'coming-due' };
+    return { className: 'tone-ok', filter: 'ok' };
+  }
+
+  const hours = Number(value);
+  if (hours < 0) return { className: 'tone-past-due', filter: 'past-due' };
+  if (hours <= 25) return { className: 'tone-critical', filter: 'critical' };
+  if (hours <= 100) return { className: 'tone-coming-due', filter: 'coming-due' };
+  return { className: 'tone-ok', filter: 'ok' };
+}
+
+function getRowFilter(statuses) {
+  if (statuses.includes('past-due')) return 'past-due';
+  if (statuses.includes('critical')) return 'critical';
+  if (statuses.includes('coming-due')) return 'coming-due';
+  if (statuses.includes('ok')) return 'ok';
+  return 'all';
+}
+
+function applyInspectionFilter(filter) {
+  const rows = document.querySelectorAll('#inspectionTable tr');
+  rows.forEach(row => {
+    row.style.display = (filter === 'all' || row.dataset.filter === filter) ? '' : 'none';
+  });
+}
+
+function setupInspectionFilters() {
+  const map = ['all', 'past-due', 'critical', 'coming-due', 'ok'];
+  document.querySelectorAll('.pill-row .pill').forEach((btn, idx) => {
+    btn.dataset.filter = map[idx];
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.pill-row .pill').forEach(node => node.classList.remove('active'));
+      btn.classList.add('active');
+      applyInspectionFilter(btn.dataset.filter);
+    });
   });
 }
 
@@ -532,6 +607,7 @@ function renderUtilization() {
 
   renderSummaryCards();
   populateInspectionSelector();
+  setupInspectionFilters();
   renderRemainingInspectionsTable();
   renderComponents();
   renderUtilization();
