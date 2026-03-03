@@ -72,6 +72,11 @@
 let dashboard;
 let chart;
 const TOP_INSPECTIONS = ['12 Month', '24 Month'];
+const HOURS_AND_DATE_INSPECTIONS = new Set([
+  '300HR/12M Airframe',
+  '300HR/12M Engine',
+  '600HR/12M Engine'
+]);
 
 function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
@@ -87,6 +92,17 @@ function round(val) {
 function monthsFromDays(days) {
   if (days === null || days === undefined || Number.isNaN(Number(days))) return null;
   return Number(days) / 30.44;
+}
+
+function formatDueDate(isoDate) {
+  if (!isoDate) return '—';
+  const parsed = new Date(isoDate);
+  if (Number.isNaN(parsed.getTime())) return isoDate;
+  return parsed.toLocaleDateString('en-CA', {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit'
+  });
 }
 
 function getStatus(value, unit) {
@@ -181,15 +197,21 @@ function renderRemainingInspectionsTable() {
 
       remainingInspectionTypes.forEach(inspectionName => {
         const match = ac.inspections.find(i => i.inspection === inspectionName);
+        const showHoursAndDate = HOURS_AND_DATE_INSPECTIONS.has(inspectionName);
         const hasHours = match?.remaining_hours !== null && match?.remaining_hours !== undefined && !Number.isNaN(Number(match?.remaining_hours));
         const hasDays = match?.remaining_days !== null && match?.remaining_days !== undefined && !Number.isNaN(Number(match?.remaining_days));
 
-        const unit = hasHours ? 'hours' : (hasDays ? 'days' : null);
+        const unit = showHoursAndDate ? (hasHours ? 'hours' : null) : (hasHours ? 'hours' : (hasDays ? 'days' : null));
         const value = hasHours ? match.remaining_hours : (hasDays ? match.remaining_days : null);
         const status = unit ? getStatus(value, unit) : null;
 
         if (!match || !status) {
           cells.push('<td>—</td>');
+          return;
+        }
+
+        if (showHoursAndDate && hasHours) {
+          cells.push(`<td class="${status.className}">${formatDueDate(match.due_date)} • ${round(match.remaining_hours)} hrs (${status.label})</td>`);
           return;
         }
 
