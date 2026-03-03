@@ -18,17 +18,10 @@
     th, td { border-bottom:1px solid #334155; padding:8px; text-align:left; }
     select { padding:6px; background:#1e293b; color:#e2e8f0; border:1px solid #475569; }
     .group { margin-bottom: 16px; }
-    .legend { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
-    .badge { display:inline-block; padding:2px 6px; border-radius:999px; font-size:11px; font-weight:700; }
-    .immediate { color:#fecaca; background:#7f1d1d; }
-    .coming-soon { color:#fde68a; background:#78350f; }
-    .upcoming { color:#bfdbfe; background:#1e3a8a; }
-    .scheduled { color:#bbf7d0; background:#14532d; }
-    td.immediate-cell { background: rgba(127, 29, 29, 0.35); }
-    td.coming-soon-cell { background: rgba(120, 53, 15, 0.35); }
-    td.upcoming-cell { background: rgba(30, 58, 138, 0.35); }
-    td.scheduled-cell { background: rgba(20, 83, 45, 0.35); }
-    .empty-text { color:#94a3b8; font-style:italic; }
+    .status-immediate { background: rgba(239, 68, 68, 0.22); color: #fecaca; font-weight: 700; }
+    .status-coming-soon { background: rgba(249, 115, 22, 0.22); color: #fed7aa; font-weight: 700; }
+    .status-upcoming { background: rgba(250, 204, 21, 0.22); color: #fef08a; font-weight: 700; }
+    .status-scheduled { background: rgba(34, 197, 94, 0.22); color: #bbf7d0; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -45,39 +38,17 @@
 
   <section id="inspections" class="tab active">
     <div class="card">
-      <label for="inspectionSelect"><strong>Top graph selector:</strong> 12 Month / 24 Month</label><br />
+      <label for="inspectionSelect">Months Remaining View:</label>
       <select id="inspectionSelect"></select>
     </div>
-
     <div class="card">
       <h3>Months Remaining by Aircraft</h3>
-      <canvas id="monthsChart" height="120"></canvas>
-    </div>
-
-    <div class="card">
-      <h3>Hours Remaining for All Other Inspections (By Aircraft)</h3>
-      <div class="legend">
-        <span class="badge immediate">IMMEDIATE (&lt;10)</span>
-        <span class="badge coming-soon">COMING SOON (&lt;25)</span>
-        <span class="badge upcoming">UPCOMING (&lt;50)</span>
-        <span class="badge scheduled">SCHEDULED (50+)</span>
-      </div>
-      <table>
-        <thead><tr id="remainingInspectionsHead"></tr></thead>
-        <tbody id="remainingInspectionsBody"></tbody>
-      </table>
-    </div>
-      <label for="inspectionSelect">Inspection:</label>
-      <select id="inspectionSelect"></select>
-    </div>
-    <div class="card">
-      <h3>Hours Remaining by Aircraft</h3>
       <canvas id="hoursChart" height="120"></canvas>
     </div>
     <div class="card">
-      <h3>Time Remaining (Months / Weeks / Days)</h3>
+      <h3>Other Inspection Hours Remaining by Aircraft</h3>
       <table>
-        <thead><tr><th>Aircraft</th><th>Due Date</th><th>Months</th><th>Weeks</th><th>Days</th><th>Hours</th></tr></thead>
+        <thead id="inspectionTableHead"></thead>
         <tbody id="inspectionTable"></tbody>
       </table>
     </div>
@@ -143,9 +114,19 @@ function showTab(name, btn){
 
 function round(val){ return (val === null || val === undefined || Number.isNaN(Number(val))) ? '—' : Number(val).toFixed(1); }
 
+function getStatusForHours(hours){
+  if (hours === null || hours === undefined || Number.isNaN(Number(hours))) return null;
+  const value = Number(hours);
+  if (value < 10) return {label: 'IMMEDIATE', className: 'status-immediate'};
+  if (value < 25) return {label: 'COMING SOON', className: 'status-coming-soon'};
+  if (value < 50) return {label: 'UPCOMING', className: 'status-upcoming'};
+  return {label: 'SCHEDULED', className: 'status-scheduled'};
+}
+
 function populateInspectionSelector(){
   const select = document.getElementById('inspectionSelect');
-  dashboard.inspection_names.forEach(name => {
+  const selectableInspections = dashboard.inspection_names.filter(name => name === '12 Month' || name === '24 Month');
+  selectableInspections.forEach(name => {
     const option = document.createElement('option');
     option.value = name;
     option.textContent = name;
@@ -165,7 +146,8 @@ function renderTopGraph(name){
     const match = ac.inspections.find(i => i.inspection === name);
     if (match) rows.push({ tail: ac.tail, months_remaining: monthsFromDays(match.remaining_days) });
   select.addEventListener('change', () => renderInspection(select.value));
-  if (dashboard.inspection_names.length) renderInspection(dashboard.inspection_names[0]);
+  if (selectableInspections.length) renderInspection(selectableInspections[0]);
+  renderInspectionSummaryTable();
 }
 
 function renderInspection(name){
@@ -193,14 +175,22 @@ function renderInspection(name){
       scales: { y: { title: { display: true, text: 'Months' } } }
     }
   const labels = rows.map(r => r.tail);
-  const hours = rows.map(r => r.remaining_hours ?? null);
+  const months = rows.map(r => r.remaining_days === null ? null : r.remaining_days / 30.44);
 
   if (chart) chart.destroy();
   chart = new Chart(document.getElementById('hoursChart'), {
     type: 'bar',
-    data: { labels, datasets: [{ label: 'Remaining Hours', data: hours, backgroundColor: '#38bdf8' }] },
+    data: { labels, datasets: [{ label: 'Remaining Months', data: months, backgroundColor: '#38bdf8' }] },
     options: { plugins: { legend: { display: false } } }
   });
+}
+
+function renderInspectionSummaryTable(){
+  const excludedInspections = new Set(['12 Month', '24 Month']);
+  const inspectionColumns = dashboard.inspection_names.filter(name => !excludedInspections.has(name));
+
+  const head = document.getElementById('inspectionTableHead');
+  head.innerHTML = `<tr><th>Aircraft</th>${inspectionColumns.map(name => `<th>${name}</th>`).join('')}</tr>`;
 
 function renderRemainingInspectionsTable(){
   const inspectionTypes = dashboard.inspection_names
@@ -233,12 +223,25 @@ function renderRemainingInspectionsTable(){
     });
   const body = document.getElementById('inspectionTable');
   body.innerHTML = '';
-  rows.forEach(r => {
-    const days = r.remaining_days;
-    const weeks = days === null ? null : days / 7;
-    const months = days === null ? null : days / 30.44;
+
+  dashboard.aircraft
+    .slice()
+    .sort((a, b) => a.tail.localeCompare(b.tail))
+    .forEach(ac => {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${r.tail}</td><td>${r.due_date ?? '—'}</td><td>${round(months)}</td><td>${round(weeks)}</td><td>${round(days)}</td><td>${round(r.remaining_hours)}</td>`;
+    const cells = [`<td>${ac.tail}</td>`];
+
+    inspectionColumns.forEach(inspectionName => {
+      const match = ac.inspections.find(i => i.inspection === inspectionName);
+      const status = getStatusForHours(match?.remaining_hours);
+      if (!match || status === null) {
+        cells.push('<td>—</td>');
+      } else {
+        cells.push(`<td class="${status.className}">${round(match.remaining_hours)} hrs (${status.label})</td>`);
+      }
+    });
+
+    tr.innerHTML = cells.join('');
     body.appendChild(tr);
   });
 }
