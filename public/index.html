@@ -73,59 +73,38 @@ let dashboard;
 let chart;
 const TOP_INSPECTIONS = ['12 Month', '24 Month'];
 
-function showTab(name, btn){
+function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
   document.getElementById(name).classList.add('active');
   document.querySelectorAll('.tabs button').forEach(el => el.classList.remove('active'));
   btn.classList.add('active');
 }
 
-function round(val){
+function round(val) {
   return (val === null || val === undefined || Number.isNaN(Number(val))) ? '—' : Number(val).toFixed(1);
 }
 
-function monthsFromDays(days){
+function monthsFromDays(days) {
   if (days === null || days === undefined || Number.isNaN(Number(days))) return null;
   return Number(days) / 30.44;
 }
 
-function hoursStatus(hours){
-  const n = Number(hours);
-  if (Number.isNaN(n)) return { label: '—', badgeClass: '', cellClass: '' };
-  if (n < 10) return { label: 'IMMEDIATE', badgeClass: 'immediate', cellClass: 'immediate-cell' };
-  if (n < 25) return { label: 'COMING SOON', badgeClass: 'coming-soon', cellClass: 'coming-soon-cell' };
-  if (n < 50) return { label: 'UPCOMING', badgeClass: 'upcoming', cellClass: 'upcoming-cell' };
-  return { label: 'SCHEDULED', badgeClass: 'scheduled', cellClass: 'scheduled-cell' };
+function getStatusForHours(hours) {
+  if (hours === null || hours === undefined || Number.isNaN(Number(hours))) return null;
+
+  const value = Number(hours);
+  if (value < 10) return { label: 'IMMEDIATE', className: 'status-immediate' };
+  if (value < 25) return { label: 'COMING SOON', className: 'status-coming-soon' };
+  if (value < 50) return { label: 'UPCOMING', className: 'status-upcoming' };
+  return { label: 'SCHEDULED', className: 'status-scheduled' };
 }
 
-function populateInspectionSelector(){
+function populateInspectionSelector() {
   const select = document.getElementById('inspectionSelect');
   select.innerHTML = '';
 
-  const available = TOP_INSPECTIONS.filter(name => dashboard.inspection_names.includes(name));
-  available.forEach(name => {
+  const selectableInspections = TOP_INSPECTIONS.filter(name => dashboard.inspection_names.includes(name));
 
-function showTab(name, btn){
-  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-  document.getElementById(name).classList.add('active');
-  document.querySelectorAll('.tabs button').forEach(el => el.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function round(val){ return (val === null || val === undefined || Number.isNaN(Number(val))) ? '—' : Number(val).toFixed(1); }
-
-function getStatusForHours(hours){
-  if (hours === null || hours === undefined || Number.isNaN(Number(hours))) return null;
-  const value = Number(hours);
-  if (value < 10) return {label: 'IMMEDIATE', className: 'status-immediate'};
-  if (value < 25) return {label: 'COMING SOON', className: 'status-coming-soon'};
-  if (value < 50) return {label: 'UPCOMING', className: 'status-upcoming'};
-  return {label: 'SCHEDULED', className: 'status-scheduled'};
-}
-
-function populateInspectionSelector(){
-  const select = document.getElementById('inspectionSelect');
-  const selectableInspections = dashboard.inspection_names.filter(name => name === '12 Month' || name === '24 Month');
   selectableInspections.forEach(name => {
     const option = document.createElement('option');
     option.value = name;
@@ -135,92 +114,53 @@ function populateInspectionSelector(){
 
   select.addEventListener('change', () => renderTopGraph(select.value));
 
-  if (available.length) {
-    renderTopGraph(available[0]);
+  if (selectableInspections.length > 0) {
+    renderTopGraph(selectableInspections[0]);
   }
 }
 
-function renderTopGraph(name){
-  const rows = [];
-  dashboard.aircraft.forEach(ac => {
-    const match = ac.inspections.find(i => i.inspection === name);
-    if (match) rows.push({ tail: ac.tail, months_remaining: monthsFromDays(match.remaining_days) });
-  select.addEventListener('change', () => renderInspection(select.value));
-  if (selectableInspections.length) renderInspection(selectableInspections[0]);
-  renderInspectionSummaryTable();
-}
-
-function renderInspection(name){
-  const rows = [];
-  dashboard.aircraft.forEach(ac => {
-    const match = ac.inspections.find(i => i.inspection === name);
-    if (match) rows.push({tail: ac.tail, ...match});
-  });
-  rows.sort((a,b) => (a.remaining_hours ?? 99999) - (b.remaining_hours ?? 99999));
-
-  rows.sort((a,b) => (a.months_remaining ?? 99999) - (b.months_remaining ?? 99999));
+function renderTopGraph(inspectionName) {
+  const rows = dashboard.aircraft
+    .map(ac => {
+      const inspection = ac.inspections.find(i => i.inspection === inspectionName);
+      return {
+        tail: ac.tail,
+        monthsRemaining: inspection ? monthsFromDays(inspection.remaining_days) : null
+      };
+    })
+    .sort((a, b) => (a.monthsRemaining ?? 99999) - (b.monthsRemaining ?? 99999));
 
   const labels = rows.map(r => r.tail);
-  const values = rows.map(r => r.months_remaining ?? null);
-
-  if (chart) chart.destroy();
-  chart = new Chart(document.getElementById('monthsChart'), {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{ label: `Months Remaining (${name})`, data: values, backgroundColor: '#38bdf8' }]
-    },
-    options: {
-      plugins: { legend: { display: true } },
-      scales: { y: { title: { display: true, text: 'Months' } } }
-    }
-  const labels = rows.map(r => r.tail);
-  const months = rows.map(r => r.remaining_days === null ? null : r.remaining_days / 30.44);
+  const values = rows.map(r => r.monthsRemaining);
 
   if (chart) chart.destroy();
   chart = new Chart(document.getElementById('hoursChart'), {
     type: 'bar',
-    data: { labels, datasets: [{ label: 'Remaining Months', data: months, backgroundColor: '#38bdf8' }] },
-    options: { plugins: { legend: { display: false } } }
+    data: {
+      labels,
+      datasets: [{
+        label: `Months Remaining (${inspectionName})`,
+        data: values,
+        backgroundColor: '#38bdf8'
+      }]
+    },
+    options: {
+      plugins: { legend: { display: true } },
+      scales: {
+        y: {
+          title: { display: true, text: 'Months' }
+        }
+      }
+    }
   });
 }
 
-function renderInspectionSummaryTable(){
-  const excludedInspections = new Set(['12 Month', '24 Month']);
-  const inspectionColumns = dashboard.inspection_names.filter(name => !excludedInspections.has(name));
+function renderRemainingInspectionsTable() {
+  const remainingInspectionTypes = dashboard.inspection_names.filter(name => !TOP_INSPECTIONS.includes(name));
 
   const head = document.getElementById('inspectionTableHead');
-  head.innerHTML = `<tr><th>Aircraft</th>${inspectionColumns.map(name => `<th>${name}</th>`).join('')}</tr>`;
+  head.innerHTML = `<tr><th>Aircraft</th>${remainingInspectionTypes.map(name => `<th>${name}</th>`).join('')}</tr>`;
 
-function renderRemainingInspectionsTable(){
-  const inspectionTypes = dashboard.inspection_names
-    .filter(name => !TOP_INSPECTIONS.includes(name))
-    .sort((a, b) => a.localeCompare(b));
-
-  const head = document.getElementById('remainingInspectionsHead');
-  const body = document.getElementById('remainingInspectionsBody');
-
-  head.innerHTML = `<th>Aircraft</th>${inspectionTypes.map(name => `<th>${name}</th>`).join('')}`;
-  body.innerHTML = '';
-
-  dashboard.aircraft
-    .slice()
-    .sort((a, b) => a.tail.localeCompare(b.tail))
-    .forEach(ac => {
-      const byInspection = Object.fromEntries(ac.inspections.map(item => [item.inspection, item]));
-      const cols = inspectionTypes.map(type => {
-        const item = byInspection[type];
-        if (!item || item.remaining_hours === null || item.remaining_hours === undefined || Number.isNaN(Number(item.remaining_hours))) {
-          return '<td class="empty-text">—</td>';
-        }
-        const status = hoursStatus(item.remaining_hours);
-        return `<td class="${status.cellClass}">${round(item.remaining_hours)} <span class="badge ${status.badgeClass}">${status.label}</span></td>`;
-      }).join('');
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${ac.tail}</td>${cols}`;
-      body.appendChild(tr);
-    });
   const body = document.getElementById('inspectionTable');
   body.innerHTML = '';
 
@@ -228,37 +168,44 @@ function renderRemainingInspectionsTable(){
     .slice()
     .sort((a, b) => a.tail.localeCompare(b.tail))
     .forEach(ac => {
-    const tr = document.createElement('tr');
-    const cells = [`<td>${ac.tail}</td>`];
+      const tr = document.createElement('tr');
+      const cells = [`<td>${ac.tail}</td>`];
 
-    inspectionColumns.forEach(inspectionName => {
-      const match = ac.inspections.find(i => i.inspection === inspectionName);
-      const status = getStatusForHours(match?.remaining_hours);
-      if (!match || status === null) {
-        cells.push('<td>—</td>');
-      } else {
+      remainingInspectionTypes.forEach(inspectionName => {
+        const match = ac.inspections.find(i => i.inspection === inspectionName);
+        const status = getStatusForHours(match?.remaining_hours);
+
+        if (!match || !status) {
+          cells.push('<td>—</td>');
+          return;
+        }
+
         cells.push(`<td class="${status.className}">${round(match.remaining_hours)} hrs (${status.label})</td>`);
-      }
-    });
+      });
 
-    tr.innerHTML = cells.join('');
-    body.appendChild(tr);
-  });
+      tr.innerHTML = cells.join('');
+      body.appendChild(tr);
+    });
 }
 
-function renderComponents(){
+function renderComponents() {
   const root = document.getElementById('componentGroups');
   root.innerHTML = '';
-  Object.entries(dashboard.components_by_aircraft).sort(([a],[b]) => a.localeCompare(b)).forEach(([tail, items]) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'card group';
-    const rows = items.map(i => `<tr><td>${i.requirement_type}</td><td>${i.ata}</td><td>${i.description}</td><td>${round(i.remaining_hours)}</td></tr>`).join('');
-    wrapper.innerHTML = `<h4>${tail}</h4><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
-    root.appendChild(wrapper);
-  });
+
+  Object.entries(dashboard.components_by_aircraft)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([tail, items]) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'card group';
+      const rows = items
+        .map(i => `<tr><td>${i.requirement_type}</td><td>${i.ata}</td><td>${i.description}</td><td>${round(i.remaining_hours)}</td></tr>`)
+        .join('');
+      wrapper.innerHTML = `<h4>${tail}</h4><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
+      root.appendChild(wrapper);
+    });
 }
 
-function renderUtilization(){
+function renderUtilization() {
   const body = document.getElementById('utilTable');
   body.innerHTML = '';
   dashboard.aircraft.forEach(ac => {
@@ -270,15 +217,11 @@ function renderUtilization(){
 }
 
 (async () => {
-  const res = await fetch('data/dashboard.json?t=' + Date.now(), { cache: 'no-store' });
+  const res = await fetch(`data/dashboard.json?t=${Date.now()}`, { cache: 'no-store' });
   dashboard = await res.json();
   document.getElementById('meta').textContent = `Generated ${dashboard.meta.generated_utc} | Aircraft: ${dashboard.meta.aircraft_count}`;
   populateInspectionSelector();
   renderRemainingInspectionsTable();
-  const res = await fetch('data/dashboard.json?t=' + Date.now(), {cache: 'no-store'});
-  dashboard = await res.json();
-  document.getElementById('meta').textContent = `Generated ${dashboard.meta.generated_utc} | Aircraft: ${dashboard.meta.aircraft_count}`;
-  populateInspectionSelector();
   renderComponents();
   renderUtilization();
 })();
