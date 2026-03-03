@@ -567,6 +567,18 @@ function monthsFromDays(days) {
   return Number(days) / 30.44;
 }
 
+function getDataTimestamp() {
+  const generatedUtc = dashboard?.meta?.generated_utc;
+  const parsed = generatedUtc ? new Date(generatedUtc) : null;
+  if (parsed && !Number.isNaN(parsed.getTime())) return parsed;
+  return new Date();
+}
+
+function monthLabelFromOffset(baseDate, offset) {
+  const monthDate = new Date(baseDate.getFullYear(), baseDate.getMonth() + offset, 1);
+  return monthDate.toLocaleString(undefined, { month: 'long' });
+}
+
 function renderSummaryCards() {
   const cards = document.getElementById('summaryCards');
   const aircraftCount = dashboard.aircraft.length;
@@ -631,6 +643,15 @@ function renderTopGraph(inspectionName) {
     })
     .sort((a, b) => (a.monthsRemaining ?? 99999) - (b.monthsRemaining ?? 99999));
 
+  const availableMonths = rows
+    .map(r => r.monthsRemaining)
+    .filter(value => value !== null && value !== undefined && !Number.isNaN(Number(value)));
+  const minMonth = availableMonths.length ? Math.min(...availableMonths) : 0;
+  const maxMonth = availableMonths.length ? Math.max(...availableMonths) : 0;
+  const lowerBound = Math.floor(Math.min(0, minMonth));
+  const upperBound = Math.ceil(Math.max(1, maxMonth));
+  const axisStartDate = getDataTimestamp();
+
   if (chart) chart.destroy();
   chart = new Chart(document.getElementById('hoursChart'), {
     type: 'bar',
@@ -649,7 +670,16 @@ function renderTopGraph(inspectionName) {
       scales: {
         y: {
           title: { display: true, text: 'Months', color: '#aac8ea' },
-          ticks: { color: '#aac8ea' },
+          min: lowerBound,
+          max: upperBound,
+          ticks: {
+            color: '#aac8ea',
+            stepSize: 1,
+            callback(value) {
+              if (!Number.isInteger(Number(value))) return '';
+              return monthLabelFromOffset(axisStartDate, Number(value));
+            }
+          },
           grid: { color: 'rgba(32, 63, 97, 0.5)' }
         },
         x: {
