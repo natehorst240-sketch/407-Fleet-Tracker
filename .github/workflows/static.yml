@@ -29,20 +29,22 @@ jobs:
       - name: Install Python deps
         run: |
           python -m pip install --upgrade pip
-          pip install pandas
+          pip install -r requirements.txt
 
-      # Prepare dist FIRST (but do not delete it later)
+      # Build JSON into public/data/dashboard.json
+      - name: Build dashboard JSON
+        run: python scripts/build_dashboard.py
+
+      # Prepare dist from the built static site
       - name: Prepare dist (copy site)
         run: |
           rm -rf dist
           mkdir -p dist
 
-          # Copy your static site into dist
           if [ -d "public" ]; then
             cp -R public/* dist/
           fi
 
-          # If you also have root index.html or other folders, copy them too (optional)
           if [ -f "index.html" ]; then
             cp index.html dist/
           fi
@@ -50,20 +52,15 @@ jobs:
           if [ -d "js" ]; then cp -R js dist/; fi
           if [ -d "assets" ]; then cp -R assets dist/; fi
 
-          # Ensure Pages entrypoint is index.html
           if [ -f "dist/index" ] && [ ! -f "dist/index.html" ]; then
             mv dist/index dist/index.html
           fi
 
-      # Build JSON AFTER dist exists (writes dist/data/dashboard.json)
-      - name: Build dashboard JSON
-        run: python scripts/407_build_dashboard_json.py
-
-      - name: Check dist after python
+      - name: Check dist output
         run: |
-          echo "After python:"
-          ls -la dist || true
-          ls -la dist/data || true
+          echo "After build and copy:"
+          ls -la dist
+          ls -la dist/data
 
       - name: Verify dist output
         run: |
