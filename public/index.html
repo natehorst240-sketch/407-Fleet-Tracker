@@ -18,12 +18,6 @@
     th, td { border-bottom:1px solid #334155; padding:8px; text-align:left; }
     select { padding:6px; background:#1e293b; color:#e2e8f0; border:1px solid #475569; }
     .group { margin-bottom: 16px; }
-    .status-pill { display:inline-block; margin-left:6px; padding:2px 6px; border-radius:999px; font-size:11px; font-weight:700; }
-    .immediate { color:#fecaca; background:#7f1d1d; }
-    .coming-soon { color:#fde68a; background:#78350f; }
-    .upcoming { color:#bfdbfe; background:#1e3a8a; }
-    .scheduled { color:#bbf7d0; background:#14532d; }
-    .empty-text { color:#94a3b8; font-style:italic; }
   </style>
 </head>
 <body>
@@ -40,18 +34,18 @@
 
   <section id="inspections" class="tab active">
     <div class="card">
-      <label for="inspectionSelect">Top graph inspection (months remaining):</label>
+      <label for="inspectionSelect">Inspection:</label>
       <select id="inspectionSelect"></select>
     </div>
     <div class="card">
-      <h3>Months Remaining by Aircraft</h3>
-      <canvas id="monthsChart" height="120"></canvas>
+      <h3>Hours Remaining by Aircraft</h3>
+      <canvas id="hoursChart" height="120"></canvas>
     </div>
     <div class="card">
-      <h3>Hours Remaining for All Other Inspections (By Aircraft)</h3>
+      <h3>Time Remaining (Months / Weeks / Days)</h3>
       <table>
-        <thead><tr id="remainingInspectionsHead"></tr></thead>
-        <tbody id="remainingInspectionsBody"></tbody>
+        <thead><tr><th>Aircraft</th><th>Due Date</th><th>Months</th><th>Weeks</th><th>Days</th><th>Hours</th></tr></thead>
+        <tbody id="inspectionTable"></tbody>
       </table>
     </div>
   </section>
@@ -73,7 +67,6 @@
 <script>
 let dashboard;
 let chart;
-const TOP_INSPECTIONS = ['12 Month', '24 Month'];
 
 function showTab(name, btn){
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
@@ -84,92 +77,46 @@ function showTab(name, btn){
 
 function round(val){ return (val === null || val === undefined || Number.isNaN(Number(val))) ? '—' : Number(val).toFixed(1); }
 
-function monthsFromDays(days){
-  if (days === null || days === undefined || Number.isNaN(Number(days))) return null;
-  return Number(days) / 30.44;
-}
-
-function hoursStatus(hours){
-  const n = Number(hours);
-  if (Number.isNaN(n)) return {label: '—', cls: ''};
-  if (n < 10) return {label: 'IMMEDIATE', cls: 'immediate'};
-  if (n < 25) return {label: 'COMING SOON', cls: 'coming-soon'};
-  if (n < 50) return {label: 'UPCOMING', cls: 'upcoming'};
-  return {label: 'SCHEDULED', cls: 'scheduled'};
-}
-
 function populateInspectionSelector(){
   const select = document.getElementById('inspectionSelect');
-  const available = TOP_INSPECTIONS.filter(name => dashboard.inspection_names.includes(name));
-
-  available.forEach(name => {
+  dashboard.inspection_names.forEach(name => {
     const option = document.createElement('option');
     option.value = name;
     option.textContent = name;
     select.appendChild(option);
   });
-
-  select.addEventListener('change', () => renderTopGraph(select.value));
-  if (available.length) renderTopGraph(available[0]);
+  select.addEventListener('change', () => renderInspection(select.value));
+  if (dashboard.inspection_names.length) renderInspection(dashboard.inspection_names[0]);
 }
 
-function renderTopGraph(name){
+function renderInspection(name){
   const rows = [];
   dashboard.aircraft.forEach(ac => {
     const match = ac.inspections.find(i => i.inspection === name);
-    if (match) {
-      rows.push({
-        tail: ac.tail,
-        months_remaining: monthsFromDays(match.remaining_days)
-      });
-    }
+    if (match) rows.push({tail: ac.tail, ...match});
   });
-
-  rows.sort((a,b) => (a.months_remaining ?? 99999) - (b.months_remaining ?? 99999));
+  rows.sort((a,b) => (a.remaining_hours ?? 99999) - (b.remaining_hours ?? 99999));
 
   const labels = rows.map(r => r.tail);
-  const months = rows.map(r => r.months_remaining ?? null);
+  const hours = rows.map(r => r.remaining_hours ?? null);
 
   if (chart) chart.destroy();
-  chart = new Chart(document.getElementById('monthsChart'), {
+  chart = new Chart(document.getElementById('hoursChart'), {
     type: 'bar',
-    data: { labels, datasets: [{ label: 'Months Remaining', data: months, backgroundColor: '#38bdf8' }] },
-    options: {
-      plugins: { legend: { display: false } },
-      scales: { y: { title: { display: true, text: 'Months' } } }
-    }
+    data: { labels, datasets: [{ label: 'Remaining Hours', data: hours, backgroundColor: '#38bdf8' }] },
+    options: { plugins: { legend: { display: false } } }
   });
-}
 
-function renderRemainingInspectionsTable(){
-  const inspectionTypes = dashboard.inspection_names
-    .filter(name => !TOP_INSPECTIONS.includes(name))
-    .sort((a, b) => a.localeCompare(b));
-
-  const head = document.getElementById('remainingInspectionsHead');
-  const body = document.getElementById('remainingInspectionsBody');
-
-  head.innerHTML = `<th>Aircraft</th>${inspectionTypes.map(name => `<th>${name}</th>`).join('')}`;
+  const body = document.getElementById('inspectionTable');
   body.innerHTML = '';
-
-  dashboard.aircraft
-    .slice()
-    .sort((a, b) => a.tail.localeCompare(b.tail))
-    .forEach(ac => {
-      const byInspection = Object.fromEntries(ac.inspections.map(item => [item.inspection, item]));
-      const cols = inspectionTypes.map(type => {
-        const item = byInspection[type];
-        if (!item || item.remaining_hours === null || item.remaining_hours === undefined || Number.isNaN(Number(item.remaining_hours))) {
-          return '<td class="empty-text">—</td>';
-        }
-        const status = hoursStatus(item.remaining_hours);
-        return `<td>${round(item.remaining_hours)} <span class="status-pill ${status.cls}">${status.label}</span></td>`;
-      }).join('');
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${ac.tail}</td>${cols}`;
-      body.appendChild(tr);
-    });
+  rows.forEach(r => {
+    const days = r.remaining_days;
+    const weeks = days === null ? null : days / 7;
+    const months = days === null ? null : days / 30.44;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.tail}</td><td>${r.due_date ?? '—'}</td><td>${round(months)}</td><td>${round(weeks)}</td><td>${round(days)}</td><td>${round(r.remaining_hours)}</td>`;
+    body.appendChild(tr);
+  });
 }
 
 function renderComponents(){
@@ -200,7 +147,6 @@ function renderUtilization(){
   dashboard = await res.json();
   document.getElementById('meta').textContent = `Generated ${dashboard.meta.generated_utc} | Aircraft: ${dashboard.meta.aircraft_count}`;
   populateInspectionSelector();
-  renderRemainingInspectionsTable();
   renderComponents();
   renderUtilization();
 })();
