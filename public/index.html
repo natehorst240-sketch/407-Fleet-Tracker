@@ -46,7 +46,7 @@
       <canvas id="hoursChart" height="120"></canvas>
     </div>
     <div class="card">
-      <h3>Other Inspection Hours Remaining by Aircraft</h3>
+      <h3>Other Inspections Remaining by Aircraft</h3>
       <table>
         <thead id="inspectionTableHead"></thead>
         <tbody id="inspectionTable"></tbody>
@@ -89,13 +89,21 @@ function monthsFromDays(days) {
   return Number(days) / 30.44;
 }
 
-function getStatusForHours(hours) {
-  if (hours === null || hours === undefined || Number.isNaN(Number(hours))) return null;
+function getStatus(value, unit) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) return null;
 
-  const value = Number(hours);
-  if (value < 10) return { label: 'IMMEDIATE', className: 'status-immediate' };
-  if (value < 25) return { label: 'COMING SOON', className: 'status-coming-soon' };
-  if (value < 50) return { label: 'UPCOMING', className: 'status-upcoming' };
+  const numericValue = Number(value);
+
+  if (unit === 'days') {
+    if (numericValue < 30) return { label: 'IMMEDIATE', className: 'status-immediate' };
+    if (numericValue < 90) return { label: 'COMING SOON', className: 'status-coming-soon' };
+    if (numericValue < 180) return { label: 'UPCOMING', className: 'status-upcoming' };
+    return { label: 'SCHEDULED', className: 'status-scheduled' };
+  }
+
+  if (numericValue < 10) return { label: 'IMMEDIATE', className: 'status-immediate' };
+  if (numericValue < 25) return { label: 'COMING SOON', className: 'status-coming-soon' };
+  if (numericValue < 50) return { label: 'UPCOMING', className: 'status-upcoming' };
   return { label: 'SCHEDULED', className: 'status-scheduled' };
 }
 
@@ -173,14 +181,20 @@ function renderRemainingInspectionsTable() {
 
       remainingInspectionTypes.forEach(inspectionName => {
         const match = ac.inspections.find(i => i.inspection === inspectionName);
-        const status = getStatusForHours(match?.remaining_hours);
+        const hasHours = match?.remaining_hours !== null && match?.remaining_hours !== undefined && !Number.isNaN(Number(match?.remaining_hours));
+        const hasDays = match?.remaining_days !== null && match?.remaining_days !== undefined && !Number.isNaN(Number(match?.remaining_days));
+
+        const unit = hasHours ? 'hours' : (hasDays ? 'days' : null);
+        const value = hasHours ? match.remaining_hours : (hasDays ? match.remaining_days : null);
+        const status = unit ? getStatus(value, unit) : null;
 
         if (!match || !status) {
           cells.push('<td>—</td>');
           return;
         }
 
-        cells.push(`<td class="${status.className}">${round(match.remaining_hours)} hrs (${status.label})</td>`);
+        const unitLabel = unit === 'days' ? 'days' : 'hrs';
+        cells.push(`<td class="${status.className}">${round(value)} ${unitLabel} (${status.label})</td>`);
       });
 
       tr.innerHTML = cells.join('');
