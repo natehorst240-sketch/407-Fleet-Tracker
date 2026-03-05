@@ -776,22 +776,80 @@ function setupInspectionFilters() {
   });
 }
 
+function getComponentsByAircraft() {
+  const candidates = [
+    dashboard?.components_by_aircraft,
+    dashboard?.component_tracking,
+    dashboard?.components,
+  ];
+
+  for (const candidate of candidates) {
+    if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) {
+      return candidate;
+    }
+  }
+
+  return {};
+}
+
+function normalizeComponentEntries(rawComponents) {
+  if (!rawComponents) return [];
+
+  if (Array.isArray(rawComponents)) {
+    const grouped = {};
+    rawComponents.forEach(item => {
+      if (!item || typeof item !== 'object') return;
+      const tail = item.tail || item.registration_number || item.registration || item.aircraft || 'UNKNOWN';
+      grouped[tail] = grouped[tail] || [];
+      grouped[tail].push(item);
+    });
+    return Object.entries(grouped);
+  }
+
+  if (typeof rawComponents !== 'object') return [];
+
+  if (Array.isArray(rawComponents.aircraft)) {
+    return normalizeComponentEntries(rawComponents.aircraft);
+  }
+
+  return Object.entries(rawComponents)
+    .filter(([, items]) => Array.isArray(items));
+}
+
+function readComponentValue(item, ...keys) {
+  for (const key of keys) {
+    if (item?.[key] !== null && item?.[key] !== undefined && item?.[key] !== '') {
+      return item[key];
+    }
+  }
+  return '—';
+}
+
 function renderComponents() {
   const root = document.getElementById('componentGroups');
   root.innerHTML = '';
   root.className = 'component-grid';
 
-  Object.entries(dashboard.components_by_aircraft)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .forEach(([tail, items]) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'panel component-card';
-      const rows = items
-        .map(i => `<tr><td>${i.requirement_type}</td><td>${i.ata}</td><td>${i.description}</td><td>${round(i.remaining_hours)}</td></tr>`)
-        .join('');
-      wrapper.innerHTML = `<h3 style="margin-bottom:8px;">${tail}</h3><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
-      root.appendChild(wrapper);
-    });
+  const componentsByAircraft = getComponentsByAircraft();
+  const entries = normalizeComponentEntries(componentsByAircraft)
+    .filter(([, items]) => items.length > 0)
+    .sort(([a], [b]) => a.localeCompare(b));
+
+  if (!entries.length) {
+    root.className = 'panel';
+    root.textContent = 'No component tracking items available in the current data source.';
+    return;
+  }
+
+  entries.forEach(([tail, items]) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'panel component-card';
+    const rows = items
+      .map(i => `<tr><td>${readComponentValue(i, 'requirement_type', 'requirementType', 'Requirement Type')}</td><td>${readComponentValue(i, 'ata', 'ata_code', 'ATA and Code')}</td><td>${readComponentValue(i, 'description', 'Description')}</td><td>${round(readComponentValue(i, 'remaining_hours', 'remainingHours', 'Remaining Hours'))}</td></tr>`)
+      .join('');
+    wrapper.innerHTML = `<h3 style="margin-bottom:8px;">${tail}</h3><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
+    root.appendChild(wrapper);
+  });
 }
 
 function renderUtilization() {
