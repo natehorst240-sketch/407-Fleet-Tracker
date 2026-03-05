@@ -531,7 +531,7 @@
         <h3>Average Daily / Weekly Flight Hours</h3>
         <div class="panel">
           <table>
-            <thead><tr><th>Aircraft</th><th>Avg Daily</th><th>Avg Weekly</th><th>History Points</th></tr></thead>
+            <thead><tr><th>Aircraft</th><th>Avg Daily</th><th>Avg Weekly</th><th>Last Δ Hours</th><th>Update Intervals</th></tr></thead>
             <tbody id="utilTable"></tbody>
           </table>
         </div>
@@ -792,47 +792,14 @@ function getComponentsByAircraft() {
   return {};
 }
 
-function normalizeComponentEntries(rawComponents) {
-  if (!rawComponents) return [];
-
-  if (Array.isArray(rawComponents)) {
-    const grouped = {};
-    rawComponents.forEach(item => {
-      if (!item || typeof item !== 'object') return;
-      const tail = item.tail || item.registration_number || item.registration || item.aircraft || 'UNKNOWN';
-      grouped[tail] = grouped[tail] || [];
-      grouped[tail].push(item);
-    });
-    return Object.entries(grouped);
-  }
-
-  if (typeof rawComponents !== 'object') return [];
-
-  if (Array.isArray(rawComponents.aircraft)) {
-    return normalizeComponentEntries(rawComponents.aircraft);
-  }
-
-  return Object.entries(rawComponents)
-    .filter(([, items]) => Array.isArray(items));
-}
-
-function readComponentValue(item, ...keys) {
-  for (const key of keys) {
-    if (item?.[key] !== null && item?.[key] !== undefined && item?.[key] !== '') {
-      return item[key];
-    }
-  }
-  return '—';
-}
-
 function renderComponents() {
   const root = document.getElementById('componentGroups');
   root.innerHTML = '';
   root.className = 'component-grid';
 
   const componentsByAircraft = getComponentsByAircraft();
-  const entries = normalizeComponentEntries(componentsByAircraft)
-    .filter(([, items]) => items.length > 0)
+  const entries = Object.entries(componentsByAircraft)
+    .filter(([, items]) => Array.isArray(items) && items.length > 0)
     .sort(([a], [b]) => a.localeCompare(b));
 
   if (!entries.length) {
@@ -845,7 +812,7 @@ function renderComponents() {
     const wrapper = document.createElement('div');
     wrapper.className = 'panel component-card';
     const rows = items
-      .map(i => `<tr><td>${readComponentValue(i, 'requirement_type', 'requirementType', 'Requirement Type')}</td><td>${readComponentValue(i, 'ata', 'ata_code', 'ATA and Code')}</td><td>${readComponentValue(i, 'description', 'Description')}</td><td>${round(readComponentValue(i, 'remaining_hours', 'remainingHours', 'Remaining Hours'))}</td></tr>`)
+      .map(i => `<tr><td>${i.requirement_type ?? '—'}</td><td>${i.ata ?? '—'}</td><td>${i.description ?? '—'}</td><td>${round(i.remaining_hours)}</td></tr>`)
       .join('');
     wrapper.innerHTML = `<h3 style="margin-bottom:8px;">${tail}</h3><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
     root.appendChild(wrapper);
@@ -857,8 +824,9 @@ function renderUtilization() {
   body.innerHTML = '';
   dashboard.aircraft.forEach(ac => {
     const util = ac.utilization || {};
+    const latestDelta = util.hour_deltas?.length ? util.hour_deltas[util.hour_deltas.length - 1].hours_delta : null;
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${ac.tail}</td><td>${round(util.avg_daily_hours)}</td><td>${round(util.avg_weekly_hours)}</td><td>${util.daily_points?.length ?? 0}</td>`;
+    tr.innerHTML = `<td>${ac.tail}</td><td>${round(util.avg_daily_hours)}</td><td>${round(util.avg_weekly_hours)}</td><td>${round(latestDelta)}</td><td>${util.hour_deltas?.length ?? 0}</td>`;
     body.appendChild(tr);
   });
 }
