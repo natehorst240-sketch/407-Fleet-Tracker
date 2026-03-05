@@ -103,45 +103,70 @@ def _save_history(history: dict[str, dict[str, float]]) -> None:
 
 
 def _update_history(
-    history: dict[str, dict[str, float]], frames: list[pd.DataFrame]
+    history: dict[str, dict[str, float]], frame: pd.DataFrame
 ) -> dict[str, dict[str, float]]:
-    for frame in frames:
-        cols = ["Registration Number", "Airframe Report Date", "Airframe Hours"]
-        missing = [c for c in cols if c not in frame.columns]
-        if missing:
+    """Add the latest daily CSV flight-hour readings into persisted history."""
+    cols = ["Registration Number", "Airframe Report Date", "Airframe Hours"]
+    missing = [c for c in cols if c not in frame.columns]
+    if missing:
+        return history
+
+    for _, row in frame[cols].drop_duplicates().iterrows():
+        tail = _clean(row["Registration Number"])
+        dt = _to_date(row["Airframe Report Date"])
+        hours = _to_float(row["Airframe Hours"])
+        if not tail or not dt or hours is None:
             continue
-        for _, row in frame[cols].drop_duplicates().iterrows():
-            tail  = _clean(row["Registration Number"])
-            dt    = _to_date(row["Airframe Report Date"])
-            hours = _to_float(row["Airframe Hours"])
-            if not tail or not dt or hours is None:
-                continue
-            history.setdefault(tail, {})
-            history[tail].setdefault(dt, hours)
+        history.setdefault(tail, {})
+        # Always accept the latest reading for the report date in case corrections are made.
+        history[tail][dt] = hours
     return history
+
+
+def _hour_deltas(points: list[tuple[str, float]]) -> list[dict[str, float | str | int]]:
+    """Build per-update flight-hour deltas from ordered (date, hours) points."""
+    deltas: list[dict[str, float | str | int]] = []
+    for idx in range(1, len(points)):
+        prev_date, prev_hours = points[idx - 1]
+        curr_date, curr_hours = points[idx]
+        days_between = max((date.fromisoformat(curr_date) - date.fromisoformat(prev_date)).days, 1)
+        hours_delta = curr_hours - prev_hours
+        deltas.append(
+            {
+                "from_date": prev_date,
+                "to_date": curr_date,
+                "days_between": days_between,
+                "hours_delta": round(hours_delta, 3),
+                "daily_rate": round(hours_delta / days_between, 3),
+            }
+        )
+    return deltas
 
 
 def _utilization(history: dict[str, dict[str, float]]) -> dict[str, Any]:
     stats: dict[str, Any] = {}
     for tail, points in history.items():
         ordered = sorted(points.items(), key=lambda x: x[0])
-        if len(ordered) < 2:
+        deltas = _hour_deltas(ordered)
+        if not deltas:
             stats[tail] = {
                 "avg_daily_hours": None,
                 "avg_weekly_hours": None,
                 "daily_points": [],
+                "hour_deltas": [],
             }
             continue
+
+        total_hours = sum(float(item["hours_delta"]) for item in deltas)
+        total_days = sum(int(item["days_between"]) for item in deltas)
+        avg_daily = total_hours / total_days if total_days else 0.0
+
         days = [{"date": dt, "hours": hrs} for dt, hrs in ordered[-30:]]
-        first_date = date.fromisoformat(ordered[0][0])
-        last_date  = date.fromisoformat(ordered[-1][0])
-        span_days  = max((last_date - first_date).days, 1)
-        flown      = ordered[-1][1] - ordered[0][1]
-        avg_daily  = flown / span_days
         stats[tail] = {
             "avg_daily_hours":  round(avg_daily, 3),
             "avg_weekly_hours": round(avg_daily * 7, 3),
             "daily_points":     days,
+            "hour_deltas":      deltas[-30:],
         }
     return stats
 
@@ -250,7 +275,7 @@ def build() -> None:
     print(f"Reading weekly CSV: {WEEKLY_CSV}")
     weekly_df = _read_csv(WEEKLY_CSV)
 
-    history = _update_history(_load_history(), [weekly_df, daily_df])
+    history = _update_history(_load_history(), daily_df)
     _save_history(history)
 
     utilization = _utilization(history)
@@ -272,7 +297,7 @@ def build() -> None:
     for tail, ac in aircraft.items():
         ac["utilization"] = utilization.get(
             tail,
-            {"avg_daily_hours": None, "avg_weekly_hours": None, "daily_points": []},
+            {"avg_daily_hours": None, "avg_weekly_hours": None, "daily_points": [], "hour_deltas": []},
         )
 
     output = {
