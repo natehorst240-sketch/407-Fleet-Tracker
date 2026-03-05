@@ -214,6 +214,10 @@ def _merge_inspections(
 
 def _collect_components(df: pd.DataFrame) -> dict[str, list[dict[str, Any]]]:
     """Components due within COMPONENT_WINDOW_HOURS — daily CSV only."""
+    required_columns = {"Requirement Type", "Remaining Hours"}
+    if not required_columns.issubset(df.columns):
+        return {}
+
     subset = df[
         df["Requirement Type"].astype(str).str.upper().isin(["RETIRE", "OVERHAUL"])
     ].copy()
