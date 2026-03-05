@@ -776,22 +776,47 @@ function setupInspectionFilters() {
   });
 }
 
+function getComponentsByAircraft() {
+  const candidates = [
+    dashboard?.components_by_aircraft,
+    dashboard?.component_tracking,
+    dashboard?.components,
+  ];
+
+  for (const candidate of candidates) {
+    if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) {
+      return candidate;
+    }
+  }
+
+  return {};
+}
+
 function renderComponents() {
   const root = document.getElementById('componentGroups');
   root.innerHTML = '';
   root.className = 'component-grid';
 
-  Object.entries(dashboard.components_by_aircraft)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .forEach(([tail, items]) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'panel component-card';
-      const rows = items
-        .map(i => `<tr><td>${i.requirement_type}</td><td>${i.ata}</td><td>${i.description}</td><td>${round(i.remaining_hours)}</td></tr>`)
-        .join('');
-      wrapper.innerHTML = `<h3 style="margin-bottom:8px;">${tail}</h3><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
-      root.appendChild(wrapper);
-    });
+  const componentsByAircraft = getComponentsByAircraft();
+  const entries = Object.entries(componentsByAircraft)
+    .filter(([, items]) => Array.isArray(items) && items.length > 0)
+    .sort(([a], [b]) => a.localeCompare(b));
+
+  if (!entries.length) {
+    root.className = 'panel';
+    root.textContent = 'No component tracking items available in the current data source.';
+    return;
+  }
+
+  entries.forEach(([tail, items]) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'panel component-card';
+    const rows = items
+      .map(i => `<tr><td>${i.requirement_type ?? '—'}</td><td>${i.ata ?? '—'}</td><td>${i.description ?? '—'}</td><td>${round(i.remaining_hours)}</td></tr>`)
+      .join('');
+    wrapper.innerHTML = `<h3 style="margin-bottom:8px;">${tail}</h3><table><thead><tr><th>Type</th><th>ATA</th><th>Description</th><th>Remaining Hours</th></tr></thead><tbody>${rows}</tbody></table>`;
+    root.appendChild(wrapper);
+  });
 }
 
 function renderUtilization() {
