@@ -275,7 +275,11 @@ def build() -> None:
     print(f"Reading weekly CSV: {WEEKLY_CSV}")
     weekly_df = _read_csv(WEEKLY_CSV)
 
-    history = _update_history(_load_history(), daily_df)
+    history = _load_history()
+    # Seed with weekly baseline first so long-range history exists immediately,
+    # then overlay the latest daily feed for freshest values.
+    history = _update_history(history, weekly_df)
+    history = _update_history(history, daily_df)
     _save_history(history)
 
     utilization = _utilization(history)
@@ -293,6 +297,11 @@ def build() -> None:
     for item in inspections:
         aircraft.setdefault(item.tail, {"tail": item.tail, "inspections": []})
         aircraft[item.tail]["inspections"].append(item.__dict__)
+
+    # Ensure aircraft that only appear in utilization history still render,
+    # even if they currently have no tracked inspections.
+    for tail in utilization:
+        aircraft.setdefault(tail, {"tail": tail, "inspections": []})
 
     for tail, ac in aircraft.items():
         ac["utilization"] = utilization.get(
