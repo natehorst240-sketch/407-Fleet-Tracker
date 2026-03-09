@@ -19,10 +19,11 @@ from typing import Any
 
 import pandas as pd
 
-DAILY_CSV  = Path("data/407_daily_due_list.csv")
-WEEKLY_CSV = Path("data/407_Due-List_weekly.csv")
-HISTORY_JSON = Path("data/flight_hours_history.json")
-OUTPUT_JSON  = Path("public/data/dashboard.json")
+ROOT_DIR = Path(__file__).resolve().parents[1]
+DAILY_CSV  = ROOT_DIR / "data/407_daily_due_list.csv"
+WEEKLY_CSV = ROOT_DIR / "data/407_Due-List_weekly.csv"
+HISTORY_JSON = ROOT_DIR / "data/flight_hours_history.json"
+OUTPUT_JSON  = ROOT_DIR / "public/data/dashboard.json"
 
 COMPONENT_WINDOW_HOURS = 200
 

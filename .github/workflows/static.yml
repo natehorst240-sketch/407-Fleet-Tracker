@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,6 +37,19 @@ jobs:
         run: python scripts/build_dashboard.py
 
       # Prepare dist from the built static site
+
+      - name: Persist generated data
+        run: |
+          if [[ -n "$(git status --porcelain -- data/flight_hours_history.json public/data/dashboard.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/flight_hours_history.json public/data/dashboard.json
+            git commit -m "chore: update generated dashboard data [skip ci]"
+            git push
+          else
+            echo "No generated data changes to commit."
+          fi
+
       - name: Prepare dist (copy site)
         run: |
           rm -rf dist
