@@ -11,6 +11,7 @@ Output:
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -74,8 +75,18 @@ def _to_date(value: Any) -> str | None:
 def _to_float(value: Any) -> float | None:
     if pd.isna(value):
         return None
+
+    if isinstance(value, str):
+        cleaned = value.strip().replace(",", "")
+        match = re.search(r"[-+]?\d*\.?\d+", cleaned)
+        if not match:
+            return None
+        cleaned = match.group(0)
+    else:
+        cleaned = value
+
     try:
-        return float(value)
+        return float(cleaned)
     except (TypeError, ValueError):
         return None
 
@@ -229,11 +240,35 @@ def _merge_inspections(
     Daily wins for any (tail, inspection) key it contains.
     Weekly fills in everything else.
     """
-    merged: dict[tuple[str, str], InspectionItem] = {}
-    for item in weekly:
-        merged[(item.tail, item.inspection)] = item
+    merged: dict[tuple[str, str], InspectionItem] = {
+        (item.tail, item.inspection): item for item in weekly
+    }
+
     for item in daily:
-        merged[(item.tail, item.inspection)] = item  # daily overwrites
+        key = (item.tail, item.inspection)
+        base = merged.get(key)
+        if not base:
+            merged[key] = item
+            continue
+
+        merged[key] = InspectionItem(
+            tail=item.tail or base.tail,
+            inspection=item.inspection or base.inspection,
+            ata=item.ata or base.ata,
+            description=item.description or base.description,
+            due_date=item.due_date or base.due_date,
+            remaining_days=(
+                item.remaining_days
+                if item.remaining_days is not None
+                else base.remaining_days
+            ),
+            remaining_hours=(
+                item.remaining_hours
+                if item.remaining_hours is not None
+                else base.remaining_hours
+            ),
+        )
+
     return list(merged.values())
 
 

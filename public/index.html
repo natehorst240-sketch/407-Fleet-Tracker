@@ -717,8 +717,7 @@ function renderRemainingInspectionsTable() {
 
       const status = getMatrixStatus(value, unit);
       rowStatuses.push(status.filter);
-      const suffix = unit === 'days' ? 'd' : '';
-      cells.push(`<td><span class="value-chip ${status.className}">${round(value)}${suffix}</span></td>`);
+      cells.push(`<td><span class="value-chip ${status.className}">${round(value)}</span></td>`);
     });
 
     tr.dataset.filter = getRowFilter(rowStatuses);
