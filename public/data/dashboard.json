@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_utc": "2026-03-09T04:36:08.746987+00:00",
-    "daily_csv": "data/407_daily_due_list.csv",
-    "weekly_csv": "data/407_Due-List_weekly.csv",
+    "generated_utc": "2026-03-09T15:38:25.623380+00:00",
+    "daily_csv": "/home/runner/work/407-Fleet-Tracker/407-Fleet-Tracker/data/407_daily_due_list.csv",
+    "weekly_csv": "/home/runner/work/407-Fleet-Tracker/407-Fleet-Tracker/data/407_Due-List_weekly.csv",
     "aircraft_count": 24
   },
   "aircraft": [
@@ -16,7 +16,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-07-31",
           "remaining_days": 144.0,
-          "remaining_hours": 58.7
+          "remaining_hours": 57.5
         },
         {
           "tail": "N307KH",
@@ -25,7 +25,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-10-31",
           "remaining_days": 236.0,
-          "remaining_hours": 152.3
+          "remaining_hours": 151.1
         },
         {
           "tail": "N307KH",
@@ -34,14 +34,31 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-10-31",
           "remaining_days": 236.0,
-          "remaining_hours": 452.3
+          "remaining_hours": 451.1
         }
       ],
       "utilization": {
-        "avg_daily_hours": null,
-        "avg_weekly_hours": null,
-        "daily_points": [],
-        "hour_deltas": []
+        "avg_daily_hours": 1.2,
+        "avg_weekly_hours": 8.4,
+        "daily_points": [
+          {
+            "date": "2026-03-07",
+            "hours": 22903.8
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 22905.0
+          }
+        ],
+        "hour_deltas": [
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-08",
+            "days_between": 1,
+            "hours_delta": 1.2,
+            "daily_rate": 1.2
+          }
+        ]
       }
     },
     {
@@ -54,7 +71,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-08-08",
           "remaining_days": 152.0,
-          "remaining_hours": 23.8
+          "remaining_hours": 23.3
         },
         {
           "tail": "N39KM",
@@ -63,7 +80,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-06-30",
           "remaining_days": 113.0,
-          "remaining_hours": 262.5
+          "remaining_hours": 262.0
         },
         {
           "tail": "N39KM",
@@ -72,7 +89,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-10-31",
           "remaining_days": 236.0,
-          "remaining_hours": 147.1
+          "remaining_hours": 146.6
         },
         {
           "tail": "N39KM",
@@ -130,8 +147,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 2.5,
-        "avg_weekly_hours": 17.5,
+        "avg_daily_hours": 2.571,
+        "avg_weekly_hours": 18.0,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -139,7 +156,7 @@
           },
           {
             "date": "2026-03-08",
-            "hours": 3284.2
+            "hours": 3284.7
           }
         ],
         "hour_deltas": [
@@ -147,8 +164,8 @@
             "from_date": "2026-03-01",
             "to_date": "2026-03-08",
             "days_between": 7,
-            "hours_delta": 17.5,
-            "daily_rate": 2.5
+            "hours_delta": 18.0,
+            "daily_rate": 2.571
           }
         ]
       }
@@ -290,7 +307,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
           "remaining_days": 297.0,
-          "remaining_hours": 233.4
+          "remaining_hours": 231.3
         },
         {
           "tail": "N407CH",
@@ -299,7 +316,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-28",
           "remaining_days": 356.0,
-          "remaining_hours": 284.2
+          "remaining_hours": 282.1
         },
         {
           "tail": "N407CH",
@@ -308,7 +325,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-02-06",
           "remaining_days": 334.0,
-          "remaining_hours": 584.2
+          "remaining_hours": 582.1
         },
         {
           "tail": "N407CH",
@@ -357,8 +374,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.417,
-        "avg_weekly_hours": 9.917,
+        "avg_daily_hours": 1.514,
+        "avg_weekly_hours": 10.6,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -367,6 +384,10 @@
           {
             "date": "2026-03-07",
             "hours": 17372.5
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 17374.6
           }
         ],
         "hour_deltas": [
@@ -376,6 +397,13 @@
             "days_between": 6,
             "hours_delta": 8.5,
             "daily_rate": 1.417
+          },
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-08",
+            "days_between": 1,
+            "hours_delta": 2.1,
+            "daily_rate": 2.1
           }
         ]
       }
@@ -491,7 +519,7 @@
           "description": "600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-12-05",
           "remaining_days": 271.0,
-          "remaining_hours": 577.5
+          "remaining_hours": 576.4
         },
         {
           "tail": "N407CP",
@@ -500,7 +528,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-02-28",
           "remaining_days": 356.0,
-          "remaining_hours": 277.5
+          "remaining_hours": 276.4
         },
         {
           "tail": "N407CP",
@@ -509,7 +537,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-28",
           "remaining_days": 356.0,
-          "remaining_hours": 277.5
+          "remaining_hours": 276.4
         },
         {
           "tail": "N407CP",
@@ -549,8 +577,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.429,
-        "avg_weekly_hours": 3.0,
+        "avg_daily_hours": 0.586,
+        "avg_weekly_hours": 4.1,
         "daily_points": [
           {
             "date": "2026-02-28",
@@ -558,7 +586,7 @@
           },
           {
             "date": "2026-03-07",
-            "hours": 9974.1
+            "hours": 9975.2
           }
         ],
         "hour_deltas": [
@@ -566,8 +594,8 @@
             "from_date": "2026-02-28",
             "to_date": "2026-03-07",
             "days_between": 7,
-            "hours_delta": 3.0,
-            "daily_rate": 0.429
+            "hours_delta": 4.1,
+            "daily_rate": 0.586
           }
         ]
       }
@@ -801,7 +829,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-07-31",
           "remaining_days": 144.0,
-          "remaining_hours": 97.0
+          "remaining_hours": 95.7
         },
         {
           "tail": "N407FM",
@@ -810,7 +838,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-07-31",
           "remaining_days": 144.0,
-          "remaining_hours": 97.0
+          "remaining_hours": 95.7
         },
         {
           "tail": "N407FM",
@@ -828,7 +856,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-12-31",
           "remaining_days": 297.0,
-          "remaining_hours": 554.1
+          "remaining_hours": 552.8
         },
         {
           "tail": "N407FM",
@@ -877,8 +905,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.733,
-        "avg_weekly_hours": 5.133,
+        "avg_daily_hours": 0.814,
+        "avg_weekly_hours": 5.7,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -887,6 +915,10 @@
           {
             "date": "2026-03-07",
             "hours": 2458.8
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 2460.1
           }
         ],
         "hour_deltas": [
@@ -896,6 +928,13 @@
             "days_between": 6,
             "hours_delta": 4.4,
             "daily_rate": 0.733
+          },
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-08",
+            "days_between": 1,
+            "hours_delta": 1.3,
+            "daily_rate": 1.3
           }
         ]
       }
@@ -910,7 +949,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-04-30",
           "remaining_days": 52.0,
-          "remaining_hours": 351.0
+          "remaining_hours": 349.9
         },
         {
           "tail": "N407JM",
@@ -919,7 +958,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
           "remaining_days": 297.0,
-          "remaining_hours": 212.9
+          "remaining_hours": 211.8
         },
         {
           "tail": "N407JM",
@@ -928,7 +967,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-28",
           "remaining_days": 356.0,
-          "remaining_hours": 294.3
+          "remaining_hours": 293.2
         },
         {
           "tail": "N407JM",
@@ -995,8 +1034,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.25,
-        "avg_weekly_hours": 1.75,
+        "avg_daily_hours": 0.26,
+        "avg_weekly_hours": 1.82,
         "daily_points": [
           {
             "date": "2026-02-26",
@@ -1005,6 +1044,10 @@
           {
             "date": "2026-03-04",
             "hours": 5661.0
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 5662.1
           }
         ],
         "hour_deltas": [
@@ -1014,6 +1057,13 @@
             "days_between": 6,
             "hours_delta": 1.5,
             "daily_rate": 0.25
+          },
+          {
+            "from_date": "2026-03-04",
+            "to_date": "2026-03-08",
+            "days_between": 4,
+            "hours_delta": 1.1,
+            "daily_rate": 0.275
           }
         ]
       }
@@ -1028,7 +1078,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-11-30",
           "remaining_days": 266.0,
-          "remaining_hours": 125.6
+          "remaining_hours": 123.9
         },
         {
           "tail": "N407LF",
@@ -1037,7 +1087,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-11-07",
           "remaining_days": 243.0,
-          "remaining_hours": 125.6
+          "remaining_hours": 123.9
         },
         {
           "tail": "N407LF",
@@ -1046,7 +1096,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-10-30",
           "remaining_days": 235.0,
-          "remaining_hours": 425.6
+          "remaining_hours": 423.9
         },
         {
           "tail": "N407LF",
@@ -1113,8 +1163,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.99,
-        "avg_weekly_hours": 6.93,
+        "avg_daily_hours": 1.055,
+        "avg_weekly_hours": 7.382,
         "daily_points": [
           {
             "date": "2026-02-25",
@@ -1123,6 +1173,10 @@
           {
             "date": "2026-03-07",
             "hours": 5158.0
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 5159.7
           }
         ],
         "hour_deltas": [
@@ -1132,6 +1186,13 @@
             "days_between": 10,
             "hours_delta": 9.9,
             "daily_rate": 0.99
+          },
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-08",
+            "days_between": 1,
+            "hours_delta": 1.7,
+            "daily_rate": 1.7
           }
         ]
       }
@@ -1382,7 +1443,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
           "remaining_days": 297.0,
-          "remaining_hours": 32.4
+          "remaining_hours": 27.0
         },
         {
           "tail": "N407NW",
@@ -1391,7 +1452,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-12-07",
           "remaining_days": 273.0,
-          "remaining_hours": 32.4
+          "remaining_hours": 27.0
         },
         {
           "tail": "N407NW",
@@ -1400,7 +1461,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-08-31",
           "remaining_days": 175.0,
-          "remaining_hours": 48.7
+          "remaining_hours": 43.3
         },
         {
           "tail": "N407NW",
@@ -1467,8 +1528,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 4.84,
-        "avg_weekly_hours": 33.88,
+        "avg_daily_hours": 4.229,
+        "avg_weekly_hours": 29.6,
         "daily_points": [
           {
             "date": "2026-03-02",
@@ -1477,6 +1538,10 @@
           {
             "date": "2026-03-07",
             "hours": 1678.6
+          },
+          {
+            "date": "2026-03-09",
+            "hours": 1684.0
           }
         ],
         "hour_deltas": [
@@ -1486,6 +1551,13 @@
             "days_between": 5,
             "hours_delta": 24.2,
             "daily_rate": 4.84
+          },
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-09",
+            "days_between": 2,
+            "hours_delta": 5.4,
+            "daily_rate": 2.7
           }
         ]
       }
@@ -1500,7 +1572,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-07-28",
           "remaining_days": 141.0,
-          "remaining_hours": 61.9
+          "remaining_hours": 57.7
         },
         {
           "tail": "N407PW",
@@ -1509,7 +1581,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-07-28",
           "remaining_days": 141.0,
-          "remaining_hours": 61.9
+          "remaining_hours": 57.7
         },
         {
           "tail": "N407PW",
@@ -1527,7 +1599,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-01-31",
           "remaining_days": 328.0,
-          "remaining_hours": 567.0
+          "remaining_hours": 562.8
         },
         {
           "tail": "N407PW",
@@ -1585,8 +1657,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.16,
-        "avg_weekly_hours": 1.12,
+        "avg_daily_hours": 0.714,
+        "avg_weekly_hours": 5.0,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -1595,6 +1667,10 @@
           {
             "date": "2026-03-06",
             "hours": 1112.2
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 1116.4
           }
         ],
         "hour_deltas": [
@@ -1604,6 +1680,13 @@
             "days_between": 5,
             "hours_delta": 0.8,
             "daily_rate": 0.16
+          },
+          {
+            "from_date": "2026-03-06",
+            "to_date": "2026-03-08",
+            "days_between": 2,
+            "hours_delta": 4.2,
+            "daily_rate": 2.1
           }
         ]
       }
@@ -1618,7 +1701,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-01-29",
           "remaining_days": 326.0,
-          "remaining_hours": 256.5
+          "remaining_hours": 254.9
         },
         {
           "tail": "N407RU",
@@ -1627,7 +1710,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-01-29",
           "remaining_days": 326.0,
-          "remaining_hours": 256.5
+          "remaining_hours": 254.9
         },
         {
           "tail": "N407RU",
@@ -1636,7 +1719,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-10-31",
           "remaining_days": 236.0,
-          "remaining_hours": 375.0
+          "remaining_hours": 373.4
         },
         {
           "tail": "N407RU",
@@ -1713,6 +1796,10 @@
           {
             "date": "2026-03-07",
             "hours": 1771.2
+          },
+          {
+            "date": "2026-03-09",
+            "hours": 1772.8
           }
         ],
         "hour_deltas": [
@@ -1721,6 +1808,13 @@
             "to_date": "2026-03-07",
             "days_between": 6,
             "hours_delta": 4.8,
+            "daily_rate": 0.8
+          },
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-09",
+            "days_between": 2,
+            "hours_delta": 1.6,
             "daily_rate": 0.8
           }
         ]
@@ -1736,7 +1830,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-03-07",
           "remaining_days": 363.0,
-          "remaining_hours": 300.0
+          "remaining_hours": 298.8
         },
         {
           "tail": "N407SL",
@@ -1745,7 +1839,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-12-03",
           "remaining_days": 269.0,
-          "remaining_hours": 177.8
+          "remaining_hours": 176.6
         },
         {
           "tail": "N407SL",
@@ -1763,7 +1857,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-12-03",
           "remaining_days": 269.0,
-          "remaining_hours": 477.8
+          "remaining_hours": 476.6
         },
         {
           "tail": "N407SL",
@@ -1821,8 +1915,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.45,
-        "avg_weekly_hours": 10.15,
+        "avg_daily_hours": 1.414,
+        "avg_weekly_hours": 9.9,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -1831,6 +1925,10 @@
           {
             "date": "2026-03-07",
             "hours": 1963.3
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 1964.5
           }
         ],
         "hour_deltas": [
@@ -1840,6 +1938,13 @@
             "days_between": 6,
             "hours_delta": 8.7,
             "daily_rate": 1.45
+          },
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-08",
+            "days_between": 1,
+            "hours_delta": 1.2,
+            "daily_rate": 1.2
           }
         ]
       }
@@ -1854,7 +1959,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-05-14",
           "remaining_days": 66.0,
-          "remaining_hours": 115.5
+          "remaining_hours": 111.8
         },
         {
           "tail": "N407TH",
@@ -1863,7 +1968,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-11-30",
           "remaining_days": 266.0,
-          "remaining_hours": 164.8
+          "remaining_hours": 161.1
         },
         {
           "tail": "N407TH",
@@ -1872,7 +1977,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-01-31",
           "remaining_days": 328.0,
-          "remaining_hours": 227.2
+          "remaining_hours": 223.5
         },
         {
           "tail": "N407TH",
@@ -1939,8 +2044,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.417,
-        "avg_weekly_hours": 9.917,
+        "avg_daily_hours": 1.525,
+        "avg_weekly_hours": 10.675,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -1949,6 +2054,10 @@
           {
             "date": "2026-03-07",
             "hours": 8488.3
+          },
+          {
+            "date": "2026-03-09",
+            "hours": 8492.0
           }
         ],
         "hour_deltas": [
@@ -1958,6 +2067,13 @@
             "days_between": 6,
             "hours_delta": 8.5,
             "daily_rate": 1.417
+          },
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-09",
+            "days_between": 2,
+            "hours_delta": 3.7,
+            "daily_rate": 1.85
           }
         ]
       }
@@ -1990,7 +2106,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-07-31",
           "remaining_days": 144.0,
-          "remaining_hours": 79.2
+          "remaining_hours": 76.4
         },
         {
           "tail": "N407TK",
@@ -1999,7 +2115,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-09-30",
           "remaining_days": 205.0,
-          "remaining_hours": 182.1
+          "remaining_hours": 179.3
         },
         {
           "tail": "N407TK",
@@ -2008,7 +2124,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-01-31",
           "remaining_days": 328.0,
-          "remaining_hours": 563.1
+          "remaining_hours": 560.3
         },
         {
           "tail": "N407TK",
@@ -2057,8 +2173,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.35,
-        "avg_weekly_hours": 9.45,
+        "avg_daily_hours": 1.557,
+        "avg_weekly_hours": 10.9,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -2067,6 +2183,10 @@
           {
             "date": "2026-03-07",
             "hours": 5177.3
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 5180.1
           }
         ],
         "hour_deltas": [
@@ -2076,6 +2196,13 @@
             "days_between": 6,
             "hours_delta": 8.1,
             "daily_rate": 1.35
+          },
+          {
+            "from_date": "2026-03-07",
+            "to_date": "2026-03-08",
+            "days_between": 1,
+            "hours_delta": 2.8,
+            "daily_rate": 2.8
           }
         ]
       }
@@ -2099,7 +2226,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-09-30",
           "remaining_days": 205.0,
-          "remaining_hours": 163.7
+          "remaining_hours": 159.1
         },
         {
           "tail": "N407ZM",
@@ -2108,7 +2235,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-09-30",
           "remaining_days": 205.0,
-          "remaining_hours": 163.7
+          "remaining_hours": 159.1
         },
         {
           "tail": "N407ZM",
@@ -2117,7 +2244,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-09-30",
           "remaining_days": 205.0,
-          "remaining_hours": 463.7
+          "remaining_hours": 459.1
         },
         {
           "tail": "N407ZM",
@@ -2175,8 +2302,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 2.3,
-        "avg_weekly_hours": 16.1,
+        "avg_daily_hours": 1.438,
+        "avg_weekly_hours": 10.062,
         "daily_points": [
           {
             "date": "2026-02-28",
@@ -2185,6 +2312,10 @@
           {
             "date": "2026-03-03",
             "hours": 5314.4
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 5319.0
           }
         ],
         "hour_deltas": [
@@ -2194,6 +2325,13 @@
             "days_between": 3,
             "hours_delta": 6.9,
             "daily_rate": 2.3
+          },
+          {
+            "from_date": "2026-03-03",
+            "to_date": "2026-03-08",
+            "days_between": 5,
+            "hours_delta": 4.6,
+            "daily_rate": 0.92
           }
         ]
       }
@@ -2208,7 +2346,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-11-14",
           "remaining_days": 250.0,
-          "remaining_hours": 221.4
+          "remaining_hours": 219.3
         },
         {
           "tail": "N466GH",
@@ -2217,7 +2355,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-02-28",
           "remaining_days": 356.0,
-          "remaining_hours": 288.8
+          "remaining_hours": 286.7
         },
         {
           "tail": "N466GH",
@@ -2226,7 +2364,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-11-30",
           "remaining_days": 266.0,
-          "remaining_hours": 521.4
+          "remaining_hours": 519.3
         },
         {
           "tail": "N466GH",
@@ -2293,8 +2431,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.5,
-        "avg_weekly_hours": 3.5,
+        "avg_daily_hours": 0.51,
+        "avg_weekly_hours": 3.57,
         "daily_points": [
           {
             "date": "2026-02-26",
@@ -2303,6 +2441,10 @@
           {
             "date": "2026-03-04",
             "hours": 2946.4
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 2948.5
           }
         ],
         "hour_deltas": [
@@ -2312,6 +2454,13 @@
             "days_between": 6,
             "hours_delta": 3.0,
             "daily_rate": 0.5
+          },
+          {
+            "from_date": "2026-03-04",
+            "to_date": "2026-03-08",
+            "days_between": 4,
+            "hours_delta": 2.1,
+            "daily_rate": 0.525
           }
         ]
       }
@@ -2520,10 +2669,27 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": null,
-        "avg_weekly_hours": null,
-        "daily_points": [],
-        "hour_deltas": []
+        "avg_daily_hours": 0.0,
+        "avg_weekly_hours": 0.0,
+        "daily_points": [
+          {
+            "date": "2026-02-28",
+            "hours": 10557.8
+          },
+          {
+            "date": "2026-03-08",
+            "hours": 10557.8
+          }
+        ],
+        "hour_deltas": [
+          {
+            "from_date": "2026-02-28",
+            "to_date": "2026-03-08",
+            "days_between": 8,
+            "hours_delta": 0.0,
+            "daily_rate": 0.0
+          }
+        ]
       }
     },
     {
@@ -2657,14 +2823,14 @@
         "remaining_hours": 140.0
       },
       {
-        "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
-        "ata": "67 30-01",
+        "description": "(RII) INPUT DRIVESHAFT - OVERHAUL",
+        "ata": "63 25-01",
         "requirement_type": "OVERHAUL",
         "remaining_hours": 140.0
       },
       {
-        "description": "(RII) INPUT DRIVESHAFT - OVERHAUL",
-        "ata": "63 25-01",
+        "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
+        "ata": "67 30-01",
         "requirement_type": "OVERHAUL",
         "remaining_hours": 140.0
       }
@@ -2674,13 +2840,13 @@
         "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
         "ata": "67 30-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 41.2
+        "remaining_hours": 39.9
       },
       {
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 54.1
+        "remaining_hours": 52.8
       }
     ],
     "N307KH": [
@@ -2688,7 +2854,7 @@
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 44.8
+        "remaining_hours": 43.6
       }
     ],
     "N407RU": [
@@ -2696,7 +2862,7 @@
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 47.8
+        "remaining_hours": 46.2
       }
     ],
     "N466GH": [
@@ -2704,19 +2870,19 @@
         "description": "(RII) ROTOR BRAKE CALIPER - OVERHAUL",
         "ata": "63 22-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 53.6
+        "remaining_hours": 51.5
       },
       {
         "description": "(RII) ROTOR BRAKE CALIPER - OVERHAUL",
         "ata": "63 22-05",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 53.6
+        "remaining_hours": 51.5
       },
       {
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 100.0
+        "remaining_hours": 97.9
       }
     ],
     "N407CN": [
@@ -2766,7 +2932,7 @@
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 100.0
+        "remaining_hours": 98.8
       }
     ],
     "N407CZ": [
@@ -2783,6 +2949,12 @@
         "remaining_hours": 181.7
       },
       {
+        "description": "(RII) INPUT DRIVESHAFT - OVERHAUL",
+        "ata": "63 25-01",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 181.7
+      },
+      {
         "description": "(RII) TAIL ROTOR HUB ASSEMBLY - OVERHAUL",
         "ata": "64 10-00",
         "requirement_type": "OVERHAUL",
@@ -2793,44 +2965,38 @@
         "ata": "67 30-01",
         "requirement_type": "OVERHAUL",
         "remaining_hours": 181.7
-      },
-      {
-        "description": "(RII) INPUT DRIVESHAFT - OVERHAUL",
-        "ata": "63 25-01",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 181.7
       }
     ],
     "N407JM": [
       {
+        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (BLUE)",
+        "ata": "67 13-20",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 119.9
+      },
+      {
         "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (GREEEN)",
         "ata": "67 13-25",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 121.0
+        "remaining_hours": 119.9
       },
       {
         "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (ORANGE)",
         "ata": "67 13-30",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 121.0
+        "remaining_hours": 119.9
       },
       {
         "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY  (RED)",
         "ata": "67 13-35",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 121.0
-      },
-      {
-        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (BLUE)",
-        "ata": "67 13-20",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 121.0
+        "remaining_hours": 119.9
       },
       {
         "description": "(RII) AIRCRAFT BATTERY RECONDITION / CAPACITY CHECK",
         "ata": "24 20-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 188.4
+        "remaining_hours": 187.3
       }
     ],
     "N407CH": [
@@ -2838,7 +3004,21 @@
         "description": "(RII) ENGINE BLEED VALVE - OVERHAUL",
         "ata": "72 00-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 149.3
+        "remaining_hours": 147.2
+      }
+    ],
+    "N407TH": [
+      {
+        "description": "(RII) TAIL ROTOR HUB ASSEMBLY - OVERHAUL",
+        "ata": "64 10-00",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 161.9
+      },
+      {
+        "description": "(RII) AIRCRAFT BATTERY RECONDITION / CAPACITY CHECK",
+        "ata": "24 20-01",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 193.7
       }
     ],
     "N862YB": [
@@ -2855,26 +3035,12 @@
         "remaining_hours": 186.0
       }
     ],
-    "N407TH": [
-      {
-        "description": "(RII) TAIL ROTOR HUB ASSEMBLY - OVERHAUL",
-        "ata": "64 10-00",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 165.6
-      },
-      {
-        "description": "(RII) AIRCRAFT BATTERY RECONDITION / CAPACITY CHECK",
-        "ata": "24 20-01",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 197.4
-      }
-    ],
     "N407ZM": [
       {
         "description": "(RII) MAIN ROTOR HUB ASSEMBLY - OVERHAUL",
         "ata": "62 00-00",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 174.2
+        "remaining_hours": 169.6
       }
     ]
   },
