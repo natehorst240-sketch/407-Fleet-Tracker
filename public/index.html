@@ -465,6 +465,7 @@
       <div class="tabs">
         <button class="active" onclick="showTab('inspections', this)">Maintenance Due List</button>
         <button onclick="showTab('calendar', this)">Calendar View</button>
+        <button onclick="showTab('interimInspections', this)">Interim Inspections</button>
         <button onclick="showTab('utilization', this)">Flight Hours Tracking</button>
         <button onclick="showTab('components', this)">Component Tracking</button>
       </div>
@@ -498,6 +499,15 @@
             <thead id="inspectionTableHead"></thead>
             <tbody id="inspectionTable"></tbody>
           </table>
+        </div>
+      </section>
+
+
+
+      <section id="interimInspections" class="tab">
+        <h3>Interim Inspections — Months Remaining</h3>
+        <div class="panel">
+          <canvas id="interimChart" height="110"></canvas>
         </div>
       </section>
 
@@ -547,6 +557,7 @@
 <script>
 let dashboard;
 let chart;
+let interimChart;
 const TOP_INSPECTIONS = ['12 Month', '24 Month'];
 const CALENDAR_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 let currentCalendarDate = new Date();
@@ -691,8 +702,93 @@ function renderTopGraph(inspectionName) {
   });
 }
 
+
+function getInterimInspectionNames() {
+  return dashboard.inspection_names.filter(name => name.endsWith('Interim'));
+}
+
+function renderInterimInspectionGraph() {
+  const interimNames = getInterimInspectionNames();
+  const canvas = document.getElementById('interimChart');
+  if (!canvas) return;
+
+  if (!interimNames.length) {
+    if (interimChart) {
+      interimChart.destroy();
+      interimChart = null;
+    }
+    return;
+  }
+
+  const rows = dashboard.aircraft
+    .map(ac => {
+      const months = interimNames.map(name => {
+        const inspection = ac.inspections.find(i => i.inspection === name);
+        return inspection ? monthsFromDays(inspection.remaining_days) : null;
+      });
+      const numericMonths = months.filter(v => v !== null && v !== undefined && !Number.isNaN(Number(v)));
+      const minMonths = numericMonths.length ? Math.min(...numericMonths) : Number.POSITIVE_INFINITY;
+      return { tail: ac.tail, months, minMonths };
+    })
+    .sort((a, b) => a.minMonths - b.minMonths);
+
+  const allMonths = rows.flatMap(row => row.months).filter(v => v !== null && v !== undefined && !Number.isNaN(Number(v)));
+  const minMonth = allMonths.length ? Math.min(...allMonths) : 0;
+  const maxMonth = allMonths.length ? Math.max(...allMonths) : 0;
+  const lowerBound = Math.floor(Math.min(0, minMonth));
+  const upperBound = Math.ceil(Math.max(1, maxMonth));
+
+  const palette = ['#25c8ff', '#66d0ff', '#ffc658', '#ff8a1f', '#ff537f'];
+  const borderPalette = ['#8ce6ff', '#b5e7ff', '#ffe3a3', '#ffc088', '#ff9cb8'];
+  const datasets = interimNames.map((name, idx) => ({
+    label: name,
+    data: rows.map(row => row.months[idx]),
+    backgroundColor: palette[idx % palette.length],
+    borderColor: borderPalette[idx % borderPalette.length],
+    borderWidth: 1
+  }));
+
+  if (interimChart) interimChart.destroy();
+  interimChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: rows.map(row => row.tail),
+      datasets
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#d9ebff' } },
+        tooltip: {
+          callbacks: {
+            label(context) {
+              const value = context.parsed.y;
+              const display = value === null || value === undefined ? '—' : Number(value).toFixed(1);
+              return `${context.dataset.label}: ${display} months`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          title: { display: true, text: 'Months Remaining', color: '#aac8ea' },
+          min: lowerBound,
+          max: upperBound,
+          ticks: { color: '#aac8ea' },
+          grid: { color: 'rgba(32, 63, 97, 0.5)' }
+        },
+        x: {
+          ticks: { color: '#aac8ea' },
+          grid: { color: 'rgba(32, 63, 97, 0.18)' }
+        }
+      }
+    }
+  });
+}
+
 function renderRemainingInspectionsTable() {
-  const remainingInspectionTypes = dashboard.inspection_names.filter(name => !TOP_INSPECTIONS.includes(name));
+  const interimInspectionNames = getInterimInspectionNames();
+  const remainingInspectionTypes = dashboard.inspection_names.filter(name => !TOP_INSPECTIONS.includes(name) && !interimInspectionNames.includes(name));
   document.getElementById('inspectionTableHead').innerHTML =
     `<tr><th>Aircraft</th>${remainingInspectionTypes.map(name => `<th>${name}</th>`).join('')}</tr>`;
 
@@ -962,6 +1058,7 @@ function setCalendarToday() {
   renderRemainingInspectionsTable();
   renderComponents();
   renderUtilization();
+  renderInterimInspectionGraph();
   renderCalendar();
 })();
 </script>
