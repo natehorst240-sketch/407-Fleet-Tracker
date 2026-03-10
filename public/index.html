@@ -419,6 +419,41 @@
     .status-upcoming { background: rgba(247, 193, 74, 0.18); color: #fff0cb; font-weight: 700; }
     .status-scheduled { background: rgba(41, 239, 176, 0.15); color: #d7fff1; font-weight: 700; }
 
+    .interim-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .interim-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: linear-gradient(135deg, rgba(12, 24, 40, 0.9), rgba(7, 14, 24, 0.95));
+    }
+
+    .interim-card h4 {
+      margin: 0 0 10px;
+      color: var(--cyan);
+      font-size: 0.88rem;
+      letter-spacing: 0.14em;
+    }
+
+    .interim-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 0;
+      border-top: 1px solid rgba(23, 48, 78, 0.5);
+      font-size: 0.68rem;
+      align-items: center;
+    }
+
+    .interim-row:first-of-type { border-top: 0; }
+    .interim-name { color: #d9ebff; }
+    .interim-status { font-weight: 800; text-align: right; letter-spacing: 0.08em; }
+    .interim-empty { color: #95aac5; font-size: 0.72rem; }
+
     .foot {
       border-top: 1px solid var(--line);
       margin-top: 24px;
@@ -507,7 +542,7 @@
       <section id="interimInspections" class="tab">
         <h3>Interim Inspections — Months Remaining</h3>
         <div class="panel">
-          <canvas id="interimChart" height="110"></canvas>
+          <div id="interimCardGrid" class="interim-grid"></div>
         </div>
       </section>
 
@@ -557,7 +592,6 @@
 <script>
 let dashboard;
 let chart;
-let interimChart;
 const TOP_INSPECTIONS = ['12 Month', '24 Month'];
 const CALENDAR_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 let currentCalendarDate = new Date();
@@ -709,14 +743,11 @@ function getInterimInspectionNames() {
 
 function renderInterimInspectionGraph() {
   const interimNames = getInterimInspectionNames();
-  const canvas = document.getElementById('interimChart');
-  if (!canvas) return;
+  const cardGrid = document.getElementById('interimCardGrid');
+  if (!cardGrid) return;
 
   if (!interimNames.length) {
-    if (interimChart) {
-      interimChart.destroy();
-      interimChart = null;
-    }
+    cardGrid.innerHTML = '<div class="interim-empty">No interim inspections found in current data.</div>';
     return;
   }
 
@@ -732,58 +763,27 @@ function renderInterimInspectionGraph() {
     })
     .sort((a, b) => a.minMonths - b.minMonths);
 
-  const allMonths = rows.flatMap(row => row.months).filter(v => v !== null && v !== undefined && !Number.isNaN(Number(v)));
-  const minMonth = allMonths.length ? Math.min(...allMonths) : 0;
-  const maxMonth = allMonths.length ? Math.max(...allMonths) : 0;
-  const lowerBound = Math.floor(Math.min(0, minMonth));
-  const upperBound = Math.ceil(Math.max(1, maxMonth));
-
-  const palette = ['#25c8ff', '#66d0ff', '#ffc658', '#ff8a1f', '#ff537f'];
-  const borderPalette = ['#8ce6ff', '#b5e7ff', '#ffe3a3', '#ffc088', '#ff9cb8'];
-  const datasets = interimNames.map((name, idx) => ({
-    label: name,
-    data: rows.map(row => row.months[idx]),
-    backgroundColor: palette[idx % palette.length],
-    borderColor: borderPalette[idx % borderPalette.length],
-    borderWidth: 1
-  }));
-
-  if (interimChart) interimChart.destroy();
-  interimChart = new Chart(canvas, {
-    type: 'bar',
-    data: {
-      labels: rows.map(row => row.tail),
-      datasets
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { labels: { color: '#d9ebff' } },
-        tooltip: {
-          callbacks: {
-            label(context) {
-              const value = context.parsed.y;
-              const display = value === null || value === undefined ? '—' : Number(value).toFixed(1);
-              return `${context.dataset.label}: ${display} months`;
-            }
-          }
-        }
-      },
-      scales: {
-        y: {
-          title: { display: true, text: 'Months Remaining', color: '#aac8ea' },
-          min: lowerBound,
-          max: upperBound,
-          ticks: { color: '#aac8ea' },
-          grid: { color: 'rgba(32, 63, 97, 0.5)' }
-        },
-        x: {
-          ticks: { color: '#aac8ea' },
-          grid: { color: 'rgba(32, 63, 97, 0.18)' }
-        }
+  cardGrid.innerHTML = rows.map(row => {
+    const itemRows = interimNames.map((name, idx) => {
+      const months = row.months[idx];
+      if (months === null || months === undefined || Number.isNaN(Number(months))) {
+        return `<div class="interim-row"><span class="interim-name">${name}</span><span class="interim-status tone-na">N/A</span></div>`;
       }
-    }
-  });
+
+      const status = getInterimMonthStatus(months);
+      return `<div class="interim-row"><span class="interim-name">${name}</span><span class="interim-status ${status.className}">${status.label} · ${Number(months).toFixed(1)} MO REMAINING</span></div>`;
+    }).join('');
+
+    return `<article class="interim-card"><h4>${row.tail}</h4>${itemRows}</article>`;
+  }).join('');
+}
+
+function getInterimMonthStatus(months) {
+  const value = Number(months);
+  if (value < 0) return { label: 'PAST DUE', className: 'tone-past-due' };
+  if (value <= 1) return { label: 'CRITICAL', className: 'tone-critical' };
+  if (value <= 3) return { label: 'COMING DUE', className: 'tone-coming-due' };
+  return { label: 'OK', className: 'tone-ok' };
 }
 
 function renderRemainingInspectionsTable() {
