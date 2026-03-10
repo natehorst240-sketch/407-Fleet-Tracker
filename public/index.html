@@ -541,7 +541,7 @@
         <h3>Average Daily / Weekly Flight Hours</h3>
         <div class="panel">
           <table>
-            <thead><tr><th>Aircraft</th><th>Avg Daily</th><th>Avg Weekly</th><th>Last Δ Hours</th><th>Update Intervals</th></tr></thead>
+            <thead><tr><th>Aircraft</th><th>Avg Daily</th><th>Avg Weekly</th><th>Last Δ Hours</th><th>Updates Logged</th></tr></thead>
             <tbody id="utilTable"></tbody>
           </table>
         </div>
@@ -920,8 +920,9 @@ function renderUtilization() {
   dashboard.aircraft.forEach(ac => {
     const util = ac.utilization || {};
     const latestDelta = util.hour_deltas?.length ? util.hour_deltas[util.hour_deltas.length - 1].hours_delta : null;
+    const updateCount = util.daily_points?.length ?? (util.hour_deltas?.length ? util.hour_deltas.length + 1 : 0);
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${ac.tail}</td><td>${round(util.avg_daily_hours)}</td><td>${round(util.avg_weekly_hours)}</td><td>${round(latestDelta)}</td><td>${util.hour_deltas?.length ?? 0}</td>`;
+    tr.innerHTML = `<td>${ac.tail}</td><td>${round(util.avg_daily_hours)}</td><td>${round(util.avg_weekly_hours)}</td><td>${round(latestDelta)}</td><td>${updateCount}</td>`;
     body.appendChild(tr);
   });
 }
