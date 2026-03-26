@@ -973,9 +973,9 @@ function getCalendarEvents() {
         });
       }
 
-      // Flight-hour projection: item has remaining_hours but no calendar due date
-      // Project due date using the aircraft's average daily flight hours
-      if (!item.due_date && item.remaining_hours != null && avgDailyHours > 0) {
+      // Flight-hour projection: project when flight hours will run out
+      // Applies to any inspection with remaining_hours, using the aircraft's average daily rate
+      if (item.remaining_hours != null && avgDailyHours > 0) {
         const projectedDays = item.remaining_hours / avgDailyHours;
         const projectedDate = new Date(today);
         projectedDate.setDate(projectedDate.getDate() + Math.round(projectedDays));
