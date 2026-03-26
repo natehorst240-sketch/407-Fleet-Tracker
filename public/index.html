@@ -218,6 +218,7 @@
     .event-overdue { background: rgba(255, 60, 109, 0.2); border-color: rgba(255, 96, 140, 0.5); color: #ffd2df; }
     .event-soon { background: rgba(255, 177, 64, 0.2); border-color: rgba(255, 208, 112, 0.5); color: #ffecc5; }
     .event-upcoming { background: rgba(102, 208, 255, 0.18); border-color: rgba(102, 208, 255, 0.5); color: #d8f3ff; }
+    .event-projected { border-style: dashed; opacity: 0.8; }
     .calendar-more { color: #9fc4e7; font-size: 0.56rem; }
 
     .event-tooltip {
@@ -943,13 +944,20 @@ function escapeHtml(value) {
 }
 
 function getCalendarEvents() {
-  return dashboard.aircraft.flatMap(ac =>
-    ac.inspections
-      .filter(item => item.due_date)
-      .map(item => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return dashboard.aircraft.flatMap(ac => {
+    const avgDailyHours = ac.utilization?.avg_daily_hours;
+
+    return ac.inspections.flatMap(item => {
+      const events = [];
+
+      // Calendar-based event: item has a known due date
+      if (item.due_date) {
         const dueDate = new Date(`${item.due_date}T00:00:00`);
         const daysRemaining = item.remaining_days ?? Number.MAX_SAFE_INTEGER;
-        return {
+        events.push({
           tail: ac.tail,
           inspection: item.inspection,
           ata: item.ata,
@@ -959,10 +967,37 @@ function getCalendarEvents() {
           dueDateText: item.due_date,
           remainingDays: item.remaining_days,
           remainingHours: item.remaining_hours,
-          daysRemaining: Number(daysRemaining)
-        };
-      })
-  );
+          daysRemaining: Number(daysRemaining),
+          isProjected: false,
+          avgDailyHours: null
+        });
+      }
+
+      // Flight-hour projection: item has remaining_hours but no calendar due date
+      // Project due date using the aircraft's average daily flight hours
+      if (!item.due_date && item.remaining_hours != null && avgDailyHours > 0) {
+        const projectedDays = item.remaining_hours / avgDailyHours;
+        const projectedDate = new Date(today);
+        projectedDate.setDate(projectedDate.getDate() + Math.round(projectedDays));
+        events.push({
+          tail: ac.tail,
+          inspection: item.inspection,
+          ata: item.ata,
+          description: item.description,
+          dueDate: projectedDate,
+          dueDateKey: projectedDate.toISOString().slice(0, 10),
+          dueDateText: projectedDate.toISOString().slice(0, 10),
+          remainingDays: projectedDays,
+          remainingHours: item.remaining_hours,
+          daysRemaining: projectedDays,
+          isProjected: true,
+          avgDailyHours
+        });
+      }
+
+      return events;
+    });
+  });
 }
 
 function renderCalendar() {
@@ -1011,15 +1046,25 @@ function renderCalendar() {
     const eventMarkup = dayEvents.slice(0, 3).map(event => {
       const remainingDays = event.remainingDays === null || event.remainingDays === undefined ? '—' : round(event.remainingDays);
       const remainingHours = event.remainingHours === null || event.remainingHours === undefined ? '—' : round(event.remainingHours);
-      return `<div class="calendar-event ${getEventTone(event.daysRemaining)}">` +
-        `<strong>${escapeHtml(event.tail)}</strong> ${escapeHtml(event.inspection)}` +
+      const projectedClass = event.isProjected ? ' event-projected' : '';
+      const dueDateLabel = event.isProjected ? 'Projected due:' : 'Due date:';
+      const projectedRate = event.isProjected && event.avgDailyHours != null
+        ? `<div class="tooltip-row"><span class="tooltip-label">Avg daily hours:</span>${escapeHtml(String(round(event.avgDailyHours)))}</div>`
+        : '';
+      const projectedNote = event.isProjected
+        ? `<div class="tooltip-row" style="color:#9db8d8;font-style:italic;">Projected from flight hours</div>`
+        : '';
+      return `<div class="calendar-event ${getEventTone(event.daysRemaining)}${projectedClass}">` +
+        `<strong>${escapeHtml(event.tail)}</strong> ${event.isProjected ? '~' : ''}${escapeHtml(event.inspection)}` +
         `<div class="event-tooltip">` +
         `<div class="tooltip-title">${escapeHtml(event.tail)} — ${escapeHtml(event.inspection)}</div>` +
-        `<div class="tooltip-row"><span class="tooltip-label">Due date:</span>${escapeHtml(event.dueDateText)}</div>` +
-        `<div class="tooltip-row"><span class="tooltip-label">Remaining days:</span>${escapeHtml(remainingDays)}</div>` +
-        `<div class="tooltip-row"><span class="tooltip-label">Remaining hours:</span>${escapeHtml(remainingHours)}</div>` +
+        `<div class="tooltip-row"><span class="tooltip-label">${dueDateLabel}</span>${escapeHtml(event.dueDateText)}</div>` +
+        `<div class="tooltip-row"><span class="tooltip-label">Remaining days:</span>${escapeHtml(String(remainingDays))}</div>` +
+        `<div class="tooltip-row"><span class="tooltip-label">Remaining hours:</span>${escapeHtml(String(remainingHours))}</div>` +
+        projectedRate +
         `<div class="tooltip-row"><span class="tooltip-label">ATA:</span>${escapeHtml(event.ata || 'N/A')}</div>` +
         `<div class="tooltip-row"><span class="tooltip-label">Description:</span>${escapeHtml(event.description || 'N/A')}</div>` +
+        projectedNote +
         `</div></div>`;
     }).join('');
     const moreMarkup = dayEvents.length > 3 ? `<div class="calendar-more">+${dayEvents.length - 3} more</div>` : '';
