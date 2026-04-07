@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_utc": "2026-04-01T10:12:37.205655+00:00",
+    "generated_utc": "2026-04-07T10:12:45.107263+00:00",
     "daily_csv": "/home/runner/work/407-Fleet-Tracker/407-Fleet-Tracker/data/407_daily_due_list.csv",
     "weekly_csv": "/home/runner/work/407-Fleet-Tracker/407-Fleet-Tracker/data/407_Due-List_weekly.csv",
     "aircraft_count": 24
@@ -15,8 +15,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
-          "remaining_hours": 33.0
+          "remaining_days": 115.0,
+          "remaining_hours": 23.0
         },
         {
           "tail": "N307KH",
@@ -24,8 +24,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-10-31",
-          "remaining_days": 213.0,
-          "remaining_hours": 126.6
+          "remaining_days": 207.0,
+          "remaining_hours": 116.6
         },
         {
           "tail": "N307KH",
@@ -33,13 +33,13 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-10-31",
-          "remaining_days": 213.0,
-          "remaining_hours": 426.6
+          "remaining_days": 207.0,
+          "remaining_hours": 416.6
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.071,
-        "avg_weekly_hours": 7.496,
+        "avg_daily_hours": 1.152,
+        "avg_weekly_hours": 8.061,
         "daily_points": [
           {
             "date": "2026-03-07",
@@ -80,6 +80,10 @@
           {
             "date": "2026-03-31",
             "hours": 22929.5
+          },
+          {
+            "date": "2026-04-07",
+            "hours": 22939.5
           }
         ],
         "hour_deltas": [
@@ -145,6 +149,13 @@
             "days_between": 8,
             "hours_delta": 4.2,
             "daily_rate": 0.525
+          },
+          {
+            "from_date": "2026-03-31",
+            "to_date": "2026-04-07",
+            "days_between": 7,
+            "hours_delta": 10.0,
+            "daily_rate": 1.429
           }
         ]
       }
@@ -158,8 +169,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-03-19",
-          "remaining_days": 352.0,
-          "remaining_hours": 290.0
+          "remaining_days": 346.0,
+          "remaining_hours": 280.9
         },
         {
           "tail": "N39KM",
@@ -167,8 +178,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-03-31",
-          "remaining_days": 364.0,
-          "remaining_hours": 590.0
+          "remaining_days": 358.0,
+          "remaining_hours": 580.9
         },
         {
           "tail": "N39KM",
@@ -176,8 +187,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-10-31",
-          "remaining_days": 213.0,
-          "remaining_hours": 133.0
+          "remaining_days": 207.0,
+          "remaining_hours": 123.9
         },
         {
           "tail": "N39KM",
@@ -185,7 +196,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-10-31",
-          "remaining_days": 213.0,
+          "remaining_days": 207.0,
           "remaining_hours": null
         },
         {
@@ -194,7 +205,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
+          "remaining_days": 268.0,
           "remaining_hours": null
         },
         {
@@ -203,7 +214,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-08-31",
-          "remaining_days": 1248.0,
+          "remaining_days": 1242.0,
           "remaining_hours": null
         },
         {
@@ -212,7 +223,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2029-08-31",
-          "remaining_days": 1248.0,
+          "remaining_days": 1242.0,
           "remaining_hours": null
         },
         {
@@ -221,7 +232,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2030-06-30",
-          "remaining_days": 1551.0,
+          "remaining_days": 1545.0,
           "remaining_hours": null
         },
         {
@@ -230,13 +241,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-10-31",
-          "remaining_days": 1674.0,
+          "remaining_days": 1668.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.09,
-        "avg_weekly_hours": 7.628,
+        "avg_daily_hours": 1.131,
+        "avg_weekly_hours": 7.914,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -285,6 +296,10 @@
           {
             "date": "2026-03-30",
             "hours": 3298.3
+          },
+          {
+            "date": "2026-04-06",
+            "hours": 3307.4
           }
         ],
         "hour_deltas": [
@@ -364,6 +379,13 @@
             "days_between": 1,
             "hours_delta": 0.0,
             "daily_rate": 0.0
+          },
+          {
+            "from_date": "2026-03-30",
+            "to_date": "2026-04-06",
+            "days_between": 7,
+            "hours_delta": 9.1,
+            "daily_rate": 1.3
           }
         ]
       }
@@ -377,7 +399,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
+          "remaining_days": 115.0,
           "remaining_hours": null
         },
         {
@@ -386,8 +408,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
-          "remaining_hours": 78.2
+          "remaining_days": 115.0,
+          "remaining_hours": 73.4
         },
         {
           "tail": "N407BY",
@@ -395,8 +417,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
-          "remaining_hours": 78.2
+          "remaining_days": 115.0,
+          "remaining_hours": 73.4
         },
         {
           "tail": "N407BY",
@@ -404,8 +426,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
-          "remaining_hours": 378.2
+          "remaining_days": 115.0,
+          "remaining_hours": 373.4
         },
         {
           "tail": "N407BY",
@@ -413,7 +435,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2027-08-31",
-          "remaining_days": 517.0,
+          "remaining_days": 511.0,
           "remaining_hours": null
         },
         {
@@ -422,7 +444,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2027-10-27",
-          "remaining_days": 574.0,
+          "remaining_days": 568.0,
           "remaining_hours": null
         },
         {
@@ -431,7 +453,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2027-10-31",
-          "remaining_days": 578.0,
+          "remaining_days": 572.0,
           "remaining_hours": null
         },
         {
@@ -440,7 +462,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2027-10-31",
-          "remaining_days": 578.0,
+          "remaining_days": 572.0,
           "remaining_hours": null
         },
         {
@@ -449,7 +471,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-12-31",
-          "remaining_days": 639.0,
+          "remaining_days": 633.0,
           "remaining_hours": null
         },
         {
@@ -458,13 +480,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-03-19",
-          "remaining_days": 1083.0,
+          "remaining_days": 1077.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.071,
-        "avg_weekly_hours": 7.497,
+        "avg_daily_hours": 1.027,
+        "avg_weekly_hours": 7.189,
         "daily_points": [
           {
             "date": "2026-02-27",
@@ -525,6 +547,10 @@
           {
             "date": "2026-03-30",
             "hours": 1099.6
+          },
+          {
+            "date": "2026-04-05",
+            "hours": 1104.4
           }
         ],
         "hour_deltas": [
@@ -625,6 +651,13 @@
             "days_between": 1,
             "hours_delta": 2.9,
             "daily_rate": 2.9
+          },
+          {
+            "from_date": "2026-03-30",
+            "to_date": "2026-04-05",
+            "days_between": 6,
+            "hours_delta": 4.8,
+            "daily_rate": 0.8
           }
         ]
       }
@@ -638,7 +671,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-04-30",
-          "remaining_days": 29.0,
+          "remaining_days": 23.0,
           "remaining_hours": null
         },
         {
@@ -647,8 +680,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
-          "remaining_hours": 206.9
+          "remaining_days": 268.0,
+          "remaining_hours": 205.2
         },
         {
           "tail": "N407CH",
@@ -656,8 +689,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
-          "remaining_hours": 257.7
+          "remaining_days": 327.0,
+          "remaining_hours": 256.0
         },
         {
           "tail": "N407CH",
@@ -665,8 +698,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-02-06",
-          "remaining_days": 311.0,
-          "remaining_hours": 557.7
+          "remaining_days": 305.0,
+          "remaining_hours": 556.0
         },
         {
           "tail": "N407CH",
@@ -674,7 +707,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-04-30",
-          "remaining_days": 394.0,
+          "remaining_days": 388.0,
           "remaining_hours": null
         },
         {
@@ -683,7 +716,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2028-06-30",
-          "remaining_days": 821.0,
+          "remaining_days": 815.0,
           "remaining_hours": null
         },
         {
@@ -692,7 +725,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2028-06-30",
-          "remaining_days": 821.0,
+          "remaining_days": 815.0,
           "remaining_hours": null
         },
         {
@@ -701,7 +734,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-04-30",
-          "remaining_days": 1490.0,
+          "remaining_days": 1484.0,
           "remaining_hours": null
         },
         {
@@ -710,13 +743,13 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2030-07-31",
-          "remaining_days": 1582.0,
+          "remaining_days": 1576.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.75,
-        "avg_weekly_hours": 12.25,
+        "avg_daily_hours": 1.049,
+        "avg_weekly_hours": 7.34,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -753,6 +786,10 @@
           {
             "date": "2026-03-21",
             "hours": 17399.0
+          },
+          {
+            "date": "2026-04-05",
+            "hours": 17400.7
           }
         ],
         "hour_deltas": [
@@ -811,6 +848,13 @@
             "days_between": 1,
             "hours_delta": 3.9,
             "daily_rate": 3.9
+          },
+          {
+            "from_date": "2026-03-21",
+            "to_date": "2026-04-05",
+            "days_between": 15,
+            "hours_delta": 1.7,
+            "daily_rate": 0.113
           }
         ]
       }
@@ -824,7 +868,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
+          "remaining_days": 115.0,
           "remaining_hours": null
         },
         {
@@ -833,7 +877,7 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-09-30",
-          "remaining_days": 182.0,
+          "remaining_days": 176.0,
           "remaining_hours": 169.2
         },
         {
@@ -842,7 +886,7 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-09-30",
-          "remaining_days": 182.0,
+          "remaining_days": 176.0,
           "remaining_hours": 169.2
         },
         {
@@ -851,7 +895,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-09-30",
-          "remaining_days": 182.0,
+          "remaining_days": 176.0,
           "remaining_hours": null
         },
         {
@@ -860,7 +904,7 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-10-31",
-          "remaining_days": 213.0,
+          "remaining_days": 207.0,
           "remaining_hours": 530.5
         },
         {
@@ -869,7 +913,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2029-04-30",
-          "remaining_days": 1125.0,
+          "remaining_days": 1119.0,
           "remaining_hours": null
         },
         {
@@ -878,7 +922,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-02-28",
-          "remaining_days": 1429.0,
+          "remaining_days": 1423.0,
           "remaining_hours": null
         },
         {
@@ -887,7 +931,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2030-06-30",
-          "remaining_days": 1551.0,
+          "remaining_days": 1545.0,
           "remaining_hours": null
         },
         {
@@ -896,7 +940,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2030-07-31",
-          "remaining_days": 1582.0,
+          "remaining_days": 1576.0,
           "remaining_hours": null
         },
         {
@@ -905,7 +949,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2030-07-31",
-          "remaining_days": 1582.0,
+          "remaining_days": 1576.0,
           "remaining_hours": null
         }
       ],
@@ -964,8 +1008,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-12-05",
-          "remaining_days": 248.0,
-          "remaining_hours": 554.1
+          "remaining_days": 242.0,
+          "remaining_hours": 551.9
         },
         {
           "tail": "N407CP",
@@ -973,8 +1017,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
-          "remaining_hours": 254.1
+          "remaining_days": 327.0,
+          "remaining_hours": 251.9
         },
         {
           "tail": "N407CP",
@@ -982,8 +1026,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
-          "remaining_hours": 254.1
+          "remaining_days": 327.0,
+          "remaining_hours": 251.9
         },
         {
           "tail": "N407CP",
@@ -991,7 +1035,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
+          "remaining_days": 327.0,
           "remaining_hours": null
         },
         {
@@ -1000,7 +1044,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2028-02-29",
-          "remaining_days": 699.0,
+          "remaining_days": 693.0,
           "remaining_hours": null
         },
         {
@@ -1009,7 +1053,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2030-04-30",
-          "remaining_days": 1490.0,
+          "remaining_days": 1484.0,
           "remaining_hours": null
         },
         {
@@ -1018,13 +1062,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2031-02-28",
-          "remaining_days": 1794.0,
+          "remaining_days": 1788.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.852,
-        "avg_weekly_hours": 5.961,
+        "avg_daily_hours": 0.773,
+        "avg_weekly_hours": 5.411,
         "daily_points": [
           {
             "date": "2026-02-28",
@@ -1069,6 +1113,10 @@
           {
             "date": "2026-03-31",
             "hours": 9997.5
+          },
+          {
+            "date": "2026-04-06",
+            "hours": 9999.7
           }
         ],
         "hour_deltas": [
@@ -1141,6 +1189,13 @@
             "days_between": 2,
             "hours_delta": 0.5,
             "daily_rate": 0.25
+          },
+          {
+            "from_date": "2026-03-31",
+            "to_date": "2026-04-06",
+            "days_between": 6,
+            "hours_delta": 2.2,
+            "daily_rate": 0.367
           }
         ]
       }
@@ -1154,8 +1209,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-01-27",
-          "remaining_days": 301.0,
-          "remaining_hours": 218.7
+          "remaining_days": 295.0,
+          "remaining_hours": 218.5
         },
         {
           "tail": "N407CZ",
@@ -1163,8 +1218,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
-          "remaining_hours": 218.7
+          "remaining_days": 299.0,
+          "remaining_hours": 218.5
         },
         {
           "tail": "N407CZ",
@@ -1172,7 +1227,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
+          "remaining_days": 299.0,
           "remaining_hours": null
         },
         {
@@ -1181,8 +1236,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
-          "remaining_hours": 518.7
+          "remaining_days": 299.0,
+          "remaining_hours": 518.5
         },
         {
           "tail": "N407CZ",
@@ -1190,7 +1245,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-08-31",
-          "remaining_days": 517.0,
+          "remaining_days": 511.0,
           "remaining_hours": null
         },
         {
@@ -1199,7 +1254,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2027-10-31",
-          "remaining_days": 578.0,
+          "remaining_days": 572.0,
           "remaining_hours": null
         },
         {
@@ -1208,7 +1263,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2027-10-31",
-          "remaining_days": 578.0,
+          "remaining_days": 572.0,
           "remaining_hours": null
         },
         {
@@ -1217,7 +1272,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2027-10-31",
-          "remaining_days": 578.0,
+          "remaining_days": 572.0,
           "remaining_hours": null
         },
         {
@@ -1226,7 +1281,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2027-10-31",
-          "remaining_days": 578.0,
+          "remaining_days": 572.0,
           "remaining_hours": null
         },
         {
@@ -1235,13 +1290,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-05-15",
-          "remaining_days": 1140.0,
+          "remaining_days": 1134.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.663,
-        "avg_weekly_hours": 4.641,
+        "avg_daily_hours": 0.503,
+        "avg_weekly_hours": 3.519,
         "daily_points": [
           {
             "date": "2026-02-27",
@@ -1282,6 +1337,10 @@
           {
             "date": "2026-03-26",
             "hours": 2336.2
+          },
+          {
+            "date": "2026-04-04",
+            "hours": 2336.4
           }
         ],
         "hour_deltas": [
@@ -1347,6 +1406,13 @@
             "days_between": 5,
             "hours_delta": 2.0,
             "daily_rate": 0.4
+          },
+          {
+            "from_date": "2026-03-26",
+            "to_date": "2026-04-04",
+            "days_between": 9,
+            "hours_delta": 0.2,
+            "daily_rate": 0.022
           }
         ]
       }
@@ -1360,8 +1426,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-03-10",
-          "remaining_days": 343.0,
-          "remaining_hours": 279.7
+          "remaining_days": 337.0,
+          "remaining_hours": 265.4
         },
         {
           "tail": "N407FC",
@@ -1369,7 +1435,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-03-31",
-          "remaining_days": -1.0,
+          "remaining_days": -7.0,
           "remaining_hours": null
         },
         {
@@ -1378,8 +1444,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
-          "remaining_hours": 211.8
+          "remaining_days": 268.0,
+          "remaining_hours": 197.5
         },
         {
           "tail": "N407FC",
@@ -1387,8 +1453,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
-          "remaining_hours": 511.8
+          "remaining_days": 268.0,
+          "remaining_hours": 497.5
         },
         {
           "tail": "N407FC",
@@ -1396,7 +1462,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-03-31",
-          "remaining_days": 364.0,
+          "remaining_days": 358.0,
           "remaining_hours": null
         },
         {
@@ -1405,7 +1471,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-01-31",
-          "remaining_days": 1036.0,
+          "remaining_days": 1030.0,
           "remaining_hours": null
         },
         {
@@ -1414,7 +1480,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2029-03-31",
-          "remaining_days": 1095.0,
+          "remaining_days": 1089.0,
           "remaining_hours": null
         },
         {
@@ -1423,7 +1489,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2029-08-31",
-          "remaining_days": 1248.0,
+          "remaining_days": 1242.0,
           "remaining_hours": null
         },
         {
@@ -1432,7 +1498,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-09-30",
-          "remaining_days": 1278.0,
+          "remaining_days": 1272.0,
           "remaining_hours": null
         },
         {
@@ -1441,13 +1507,13 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2029-12-31",
-          "remaining_days": 1370.0,
+          "remaining_days": 1364.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.406,
-        "avg_weekly_hours": 2.842,
+        "avg_daily_hours": 0.577,
+        "avg_weekly_hours": 4.037,
         "daily_points": [
           {
             "date": "2026-02-06",
@@ -1500,6 +1566,10 @@
           {
             "date": "2026-03-28",
             "hours": 14632.0
+          },
+          {
+            "date": "2026-04-07",
+            "hours": 14646.3
           }
         ],
         "hour_deltas": [
@@ -1586,6 +1656,13 @@
             "days_between": 1,
             "hours_delta": 4.0,
             "daily_rate": 4.0
+          },
+          {
+            "from_date": "2026-03-28",
+            "to_date": "2026-04-07",
+            "days_between": 10,
+            "hours_delta": 14.3,
+            "daily_rate": 1.43
           }
         ]
       }
@@ -1598,18 +1675,18 @@
           "inspection": "300HR/12M Airframe",
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
-          "due_date": "2026-07-31",
-          "remaining_days": 121.0,
-          "remaining_hours": 67.2
+          "due_date": "2027-04-30",
+          "remaining_days": 388.0,
+          "remaining_hours": 300.0
         },
         {
           "tail": "N407FM",
           "inspection": "300HR/12M Engine",
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
-          "due_date": "2026-07-31",
-          "remaining_days": 121.0,
-          "remaining_hours": 67.2
+          "due_date": "2027-04-30",
+          "remaining_days": 388.0,
+          "remaining_hours": 300.0
         },
         {
           "tail": "N407FM",
@@ -1617,7 +1694,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
+          "remaining_days": 115.0,
           "remaining_hours": null
         },
         {
@@ -1626,7 +1703,7 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
+          "remaining_days": 268.0,
           "remaining_hours": 524.3
         },
         {
@@ -1635,7 +1712,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-07-31",
-          "remaining_days": 486.0,
+          "remaining_days": 480.0,
           "remaining_hours": null
         },
         {
@@ -1644,7 +1721,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-04-30",
-          "remaining_days": 1125.0,
+          "remaining_days": 1119.0,
           "remaining_hours": null
         },
         {
@@ -1653,7 +1730,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2030-04-30",
-          "remaining_days": 1490.0,
+          "remaining_days": 1484.0,
           "remaining_hours": null
         },
         {
@@ -1662,7 +1739,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2030-04-30",
-          "remaining_days": 1490.0,
+          "remaining_days": 1484.0,
           "remaining_hours": null
         },
         {
@@ -1671,13 +1748,13 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2030-04-30",
-          "remaining_days": 1490.0,
+          "remaining_days": 1484.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.14,
-        "avg_weekly_hours": 7.98,
+        "avg_daily_hours": 1.006,
+        "avg_weekly_hours": 7.041,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -1749,6 +1826,10 @@
           },
           {
             "date": "2026-03-31",
+            "hours": 2488.6
+          },
+          {
+            "date": "2026-04-04",
             "hours": 2488.6
           }
         ],
@@ -1871,6 +1952,13 @@
             "days_between": 3,
             "hours_delta": 4.0,
             "daily_rate": 1.333
+          },
+          {
+            "from_date": "2026-03-31",
+            "to_date": "2026-04-04",
+            "days_between": 4,
+            "hours_delta": 0.0,
+            "daily_rate": 0.0
           }
         ]
       }
@@ -1884,8 +1972,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-04-30",
-          "remaining_days": 29.0,
-          "remaining_hours": 324.0
+          "remaining_days": 23.0,
+          "remaining_hours": 319.7
         },
         {
           "tail": "N407JM",
@@ -1893,8 +1981,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
-          "remaining_hours": 185.9
+          "remaining_days": 268.0,
+          "remaining_hours": 181.6
         },
         {
           "tail": "N407JM",
@@ -1902,8 +1990,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
-          "remaining_hours": 267.3
+          "remaining_days": 327.0,
+          "remaining_hours": 263.0
         },
         {
           "tail": "N407JM",
@@ -1911,7 +1999,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
+          "remaining_days": 327.0,
           "remaining_hours": null
         },
         {
@@ -1920,7 +2008,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2028-02-29",
-          "remaining_days": 699.0,
+          "remaining_days": 693.0,
           "remaining_hours": null
         },
         {
@@ -1929,7 +2017,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2028-10-31",
-          "remaining_days": 944.0,
+          "remaining_days": 938.0,
           "remaining_hours": null
         },
         {
@@ -1938,7 +2026,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2028-10-31",
-          "remaining_days": 944.0,
+          "remaining_days": 938.0,
           "remaining_hours": null
         },
         {
@@ -1947,7 +2035,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2028-12-31",
-          "remaining_days": 1005.0,
+          "remaining_days": 999.0,
           "remaining_hours": null
         },
         {
@@ -1956,7 +2044,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2030-09-30",
-          "remaining_days": 1643.0,
+          "remaining_days": 1637.0,
           "remaining_hours": null
         },
         {
@@ -1965,13 +2053,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-12-31",
-          "remaining_days": 1735.0,
+          "remaining_days": 1729.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.95,
-        "avg_weekly_hours": 6.65,
+        "avg_daily_hours": 0.841,
+        "avg_weekly_hours": 5.887,
         "daily_points": [
           {
             "date": "2026-02-26",
@@ -2032,6 +2120,10 @@
           {
             "date": "2026-03-28",
             "hours": 5688.0
+          },
+          {
+            "date": "2026-04-06",
+            "hours": 5692.3
           }
         ],
         "hour_deltas": [
@@ -2132,6 +2224,13 @@
             "days_between": 1,
             "hours_delta": 2.7,
             "daily_rate": 2.7
+          },
+          {
+            "from_date": "2026-03-28",
+            "to_date": "2026-04-06",
+            "days_between": 9,
+            "hours_delta": 4.3,
+            "daily_rate": 0.478
           }
         ]
       }
@@ -2145,7 +2244,7 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
+          "remaining_days": 237.0,
           "remaining_hours": 106.1
         },
         {
@@ -2154,7 +2253,7 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-11-07",
-          "remaining_days": 220.0,
+          "remaining_days": 214.0,
           "remaining_hours": 106.1
         },
         {
@@ -2163,7 +2262,7 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-10-30",
-          "remaining_days": 212.0,
+          "remaining_days": 206.0,
           "remaining_hours": 406.1
         },
         {
@@ -2172,7 +2271,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
+          "remaining_days": 237.0,
           "remaining_hours": null
         },
         {
@@ -2181,7 +2280,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-11-30",
-          "remaining_days": 608.0,
+          "remaining_days": 602.0,
           "remaining_hours": null
         },
         {
@@ -2190,7 +2289,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2029-04-30",
-          "remaining_days": 1125.0,
+          "remaining_days": 1119.0,
           "remaining_hours": null
         },
         {
@@ -2199,7 +2298,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-11-30",
-          "remaining_days": 1339.0,
+          "remaining_days": 1333.0,
           "remaining_hours": null
         },
         {
@@ -2208,7 +2307,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-01-31",
-          "remaining_days": 1401.0,
+          "remaining_days": 1395.0,
           "remaining_hours": null
         },
         {
@@ -2217,7 +2316,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2030-08-31",
-          "remaining_days": 1613.0,
+          "remaining_days": 1607.0,
           "remaining_hours": null
         },
         {
@@ -2226,13 +2325,13 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2030-08-31",
-          "remaining_days": 1613.0,
+          "remaining_days": 1607.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.014,
-        "avg_weekly_hours": 7.097,
+        "avg_daily_hours": 0.817,
+        "avg_weekly_hours": 5.717,
         "daily_points": [
           {
             "date": "2026-02-25",
@@ -2272,6 +2371,10 @@
           },
           {
             "date": "2026-03-26",
+            "hours": 5177.5
+          },
+          {
+            "date": "2026-04-02",
             "hours": 5177.5
           }
         ],
@@ -2338,6 +2441,13 @@
             "days_between": 1,
             "hours_delta": 1.6,
             "daily_rate": 1.6
+          },
+          {
+            "from_date": "2026-03-26",
+            "to_date": "2026-04-02",
+            "days_between": 7,
+            "hours_delta": 0.0,
+            "daily_rate": 0.0
           }
         ]
       }
@@ -2351,8 +2461,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-03-31",
-          "remaining_days": 364.0,
-          "remaining_hours": 282.3
+          "remaining_days": 358.0,
+          "remaining_hours": 275.4
         },
         {
           "tail": "N407LP",
@@ -2360,8 +2470,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
-          "remaining_hours": 105.9
+          "remaining_days": 237.0,
+          "remaining_hours": 99.0
         },
         {
           "tail": "N407LP",
@@ -2369,7 +2479,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-09-30",
-          "remaining_days": 182.0,
+          "remaining_days": 176.0,
           "remaining_hours": null
         },
         {
@@ -2378,7 +2488,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-10-31",
-          "remaining_days": 213.0,
+          "remaining_days": 207.0,
           "remaining_hours": null
         },
         {
@@ -2387,8 +2497,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
-          "remaining_hours": 405.9
+          "remaining_days": 237.0,
+          "remaining_hours": 399.0
         },
         {
           "tail": "N407LP",
@@ -2396,7 +2506,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2027-11-30",
-          "remaining_days": 608.0,
+          "remaining_days": 602.0,
           "remaining_hours": null
         },
         {
@@ -2405,7 +2515,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-03-31",
-          "remaining_days": 1095.0,
+          "remaining_days": 1089.0,
           "remaining_hours": null
         },
         {
@@ -2414,7 +2524,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2029-11-30",
-          "remaining_days": 1339.0,
+          "remaining_days": 1333.0,
           "remaining_hours": null
         },
         {
@@ -2423,7 +2533,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2030-05-31",
-          "remaining_days": 1521.0,
+          "remaining_days": 1515.0,
           "remaining_hours": null
         },
         {
@@ -2432,13 +2542,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-06-30",
-          "remaining_days": 1551.0,
+          "remaining_days": 1545.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.748,
-        "avg_weekly_hours": 12.239,
+        "avg_daily_hours": 1.651,
+        "avg_weekly_hours": 11.559,
         "daily_points": [
           {
             "date": "2026-02-28",
@@ -2515,6 +2625,10 @@
           {
             "date": "2026-03-31",
             "hours": 4153.8
+          },
+          {
+            "date": "2026-04-06",
+            "hours": 4160.7
           }
         ],
         "hour_deltas": [
@@ -2643,6 +2757,13 @@
             "days_between": 3,
             "hours_delta": 3.5,
             "daily_rate": 1.167
+          },
+          {
+            "from_date": "2026-03-31",
+            "to_date": "2026-04-06",
+            "days_between": 6,
+            "hours_delta": 6.9,
+            "daily_rate": 1.15
           }
         ]
       }
@@ -2656,7 +2777,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-06-30",
-          "remaining_days": 90.0,
+          "remaining_days": 84.0,
           "remaining_hours": null
         },
         {
@@ -2665,8 +2786,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-02-20",
-          "remaining_days": 325.0,
-          "remaining_hours": 188.3
+          "remaining_days": 319.0,
+          "remaining_hours": 183.1
         },
         {
           "tail": "N407MZ",
@@ -2674,8 +2795,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-20",
-          "remaining_days": 325.0,
-          "remaining_hours": 188.3
+          "remaining_days": 319.0,
+          "remaining_hours": 183.1
         },
         {
           "tail": "N407MZ",
@@ -2683,8 +2804,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
-          "remaining_hours": 488.3
+          "remaining_days": 327.0,
+          "remaining_hours": 483.1
         },
         {
           "tail": "N407MZ",
@@ -2692,7 +2813,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
+          "remaining_days": 268.0,
           "remaining_hours": null
         },
         {
@@ -2701,7 +2822,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2028-05-31",
-          "remaining_days": 791.0,
+          "remaining_days": 785.0,
           "remaining_hours": null
         },
         {
@@ -2710,7 +2831,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2028-05-31",
-          "remaining_days": 791.0,
+          "remaining_days": 785.0,
           "remaining_hours": null
         },
         {
@@ -2719,7 +2840,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2028-05-31",
-          "remaining_days": 791.0,
+          "remaining_days": 785.0,
           "remaining_hours": null
         },
         {
@@ -2728,7 +2849,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2028-05-31",
-          "remaining_days": 791.0,
+          "remaining_days": 785.0,
           "remaining_hours": null
         },
         {
@@ -2737,13 +2858,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-03-29",
-          "remaining_days": 1093.0,
+          "remaining_days": 1087.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 2.986,
-        "avg_weekly_hours": 20.903,
+        "avg_daily_hours": 2.623,
+        "avg_weekly_hours": 18.36,
         "daily_points": [
           {
             "date": "2026-03-02",
@@ -2800,6 +2921,10 @@
           {
             "date": "2026-03-31",
             "hours": 2416.5
+          },
+          {
+            "date": "2026-04-06",
+            "hours": 2421.7
           }
         ],
         "hour_deltas": [
@@ -2893,6 +3018,13 @@
             "days_between": 1,
             "hours_delta": 4.6,
             "daily_rate": 4.6
+          },
+          {
+            "from_date": "2026-03-31",
+            "to_date": "2026-04-06",
+            "days_between": 6,
+            "hours_delta": 5.2,
+            "daily_rate": 0.867
           }
         ]
       }
@@ -2906,8 +3038,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-03-31",
-          "remaining_days": 364.0,
-          "remaining_hours": 260.3
+          "remaining_days": 358.0,
+          "remaining_hours": 246.3
         },
         {
           "tail": "N407NW",
@@ -2915,8 +3047,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-03-17",
-          "remaining_days": 350.0,
-          "remaining_hours": 260.3
+          "remaining_days": 344.0,
+          "remaining_hours": 246.3
         },
         {
           "tail": "N407NW",
@@ -2924,8 +3056,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-03-31",
-          "remaining_days": 364.0,
-          "remaining_hours": 560.3
+          "remaining_days": 358.0,
+          "remaining_hours": 546.3
         },
         {
           "tail": "N407NW",
@@ -2933,7 +3065,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-08-31",
-          "remaining_days": 152.0,
+          "remaining_days": 146.0,
           "remaining_hours": null
         },
         {
@@ -2942,7 +3074,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-08-31",
-          "remaining_days": 517.0,
+          "remaining_days": 511.0,
           "remaining_hours": null
         },
         {
@@ -2951,7 +3083,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2027-12-11",
-          "remaining_days": 619.0,
+          "remaining_days": 613.0,
           "remaining_hours": null
         },
         {
@@ -2960,7 +3092,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2028-09-18",
-          "remaining_days": 901.0,
+          "remaining_days": 895.0,
           "remaining_hours": null
         },
         {
@@ -2969,7 +3101,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2029-09-30",
-          "remaining_days": 1278.0,
+          "remaining_days": 1272.0,
           "remaining_hours": null
         },
         {
@@ -2978,7 +3110,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-09-30",
-          "remaining_days": 1278.0,
+          "remaining_days": 1272.0,
           "remaining_hours": null
         },
         {
@@ -2987,13 +3119,13 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2029-09-30",
-          "remaining_days": 1278.0,
+          "remaining_days": 1272.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 2.752,
-        "avg_weekly_hours": 19.262,
+        "avg_daily_hours": 2.606,
+        "avg_weekly_hours": 18.239,
         "daily_points": [
           {
             "date": "2026-03-02",
@@ -3062,6 +3194,10 @@
           {
             "date": "2026-03-31",
             "hours": 1734.2
+          },
+          {
+            "date": "2026-04-07",
+            "hours": 1748.2
           }
         ],
         "hour_deltas": [
@@ -3176,6 +3312,13 @@
             "days_between": 2,
             "hours_delta": 5.1,
             "daily_rate": 2.55
+          },
+          {
+            "from_date": "2026-03-31",
+            "to_date": "2026-04-07",
+            "days_between": 7,
+            "hours_delta": 14.0,
+            "daily_rate": 2.0
           }
         ]
       }
@@ -3189,8 +3332,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-07-28",
-          "remaining_days": 118.0,
-          "remaining_hours": 17.1
+          "remaining_days": 112.0,
+          "remaining_hours": 13.7
         },
         {
           "tail": "N407PW",
@@ -3198,8 +3341,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-07-28",
-          "remaining_days": 118.0,
-          "remaining_hours": 17.1
+          "remaining_days": 112.0,
+          "remaining_hours": 13.7
         },
         {
           "tail": "N407PW",
@@ -3207,7 +3350,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-08-31",
-          "remaining_days": 152.0,
+          "remaining_days": 146.0,
           "remaining_hours": null
         },
         {
@@ -3216,8 +3359,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
-          "remaining_hours": 522.2
+          "remaining_days": 299.0,
+          "remaining_hours": 518.8
         },
         {
           "tail": "N407PW",
@@ -3225,7 +3368,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-08-31",
-          "remaining_days": 517.0,
+          "remaining_days": 511.0,
           "remaining_hours": null
         },
         {
@@ -3234,7 +3377,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-03-20",
-          "remaining_days": 1084.0,
+          "remaining_days": 1078.0,
           "remaining_hours": null
         },
         {
@@ -3243,7 +3386,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2029-08-01",
-          "remaining_days": 1218.0,
+          "remaining_days": 1212.0,
           "remaining_hours": null
         },
         {
@@ -3252,7 +3395,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2029-08-31",
-          "remaining_days": 1248.0,
+          "remaining_days": 1242.0,
           "remaining_hours": null
         },
         {
@@ -3261,7 +3404,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-08-31",
-          "remaining_days": 1248.0,
+          "remaining_days": 1242.0,
           "remaining_hours": null
         },
         {
@@ -3270,13 +3413,13 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2029-08-31",
-          "remaining_days": 1248.0,
+          "remaining_days": 1242.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.572,
-        "avg_weekly_hours": 11.007,
+        "avg_daily_hours": 1.4,
+        "avg_weekly_hours": 9.8,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -3337,6 +3480,10 @@
           {
             "date": "2026-03-30",
             "hours": 1157.0
+          },
+          {
+            "date": "2026-04-05",
+            "hours": 1160.4
           }
         ],
         "hour_deltas": [
@@ -3437,6 +3584,13 @@
             "days_between": 1,
             "hours_delta": 4.0,
             "daily_rate": 4.0
+          },
+          {
+            "from_date": "2026-03-30",
+            "to_date": "2026-04-05",
+            "days_between": 6,
+            "hours_delta": 3.4,
+            "daily_rate": 0.567
           }
         ]
       }
@@ -3450,8 +3604,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-01-29",
-          "remaining_days": 303.0,
-          "remaining_hours": 219.5
+          "remaining_days": 297.0,
+          "remaining_hours": 210.9
         },
         {
           "tail": "N407RU",
@@ -3459,8 +3613,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-01-29",
-          "remaining_days": 303.0,
-          "remaining_hours": 219.5
+          "remaining_days": 297.0,
+          "remaining_hours": 210.9
         },
         {
           "tail": "N407RU",
@@ -3468,8 +3622,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-10-31",
-          "remaining_days": 213.0,
-          "remaining_hours": 338.0
+          "remaining_days": 207.0,
+          "remaining_hours": 329.4
         },
         {
           "tail": "N407RU",
@@ -3477,7 +3631,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
+          "remaining_days": 299.0,
           "remaining_hours": null
         },
         {
@@ -3486,7 +3640,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
+          "remaining_days": 299.0,
           "remaining_hours": null
         },
         {
@@ -3495,7 +3649,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2028-01-31",
-          "remaining_days": 670.0,
+          "remaining_days": 664.0,
           "remaining_hours": null
         },
         {
@@ -3504,7 +3658,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2028-01-31",
-          "remaining_days": 670.0,
+          "remaining_days": 664.0,
           "remaining_hours": null
         },
         {
@@ -3513,7 +3667,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2028-01-31",
-          "remaining_days": 670.0,
+          "remaining_days": 664.0,
           "remaining_hours": null
         },
         {
@@ -3522,7 +3676,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2028-01-31",
-          "remaining_days": 670.0,
+          "remaining_days": 664.0,
           "remaining_hours": null
         },
         {
@@ -3531,13 +3685,13 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2028-01-31",
-          "remaining_days": 670.0,
+          "remaining_days": 664.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.493,
-        "avg_weekly_hours": 10.45,
+        "avg_daily_hours": 1.482,
+        "avg_weekly_hours": 10.376,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -3594,6 +3748,10 @@
           {
             "date": "2026-03-29",
             "hours": 1808.2
+          },
+          {
+            "date": "2026-04-04",
+            "hours": 1816.8
           }
         ],
         "hour_deltas": [
@@ -3687,6 +3845,13 @@
             "days_between": 2,
             "hours_delta": 6.9,
             "daily_rate": 3.45
+          },
+          {
+            "from_date": "2026-03-29",
+            "to_date": "2026-04-04",
+            "days_between": 6,
+            "hours_delta": 8.6,
+            "daily_rate": 1.433
           }
         ]
       }
@@ -3700,8 +3865,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-03-07",
-          "remaining_days": 340.0,
-          "remaining_hours": 243.1
+          "remaining_days": 334.0,
+          "remaining_hours": 236.7
         },
         {
           "tail": "N407SL",
@@ -3709,8 +3874,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-12-03",
-          "remaining_days": 246.0,
-          "remaining_hours": 120.9
+          "remaining_days": 240.0,
+          "remaining_hours": 114.5
         },
         {
           "tail": "N407SL",
@@ -3718,7 +3883,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
+          "remaining_days": 115.0,
           "remaining_hours": null
         },
         {
@@ -3727,8 +3892,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-12-03",
-          "remaining_days": 246.0,
-          "remaining_hours": 420.9
+          "remaining_days": 240.0,
+          "remaining_hours": 414.5
         },
         {
           "tail": "N407SL",
@@ -3736,7 +3901,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
+          "remaining_days": 268.0,
           "remaining_hours": null
         },
         {
@@ -3745,7 +3910,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-07-27",
-          "remaining_days": 482.0,
+          "remaining_days": 476.0,
           "remaining_hours": null
         },
         {
@@ -3754,7 +3919,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2027-12-31",
-          "remaining_days": 639.0,
+          "remaining_days": 633.0,
           "remaining_hours": null
         },
         {
@@ -3763,7 +3928,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2027-12-31",
-          "remaining_days": 639.0,
+          "remaining_days": 633.0,
           "remaining_hours": null
         },
         {
@@ -3772,7 +3937,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2027-12-31",
-          "remaining_days": 639.0,
+          "remaining_days": 633.0,
           "remaining_hours": null
         },
         {
@@ -3781,13 +3946,13 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2030-03-31",
-          "remaining_days": 1460.0,
+          "remaining_days": 1454.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 2.187,
-        "avg_weekly_hours": 15.307,
+        "avg_daily_hours": 2.057,
+        "avg_weekly_hours": 14.4,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -3864,6 +4029,10 @@
           {
             "date": "2026-03-31",
             "hours": 2020.2
+          },
+          {
+            "date": "2026-04-05",
+            "hours": 2026.6
           }
         ],
         "hour_deltas": [
@@ -3992,6 +4161,13 @@
             "days_between": 1,
             "hours_delta": 2.0,
             "daily_rate": 2.0
+          },
+          {
+            "from_date": "2026-03-31",
+            "to_date": "2026-04-05",
+            "days_between": 5,
+            "hours_delta": 6.4,
+            "daily_rate": 1.28
           }
         ]
       }
@@ -4005,8 +4181,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-05-14",
-          "remaining_days": 43.0,
-          "remaining_hours": 73.1
+          "remaining_days": 37.0,
+          "remaining_hours": 64.9
         },
         {
           "tail": "N407TH",
@@ -4014,8 +4190,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
-          "remaining_hours": 122.4
+          "remaining_days": 237.0,
+          "remaining_hours": 114.2
         },
         {
           "tail": "N407TH",
@@ -4023,8 +4199,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
-          "remaining_hours": 184.8
+          "remaining_days": 299.0,
+          "remaining_hours": 176.6
         },
         {
           "tail": "N407TH",
@@ -4032,7 +4208,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
+          "remaining_days": 237.0,
           "remaining_hours": null
         },
         {
@@ -4041,7 +4217,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
+          "remaining_days": 299.0,
           "remaining_hours": null
         },
         {
@@ -4050,7 +4226,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
+          "remaining_days": 299.0,
           "remaining_hours": null
         },
         {
@@ -4059,7 +4235,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2029-03-31",
-          "remaining_days": 1095.0,
+          "remaining_days": 1089.0,
           "remaining_hours": null
         },
         {
@@ -4068,7 +4244,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2029-05-31",
-          "remaining_days": 1156.0,
+          "remaining_days": 1150.0,
           "remaining_hours": null
         },
         {
@@ -4077,7 +4253,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-09-30",
-          "remaining_days": 1643.0,
+          "remaining_days": 1637.0,
           "remaining_hours": null
         },
         {
@@ -4086,13 +4262,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-12-31",
-          "remaining_days": 1735.0,
+          "remaining_days": 1729.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.818,
-        "avg_weekly_hours": 12.725,
+        "avg_daily_hours": 1.642,
+        "avg_weekly_hours": 11.492,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -4165,6 +4341,10 @@
           {
             "date": "2026-03-29",
             "hours": 8530.7
+          },
+          {
+            "date": "2026-04-06",
+            "hours": 8538.9
           }
         ],
         "hour_deltas": [
@@ -4286,6 +4466,13 @@
             "days_between": 1,
             "hours_delta": 4.0,
             "daily_rate": 4.0
+          },
+          {
+            "from_date": "2026-03-29",
+            "to_date": "2026-04-06",
+            "days_between": 8,
+            "hours_delta": 8.2,
+            "daily_rate": 1.025
           }
         ]
       }
@@ -4299,7 +4486,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-04-30",
-          "remaining_days": 29.0,
+          "remaining_days": 23.0,
           "remaining_hours": null
         },
         {
@@ -4308,7 +4495,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2026-04-30",
-          "remaining_days": 29.0,
+          "remaining_days": 23.0,
           "remaining_hours": null
         },
         {
@@ -4317,8 +4504,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-07-31",
-          "remaining_days": 121.0,
-          "remaining_hours": 47.1
+          "remaining_days": 115.0,
+          "remaining_hours": 38.6
         },
         {
           "tail": "N407TK",
@@ -4326,8 +4513,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-09-30",
-          "remaining_days": 182.0,
-          "remaining_hours": 150.0
+          "remaining_days": 176.0,
+          "remaining_hours": 141.5
         },
         {
           "tail": "N407TK",
@@ -4335,8 +4522,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
-          "remaining_hours": 531.0
+          "remaining_days": 299.0,
+          "remaining_hours": 522.5
         },
         {
           "tail": "N407TK",
@@ -4344,7 +4531,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2027-03-31",
-          "remaining_days": 364.0,
+          "remaining_days": 358.0,
           "remaining_hours": null
         },
         {
@@ -4353,7 +4540,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-04-30",
-          "remaining_days": 394.0,
+          "remaining_days": 388.0,
           "remaining_hours": null
         },
         {
@@ -4362,7 +4549,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-03-31",
-          "remaining_days": 1095.0,
+          "remaining_days": 1089.0,
           "remaining_hours": null
         },
         {
@@ -4371,7 +4558,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2030-10-31",
-          "remaining_days": 1674.0,
+          "remaining_days": 1668.0,
           "remaining_hours": null
         },
         {
@@ -4380,13 +4567,13 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2031-03-31",
-          "remaining_days": 1825.0,
+          "remaining_days": 1819.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.386,
-        "avg_weekly_hours": 9.703,
+        "avg_daily_hours": 1.391,
+        "avg_weekly_hours": 9.74,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -4451,6 +4638,10 @@
           {
             "date": "2026-03-30",
             "hours": 5209.4
+          },
+          {
+            "date": "2026-04-05",
+            "hours": 5217.9
           }
         ],
         "hour_deltas": [
@@ -4558,6 +4749,13 @@
             "days_between": 2,
             "hours_delta": 2.9,
             "daily_rate": 1.45
+          },
+          {
+            "from_date": "2026-03-30",
+            "to_date": "2026-04-05",
+            "days_between": 6,
+            "hours_delta": 8.5,
+            "daily_rate": 1.417
           }
         ]
       }
@@ -4571,7 +4769,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-04-30",
-          "remaining_days": 29.0,
+          "remaining_days": 23.0,
           "remaining_hours": null
         },
         {
@@ -4580,8 +4778,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-09-30",
-          "remaining_days": 182.0,
-          "remaining_hours": 141.1
+          "remaining_days": 176.0,
+          "remaining_hours": 138.5
         },
         {
           "tail": "N407ZM",
@@ -4589,8 +4787,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-09-30",
-          "remaining_days": 182.0,
-          "remaining_hours": 141.1
+          "remaining_days": 176.0,
+          "remaining_hours": 138.5
         },
         {
           "tail": "N407ZM",
@@ -4598,8 +4796,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-09-30",
-          "remaining_days": 182.0,
-          "remaining_hours": 441.1
+          "remaining_days": 176.0,
+          "remaining_hours": 438.5
         },
         {
           "tail": "N407ZM",
@@ -4607,7 +4805,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-04-30",
-          "remaining_days": 394.0,
+          "remaining_days": 388.0,
           "remaining_hours": null
         },
         {
@@ -4616,7 +4814,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2028-03-31",
-          "remaining_days": 730.0,
+          "remaining_days": 724.0,
           "remaining_hours": null
         },
         {
@@ -4625,7 +4823,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-05-31",
-          "remaining_days": 1156.0,
+          "remaining_days": 1150.0,
           "remaining_hours": null
         },
         {
@@ -4634,7 +4832,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-06-30",
-          "remaining_days": 1186.0,
+          "remaining_days": 1180.0,
           "remaining_hours": null
         },
         {
@@ -4643,7 +4841,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2030-08-31",
-          "remaining_days": 1613.0,
+          "remaining_days": 1607.0,
           "remaining_hours": null
         },
         {
@@ -4652,13 +4850,13 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2031-05-31",
-          "remaining_days": 1886.0,
+          "remaining_days": 1880.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.983,
-        "avg_weekly_hours": 6.883,
+        "avg_daily_hours": 0.892,
+        "avg_weekly_hours": 6.242,
         "daily_points": [
           {
             "date": "2026-02-28",
@@ -4707,6 +4905,10 @@
           {
             "date": "2026-03-30",
             "hours": 5337.0
+          },
+          {
+            "date": "2026-04-05",
+            "hours": 5339.6
           }
         ],
         "hour_deltas": [
@@ -4786,6 +4988,13 @@
             "days_between": 1,
             "hours_delta": 1.9,
             "daily_rate": 1.9
+          },
+          {
+            "from_date": "2026-03-30",
+            "to_date": "2026-04-05",
+            "days_between": 6,
+            "hours_delta": 2.6,
+            "daily_rate": 0.433
           }
         ]
       }
@@ -4799,8 +5008,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-11-14",
-          "remaining_days": 227.0,
-          "remaining_hours": 178.6
+          "remaining_days": 221.0,
+          "remaining_hours": 168.3
         },
         {
           "tail": "N466GH",
@@ -4808,8 +5017,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
-          "remaining_hours": 246.0
+          "remaining_days": 327.0,
+          "remaining_hours": 235.7
         },
         {
           "tail": "N466GH",
@@ -4817,8 +5026,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
-          "remaining_hours": 478.6
+          "remaining_days": 237.0,
+          "remaining_hours": 468.3
         },
         {
           "tail": "N466GH",
@@ -4826,7 +5035,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
+          "remaining_days": 268.0,
           "remaining_hours": null
         },
         {
@@ -4835,7 +5044,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
+          "remaining_days": 327.0,
           "remaining_hours": null
         },
         {
@@ -4844,7 +5053,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2029-07-31",
-          "remaining_days": 1217.0,
+          "remaining_days": 1211.0,
           "remaining_hours": null
         },
         {
@@ -4853,7 +5062,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-07-31",
-          "remaining_days": 1217.0,
+          "remaining_days": 1211.0,
           "remaining_hours": null
         },
         {
@@ -4862,7 +5071,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2029-07-31",
-          "remaining_days": 1217.0,
+          "remaining_days": 1211.0,
           "remaining_hours": null
         },
         {
@@ -4871,7 +5080,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2029-07-31",
-          "remaining_days": 1217.0,
+          "remaining_days": 1211.0,
           "remaining_hours": null
         },
         {
@@ -4880,13 +5089,13 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-02-28",
-          "remaining_days": 1429.0,
+          "remaining_days": 1423.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.388,
-        "avg_weekly_hours": 9.715,
+        "avg_daily_hours": 1.438,
+        "avg_weekly_hours": 10.069,
         "daily_points": [
           {
             "date": "2026-02-26",
@@ -4947,6 +5156,10 @@
           {
             "date": "2026-03-31",
             "hours": 2989.2
+          },
+          {
+            "date": "2026-04-06",
+            "hours": 2999.5
           }
         ],
         "hour_deltas": [
@@ -5047,6 +5260,13 @@
             "days_between": 5,
             "hours_delta": 2.6,
             "daily_rate": 0.52
+          },
+          {
+            "from_date": "2026-03-31",
+            "to_date": "2026-04-06",
+            "days_between": 6,
+            "hours_delta": 10.3,
+            "daily_rate": 1.717
           }
         ]
       }
@@ -5060,7 +5280,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-03-31",
-          "remaining_days": -1.0,
+          "remaining_days": -7.0,
           "remaining_hours": null
         },
         {
@@ -5069,7 +5289,7 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
+          "remaining_days": 237.0,
           "remaining_hours": 127.0
         },
         {
@@ -5078,7 +5298,7 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
+          "remaining_days": 237.0,
           "remaining_hours": 127.0
         },
         {
@@ -5087,7 +5307,7 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-11-30",
-          "remaining_days": 243.0,
+          "remaining_days": 237.0,
           "remaining_hours": 427.0
         },
         {
@@ -5096,7 +5316,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
+          "remaining_days": 299.0,
           "remaining_hours": null
         },
         {
@@ -5105,7 +5325,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-03-31",
-          "remaining_days": 364.0,
+          "remaining_days": 358.0,
           "remaining_hours": null
         },
         {
@@ -5114,7 +5334,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2029-08-31",
-          "remaining_days": 1248.0,
+          "remaining_days": 1242.0,
           "remaining_hours": null
         },
         {
@@ -5123,7 +5343,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2030-03-31",
-          "remaining_days": 1460.0,
+          "remaining_days": 1454.0,
           "remaining_hours": null
         },
         {
@@ -5132,13 +5352,13 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2031-03-31",
-          "remaining_days": 1825.0,
+          "remaining_days": 1819.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 1.41,
-        "avg_weekly_hours": 9.872,
+        "avg_daily_hours": 1.169,
+        "avg_weekly_hours": 8.18,
         "daily_points": [
           {
             "date": "2026-03-01",
@@ -5190,6 +5410,10 @@
           },
           {
             "date": "2026-03-30",
+            "hours": 3413.1
+          },
+          {
+            "date": "2026-04-05",
             "hours": 3413.1
           }
         ],
@@ -5277,6 +5501,13 @@
             "days_between": 1,
             "hours_delta": 3.3,
             "daily_rate": 3.3
+          },
+          {
+            "from_date": "2026-03-30",
+            "to_date": "2026-04-05",
+            "days_between": 6,
+            "hours_delta": 0.0,
+            "daily_rate": 0.0
           }
         ]
       }
@@ -5290,7 +5521,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2026-08-31",
-          "remaining_days": 152.0,
+          "remaining_days": 146.0,
           "remaining_hours": null
         },
         {
@@ -5299,8 +5530,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-08-31",
-          "remaining_days": 152.0,
-          "remaining_hours": 502.0
+          "remaining_days": 146.0,
+          "remaining_hours": 501.7
         },
         {
           "tail": "N7160V",
@@ -5308,8 +5539,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
-          "remaining_days": 274.0,
-          "remaining_hours": 224.6
+          "remaining_days": 268.0,
+          "remaining_hours": 224.3
         },
         {
           "tail": "N7160V",
@@ -5317,8 +5548,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-28",
-          "remaining_days": 333.0,
-          "remaining_hours": 267.9
+          "remaining_days": 327.0,
+          "remaining_hours": 267.6
         },
         {
           "tail": "N7160V",
@@ -5326,7 +5557,7 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2027-03-31",
-          "remaining_days": 364.0,
+          "remaining_days": 358.0,
           "remaining_hours": null
         },
         {
@@ -5335,7 +5566,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-08-31",
-          "remaining_days": 517.0,
+          "remaining_days": 511.0,
           "remaining_hours": null
         },
         {
@@ -5344,7 +5575,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2029-06-30",
-          "remaining_days": 1186.0,
+          "remaining_days": 1180.0,
           "remaining_hours": null
         },
         {
@@ -5353,7 +5584,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-07-31",
-          "remaining_days": 1217.0,
+          "remaining_days": 1211.0,
           "remaining_hours": null
         },
         {
@@ -5362,7 +5593,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2030-07-31",
-          "remaining_days": 1582.0,
+          "remaining_days": 1576.0,
           "remaining_hours": null
         },
         {
@@ -5371,13 +5602,13 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2030-07-31",
-          "remaining_days": 1582.0,
+          "remaining_days": 1576.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.703,
-        "avg_weekly_hours": 4.924,
+        "avg_daily_hours": 0.609,
+        "avg_weekly_hours": 4.262,
         "daily_points": [
           {
             "date": "2026-02-28",
@@ -5414,6 +5645,10 @@
           {
             "date": "2026-03-29",
             "hours": 10578.2
+          },
+          {
+            "date": "2026-04-03",
+            "hours": 10578.5
           }
         ],
         "hour_deltas": [
@@ -5472,6 +5707,13 @@
             "days_between": 1,
             "hours_delta": 2.1,
             "daily_rate": 2.1
+          },
+          {
+            "from_date": "2026-03-29",
+            "to_date": "2026-04-03",
+            "days_between": 5,
+            "hours_delta": 0.3,
+            "daily_rate": 0.06
           }
         ]
       }
@@ -5485,8 +5727,8 @@
           "ata": "05 300HR- PERIODIC INSPECTION",
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-01-11",
-          "remaining_days": 285.0,
-          "remaining_hours": 127.0
+          "remaining_days": 279.0,
+          "remaining_hours": 109.4
         },
         {
           "tail": "N862YB",
@@ -5494,8 +5736,8 @@
           "ata": "72 72/300",
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-01-11",
-          "remaining_days": 285.0,
-          "remaining_hours": 127.0
+          "remaining_days": 279.0,
+          "remaining_hours": 109.4
         },
         {
           "tail": "N862YB",
@@ -5503,8 +5745,8 @@
           "ata": "72 INSP 600HR/12MO",
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-01-07",
-          "remaining_days": 281.0,
-          "remaining_hours": 426.0
+          "remaining_days": 275.0,
+          "remaining_hours": 408.4
         },
         {
           "tail": "N862YB",
@@ -5512,7 +5754,7 @@
           "ata": "05 12MO- INSPECTION",
           "description": "12 MONTH AIRFRAME INSPECTION",
           "due_date": "2027-01-31",
-          "remaining_days": 305.0,
+          "remaining_days": 299.0,
           "remaining_hours": null
         },
         {
@@ -5521,7 +5763,7 @@
           "ata": "05 24MO. INSPECTION",
           "description": "24 MONTH AIRFRAME INSPECTION",
           "due_date": "2028-01-31",
-          "remaining_days": 670.0,
+          "remaining_days": 664.0,
           "remaining_hours": null
         },
         {
@@ -5530,7 +5772,7 @@
           "ata": "67 20-12 INTERIM",
           "description": "(RII) SPRING LINK ASSEMBLY INTERIM INSPECTION",
           "due_date": "2029-05-30",
-          "remaining_days": 1155.0,
+          "remaining_days": 1149.0,
           "remaining_hours": null
         },
         {
@@ -5539,7 +5781,7 @@
           "ata": "63 11-20 INTERIM",
           "description": "(RII) MAIN ROTOR MAST ASSEMBLY INTERIM  INSPECTION",
           "due_date": "2029-12-31",
-          "remaining_days": 1370.0,
+          "remaining_days": 1364.0,
           "remaining_hours": null
         },
         {
@@ -5548,7 +5790,7 @@
           "ata": "63 13-11 INTERIM",
           "description": "(RII) FREEWHEEL INTERIM INSPECTION",
           "due_date": "2029-12-31",
-          "remaining_days": 1370.0,
+          "remaining_days": 1364.0,
           "remaining_hours": null
         },
         {
@@ -5557,7 +5799,7 @@
           "ata": "63 21-10 INTERIM",
           "description": "(RII) TRANSMISSION INTERIM INSPECTION",
           "due_date": "2029-12-31",
-          "remaining_days": 1370.0,
+          "remaining_days": 1364.0,
           "remaining_hours": null
         },
         {
@@ -5566,13 +5808,13 @@
           "ata": "65 10-11 INTERIM",
           "description": "(RII) TAIL ROTOR GEARBOX INTERIM INSPECTION",
           "due_date": "2029-12-31",
-          "remaining_days": 1370.0,
+          "remaining_days": 1364.0,
           "remaining_hours": null
         }
       ],
       "utilization": {
-        "avg_daily_hours": 2.0,
-        "avg_weekly_hours": 14.0,
+        "avg_daily_hours": 2.217,
+        "avg_weekly_hours": 15.52,
         "daily_points": [
           {
             "date": "2026-03-02",
@@ -5637,6 +5879,10 @@
           {
             "date": "2026-04-01",
             "hours": 2170.6
+          },
+          {
+            "date": "2026-04-06",
+            "hours": 2188.2
           }
         ],
         "hour_deltas": [
@@ -5744,30 +5990,25 @@
             "days_between": 1,
             "hours_delta": 1.8,
             "daily_rate": 1.8
+          },
+          {
+            "from_date": "2026-04-01",
+            "to_date": "2026-04-06",
+            "days_between": 5,
+            "hours_delta": 17.6,
+            "daily_rate": 3.52
           }
         ]
       }
     }
   ],
   "components_by_aircraft": {
-    "N407RU": [
+    "N307KH": [
       {
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 10.8
-      },
-      {
-        "description": "(RII) STARTER GENERATOR - OVERHAUL",
-        "ata": "24 25-01",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 189.3
-      },
-      {
-        "description": "(RII) TURBINE - OVERHAUL",
-        "ata": "72 50-10",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 191.8
+        "remaining_hours": 9.1
       }
     ],
     "N407FM": [
@@ -5781,15 +6022,7 @@
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 24.3
-      }
-    ],
-    "N307KH": [
-      {
-        "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
-        "ata": "62 04-10",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 19.1
+        "remaining_hours": 100.0
       }
     ],
     "N407LP": [
@@ -5797,13 +6030,21 @@
         "description": "(RII) MAIN ROTOR HUB ASSEMBLY - OVERHAUL",
         "ata": "62 00-00",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 34.4
+        "remaining_hours": 27.5
       },
       {
         "description": "(RII) STARTER GENERATOR - OVERHAUL",
         "ata": "24 25-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 142.4
+        "remaining_hours": 135.5
+      }
+    ],
+    "N407SL": [
+      {
+        "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
+        "ata": "62 04-10",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 36.7
       }
     ],
     "N469JX": [
@@ -5820,20 +6061,12 @@
         "remaining_hours": 160.1
       }
     ],
-    "N407SL": [
-      {
-        "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
-        "ata": "62 04-10",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 43.1
-      }
-    ],
     "N466GH": [
       {
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 57.2
+        "remaining_hours": 46.9
       }
     ],
     "N407CN": [
@@ -5855,57 +6088,25 @@
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 73.2
+        "remaining_hours": 68.0
       },
       {
         "description": "(RII) MAIN ROTOR MAST ASSEMBLY - OVERHAUL",
         "ata": "63 11-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 83.5
+        "remaining_hours": 78.3
       },
       {
         "description": "(RII) INPUT DRIVESHAFT - OVERHAUL",
         "ata": "63 25-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 83.5
+        "remaining_hours": 78.3
       },
       {
         "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
         "ata": "67 30-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 83.5
-      }
-    ],
-    "N407CZ": [
-      {
-        "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
-        "ata": "62 04-10",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 82.1
-      },
-      {
-        "description": "(RII) INPUT DRIVESHAFT - OVERHAUL",
-        "ata": "63 25-01",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 163.8
-      },
-      {
-        "description": "(RII) MAIN ROTOR MAST ASSEMBLY - OVERHAUL",
-        "ata": "63 11-10",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 163.8
-      },
-      {
-        "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
-        "ata": "67 30-01",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 163.8
-      },
-      {
-        "description": "(RII) TAIL ROTOR HUB ASSEMBLY - OVERHAUL",
-        "ata": "64 10-00",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 163.8
+        "remaining_hours": 78.3
       }
     ],
     "N407BY": [
@@ -5913,45 +6114,45 @@
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 82.7
+        "remaining_hours": 77.9
       },
       {
         "description": "(RII) ROTOR BRAKE DISC - INSPECTION",
         "ata": "63 22-11",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 100.4
+        "remaining_hours": 95.6
       }
     ],
-    "N407JM": [
+    "N407CZ": [
       {
-        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY  (RED)",
-        "ata": "67 13-35",
+        "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
+        "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 94.0
+        "remaining_hours": 81.9
       },
       {
-        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (ORANGE)",
-        "ata": "67 13-30",
+        "description": "(RII) TAIL ROTOR HUB ASSEMBLY - OVERHAUL",
+        "ata": "64 10-00",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 94.0
+        "remaining_hours": 163.6
       },
       {
-        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (GREEEN)",
-        "ata": "67 13-25",
+        "description": "(RII) MAIN ROTOR MAST ASSEMBLY - OVERHAUL",
+        "ata": "63 11-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 94.0
+        "remaining_hours": 163.6
       },
       {
-        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (BLUE)",
-        "ata": "67 13-20",
+        "description": "(RII) INPUT DRIVESHAFT - OVERHAUL",
+        "ata": "63 25-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 94.0
+        "remaining_hours": 163.6
       },
       {
-        "description": "(RII) AIRCRAFT BATTERY RECONDITION / CAPACITY CHECK",
-        "ata": "24 20-01",
+        "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
+        "ata": "67 30-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 161.4
+        "remaining_hours": 163.6
       }
     ],
     "N862YB": [
@@ -5959,21 +6160,65 @@
         "description": "(RII) TAIL ROTOR HUB ASSEMBLY - OVERHAUL",
         "ata": "64 10-00",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 102.4
+        "remaining_hours": 84.8
       },
       {
         "description": "(RII) AIRCRAFT BATTERY RECONDITION / CAPACITY CHECK",
         "ata": "24 20-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 126.0
+        "remaining_hours": 108.4
       }
     ],
-    "N407CH": [
+    "N407JM": [
       {
-        "description": "(RII) ENGINE BLEED VALVE - OVERHAUL",
-        "ata": "72 00-10",
+        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY  (RED)",
+        "ata": "67 13-35",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 122.8
+        "remaining_hours": 89.7
+      },
+      {
+        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (GREEEN)",
+        "ata": "67 13-25",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 89.7
+      },
+      {
+        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (ORANGE)",
+        "ata": "67 13-30",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 89.7
+      },
+      {
+        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (BLUE)",
+        "ata": "67 13-20",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 89.7
+      },
+      {
+        "description": "(RII) AIRCRAFT BATTERY RECONDITION / CAPACITY CHECK",
+        "ata": "24 20-01",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 157.1
+      }
+    ],
+    "N407RU": [
+      {
+        "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
+        "ata": "62 04-10",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 96.3
+      },
+      {
+        "description": "(RII) STARTER GENERATOR - OVERHAUL",
+        "ata": "24 25-01",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 180.7
+      },
+      {
+        "description": "(RII) TURBINE - OVERHAUL",
+        "ata": "72 50-10",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 183.2
       }
     ],
     "N407TH": [
@@ -5981,19 +6226,27 @@
         "description": "(RII) TAIL ROTOR HUB ASSEMBLY - OVERHAUL",
         "ata": "64 10-00",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 123.2
+        "remaining_hours": 115.0
       },
       {
         "description": "(RII) AIRCRAFT BATTERY RECONDITION / CAPACITY CHECK",
         "ata": "24 20-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 155.0
+        "remaining_hours": 146.8
       },
       {
         "description": "(RII) FREEWHEEL ASSEMBLY - OVERHAUL",
         "ata": "63 13-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 169.9
+        "remaining_hours": 161.7
+      }
+    ],
+    "N407CH": [
+      {
+        "description": "(RII) ENGINE BLEED VALVE - OVERHAUL",
+        "ata": "72 00-10",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 121.1
       }
     ],
     "N407ZM": [
@@ -6001,7 +6254,7 @@
         "description": "(RII) MAIN ROTOR HUB ASSEMBLY - OVERHAUL",
         "ata": "62 00-00",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 151.6
+        "remaining_hours": 149.0
       }
     ],
     "N407NW": [
@@ -6009,7 +6262,7 @@
         "description": "(RII) AIRCRAFT BATTERY - CAPACITY CHECK",
         "ata": "24 20-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 176.8
+        "remaining_hours": 162.8
       }
     ]
   },
