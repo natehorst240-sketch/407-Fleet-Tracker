@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_utc": "2026-05-28T05:10:15.247521+00:00",
+    "generated_utc": "2026-05-28T10:12:38.496526+00:00",
     "daily_csv": "/home/runner/work/407-Fleet-Tracker/407-Fleet-Tracker/data/407_daily_due_list.csv",
     "weekly_csv": "/home/runner/work/407-Fleet-Tracker/407-Fleet-Tracker/data/407_Due-List_weekly.csv",
     "aircraft_count": 24
@@ -4176,7 +4176,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2027-02-20",
           "remaining_days": 268.0,
-          "remaining_hours": 84.3
+          "remaining_hours": 93.6
         },
         {
           "tail": "N407MZ",
@@ -4185,7 +4185,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-20",
           "remaining_days": 268.0,
-          "remaining_hours": 84.3
+          "remaining_hours": 93.6
         },
         {
           "tail": "N407MZ",
@@ -4194,7 +4194,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2027-02-28",
           "remaining_days": 276.0,
-          "remaining_hours": 384.3
+          "remaining_hours": 393.6
         },
         {
           "tail": "N407MZ",
@@ -4252,8 +4252,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 2.216,
-        "avg_weekly_hours": 15.514,
+        "avg_daily_hours": 2.108,
+        "avg_weekly_hours": 14.757,
         "daily_points": [
           {
             "date": "2026-03-02",
@@ -4353,7 +4353,7 @@
           },
           {
             "date": "2026-05-27",
-            "hours": 2520.5
+            "hours": 2511.2
           }
         ],
         "hour_deltas": [
@@ -4522,8 +4522,8 @@
             "from_date": "2026-04-23",
             "to_date": "2026-05-27",
             "days_between": 34,
-            "hours_delta": 69.7,
-            "daily_rate": 2.05
+            "hours_delta": 60.4,
+            "daily_rate": 1.776
           }
         ]
       }
@@ -8012,7 +8012,7 @@
           "description": "(RII) 600 HOUR/ 12 MONTH ENGINE OIL & SCAVENGE OIL FILTER CHANGE",
           "due_date": "2026-08-31",
           "remaining_days": 95.0,
-          "remaining_hours": 457.2
+          "remaining_hours": 455.3
         },
         {
           "tail": "N7160V",
@@ -8021,7 +8021,7 @@
           "description": "300 HOUR /12 MONTH PERIODIC AIRFRAME INSPECTION",
           "due_date": "2026-12-31",
           "remaining_days": 217.0,
-          "remaining_hours": 179.8
+          "remaining_hours": 177.9
         },
         {
           "tail": "N7160V",
@@ -8030,7 +8030,7 @@
           "description": "300 HOUR/12 MONTH ENGINE INSPECTION",
           "due_date": "2027-02-28",
           "remaining_days": 276.0,
-          "remaining_hours": 223.1
+          "remaining_hours": 221.2
         },
         {
           "tail": "N7160V",
@@ -8088,8 +8088,8 @@
         }
       ],
       "utilization": {
-        "avg_daily_hours": 0.741,
-        "avg_weekly_hours": 5.186,
+        "avg_daily_hours": 0.754,
+        "avg_weekly_hours": 5.278,
         "daily_points": [
           {
             "date": "2026-02-28",
@@ -8166,6 +8166,10 @@
           {
             "date": "2026-05-27",
             "hours": 10623.0
+          },
+          {
+            "date": "2026-05-28",
+            "hours": 10624.9
           }
         ],
         "hour_deltas": [
@@ -8294,6 +8298,13 @@
             "days_between": 34,
             "hours_delta": 20.6,
             "daily_rate": 0.606
+          },
+          {
+            "from_date": "2026-05-27",
+            "to_date": "2026-05-28",
+            "days_between": 1,
+            "hours_delta": 1.9,
+            "daily_rate": 1.9
           }
         ]
       }
@@ -8752,19 +8763,19 @@
         "description": "(RII) MAIN ROTOR MAST ASSEMBLY - OVERHAUL",
         "ata": "63 11-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": -20.5
+        "remaining_hours": -11.2
       },
       {
         "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
         "ata": "67 30-01",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": -20.5
+        "remaining_hours": -11.2
       },
       {
         "description": "100 HOUR MAIN ROTOR YOKE ASSEMBLY AIRWORTHINESS LIMITATIONS  INSPECTION",
         "ata": "62 04-10",
         "requirement_type": "OVERHAUL",
-        "remaining_hours": 64.0
+        "remaining_hours": 73.3
       }
     ],
     "N407TH": [
@@ -8853,12 +8864,6 @@
     ],
     "N407JM": [
       {
-        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (BLUE)",
-        "ata": "67 13-20",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 55.6
-      },
-      {
         "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (GREEEN)",
         "ata": "67 13-25",
         "requirement_type": "OVERHAUL",
@@ -8873,6 +8878,12 @@
       {
         "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY  (RED)",
         "ata": "67 13-35",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 55.6
+      },
+      {
+        "description": "(RII) MAIN ROTOR PITCH LINK ASSEMBLY (BLUE)",
+        "ata": "67 13-20",
         "requirement_type": "OVERHAUL",
         "remaining_hours": 55.6
       },
@@ -8905,6 +8916,12 @@
         "remaining_hours": 143.8
       },
       {
+        "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
+        "ata": "67 30-01",
+        "requirement_type": "OVERHAUL",
+        "remaining_hours": 143.8
+      },
+      {
         "description": "(RII) MAIN ROTOR MAST ASSEMBLY - OVERHAUL",
         "ata": "63 11-10",
         "requirement_type": "OVERHAUL",
@@ -8913,12 +8930,6 @@
       {
         "description": "(RII) INPUT DRIVESHAFT - OVERHAUL",
         "ata": "63 25-01",
-        "requirement_type": "OVERHAUL",
-        "remaining_hours": 143.8
-      },
-      {
-        "description": "(RII) SWASHPLATE AND SUPPORT ASSEMBLY - OVERHAUL",
-        "ata": "67 30-01",
         "requirement_type": "OVERHAUL",
         "remaining_hours": 143.8
       }
